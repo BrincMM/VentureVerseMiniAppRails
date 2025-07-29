@@ -1,0 +1,5 @@
+---
+description: This is Rails8 with Sqlite3. Please be aware use Rails8 synatx for enum and use Sqlite3 SQL. Please note, all the database table has id primary key. 
+globs: *.rb
+alwaysApply: false
+---
