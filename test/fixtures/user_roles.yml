@@ -1,0 +1,11 @@
+founder_role:
+  user: user_one
+  role: founder
+
+mentor_role:
+  user: user_two
+  role: mentor
+
+investor_role:
+  user: user_two
+  role: investor 

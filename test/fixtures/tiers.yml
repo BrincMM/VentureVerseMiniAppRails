@@ -1,0 +1,23 @@
+tier_one:
+  tier_name: Basic
+  stripe_price_id: price_basic_monthly
+  monthly_credit: 100.00
+  monthly_tier_price: 9.99
+  yearly_tier_price: 99.99
+  active: true
+
+tier_two:
+  tier_name: Pro
+  stripe_price_id: price_pro_monthly
+  monthly_credit: 500.00
+  monthly_tier_price: 49.99
+  yearly_tier_price: 499.99
+  active: true
+
+tier_inactive:
+  tier_name: Legacy
+  stripe_price_id: price_legacy_monthly
+  monthly_credit: 50.00
+  monthly_tier_price: 4.99
+  yearly_tier_price: 49.99
+  active: false 

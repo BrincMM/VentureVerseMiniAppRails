@@ -1,0 +1,20 @@
+activity_one:
+  activity_type: app_usage
+  app_meta: "Test meta data"
+  app: app_one
+  user: user_one
+  timestamp: <%= Time.current %>
+
+activity_two:
+  activity_type: content_procurement
+  app_meta: "Content purchase"
+  app: app_two
+  user: user_one
+  timestamp: <%= Time.current %>
+
+activity_three:
+  activity_type: perks_procurement
+  app_meta: "Perk purchase"
+  app: app_one
+  user: user_two
+  timestamp: <%= Time.current %> 

@@ -1,0 +1,13 @@
+stripe_one:
+  user: user_one
+  stripe_customer_id: cus_test1
+  subscription_id: sub_test1
+  subscription_status: active
+  next_subscription_time: <%= 30.days.from_now %>
+
+stripe_two:
+  user: user_two
+  stripe_customer_id: cus_test2
+  subscription_id: sub_test2
+  subscription_status: trialing
+  next_subscription_time: <%= 7.days.from_now %> 

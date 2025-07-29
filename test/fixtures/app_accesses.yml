@@ -1,0 +1,11 @@
+access_one:
+  app: app_one
+  user: user_one
+
+access_two:
+  app: app_two
+  user: user_one
+
+access_three:
+  app: app_one
+  user: user_two 

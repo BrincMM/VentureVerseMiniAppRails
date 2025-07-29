@@ -1,0 +1,13 @@
+app_one:
+  app_name: Test App 1
+  description: A test application
+  category: AI
+  sector: Technology
+  link: https://testapp1.example.com
+
+app_two:
+  app_name: Test App 2
+  description: Another test application
+  category: Blockchain
+  sector: Finance
+  link: https://testapp2.example.com 
