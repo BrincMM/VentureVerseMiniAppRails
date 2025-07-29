@@ -13,7 +13,10 @@ Rails.application.routes.draw do
     get 'health', to: 'health#index'
 
     namespace :v1 do
-      resources :users, only: [:create]
+      namespace :users do
+        post 'google_signup', to: 'registrations#google_signup'
+        post 'email_signup', to: 'registrations#email_signup'
+      end
     end
   end
 

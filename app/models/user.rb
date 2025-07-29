@@ -7,10 +7,12 @@ class User < ApplicationRecord
   has_one :stripe_info, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :first_name, presence: true
+  validates :first_name, :last_name, :age_consent, presence: true
   validates :nick_name, uniqueness: true, allow_nil: true
   validates :google_id, uniqueness: true, allow_nil: true
   validates :monthly_credit_balance, :top_up_credit_balance, numericality: { greater_than_or_equal_to: 0 }
+  validates :linkedIn, :twitter, :avatar, url: true, allow_blank: true
+  validates :password, presence: true, if: -> { google_id.blank? }
 
   # Helper methods to check roles
   def founder?
