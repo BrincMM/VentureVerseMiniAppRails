@@ -1,0 +1,13 @@
+one:
+  user_id: 293267324
+  timestamp: <%= Time.current %>
+  metadata: |
+    browser: Chrome
+    ip: 127.0.0.1
+
+two:
+  user_id: 987556848
+  timestamp: <%= Time.current %>
+  metadata: |
+    browser: Firefox
+    ip: 192.168.1.1 

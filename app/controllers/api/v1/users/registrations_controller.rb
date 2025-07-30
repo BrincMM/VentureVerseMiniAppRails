@@ -9,6 +9,7 @@ module Api
             process_user_roles
             render :user, formats: [:json], status: :created
           else
+            puts "\nValidation errors: #{@user.errors.full_messages}"
             render json: {
               success: false,
               message: "Failed to create user",
@@ -53,7 +54,7 @@ module Api
         def process_user_roles
           if params[:user_roles].present?
             params[:user_roles].each do |role|
-              role_name = role.downcase.to_sym
+              role_name = role.to_s.downcase.strip.to_sym
               @user.add_role(role_name) if UserRole.roles.key?(role_name)
             end
           end

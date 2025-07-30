@@ -1,23 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
 user_one:
   email: user1@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
   first_name: John
   last_name: Doe
-  country: US
   age_consent: true
+  country: US
   nick_name: johndoe
-  monthly_credit_balance: 100.00
-  top_up_credit_balance: 50.00
+  linkedIn: https://linkedin.com/in/johndoe
+  twitter: https://twitter.com/johndoe
+  avatar: https://example.com/avatar1.jpg
+  monthly_credit_balance: 100.0
+  top_up_credit_balance: 50.0
   tier: tier_one
 
 user_two:
   email: user2@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
   first_name: Jane
   last_name: Smith
-  country: UK
   age_consent: true
+  country: UK
   nick_name: janesmith
-  monthly_credit_balance: 200.00
-  top_up_credit_balance: 0.00
+  linkedIn: https://linkedin.com/in/janesmith
+  twitter: https://twitter.com/janesmith
+  avatar: https://example.com/avatar2.jpg
+  monthly_credit_balance: 200.0
+  top_up_credit_balance: 75.0
   tier: tier_two
 
 user_without_tier:
@@ -27,4 +37,6 @@ user_without_tier:
   country: CA
   age_consent: false
   monthly_credit_balance: 0.00
-  top_up_credit_balance: 0.00 
+  top_up_credit_balance: 0.00
+  google_id: google_user3
+  # No need to set encrypted_password for Google users as it will be auto-generated 

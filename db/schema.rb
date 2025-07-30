@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_29_070733) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_29_084916) do
   create_table "app_accesses", force: :cascade do |t|
     t.integer "app_id", null: false
     t.integer "user_id", null: false
@@ -81,6 +81,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_070733) do
     t.index ["email"], name: "index_forget_passwords_on_email"
   end
 
+  create_table "log_in_histories", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "timestamp", null: false
+    t.text "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timestamp"], name: "index_log_in_histories_on_timestamp"
+    t.index ["user_id", "timestamp"], name: "index_log_in_histories_on_user_id_and_timestamp"
+    t.index ["user_id"], name: "index_log_in_histories_on_user_id"
+  end
+
   create_table "stripe_infos", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "stripe_customer_id", null: false
@@ -134,6 +145,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_070733) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tier_id"
+    t.string "encrypted_password", default: "", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_id"], name: "index_users_on_google_id", unique: true
     t.index ["nick_name"], name: "index_users_on_nick_name", unique: true
@@ -146,6 +158,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_070733) do
   add_foreign_key "app_activities", "users"
   add_foreign_key "credit_spents", "users"
   add_foreign_key "credit_topups", "users"
+  add_foreign_key "log_in_histories", "users"
   add_foreign_key "stripe_infos", "users"
   add_foreign_key "user_roles", "users"
   add_foreign_key "users", "tiers"

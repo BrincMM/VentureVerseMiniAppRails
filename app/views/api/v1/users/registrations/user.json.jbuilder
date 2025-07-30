@@ -15,6 +15,7 @@ json.data do
   json.monthly_credit_balance @user.monthly_credit_balance.to_f
   json.top_up_credit_balance @user.top_up_credit_balance.to_f
   json.tier_id @user.tier_id
+  json.user_roles @user.user_roles.pluck(:role)
   json.created_at @user.created_at
   json.updated_at @user.updated_at
 end 

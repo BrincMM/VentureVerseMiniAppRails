@@ -13,7 +13,8 @@ module Api
               google_id: "google123",
               first_name: "John",
               last_name: "Doe",
-              age_consent: true
+              age_consent: true,
+              user_roles: ["Founder"]
             }, as: :json
           end
 
@@ -31,6 +32,7 @@ module Api
           assert_equal "google123", user_data["google_id"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
           assert_equal 0.0, user_data["top_up_credit_balance"]
+          assert_equal ["founder"], user_data["user_roles"]
         end
 
         test "should create user with email signup" do
@@ -42,7 +44,8 @@ module Api
               password: "password123",
               first_name: "John",
               last_name: "Doe",
-              age_consent: true
+              age_consent: true,
+              user_roles: ["Mentor", "Investor"]
             }, as: :json
           end
 
@@ -60,6 +63,7 @@ module Api
           assert_nil user_data["google_id"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
           assert_equal 0.0, user_data["top_up_credit_balance"]
+          assert_equal ["mentor", "investor"], user_data["user_roles"]
         end
 
         test "should create user with all optional params" do
@@ -225,6 +229,7 @@ module Api
           assert_equal true, user_data["age_consent"]
           assert user_data["created_at"].present?
           assert user_data["updated_at"].present?
+          assert user_data["user_roles"].is_a?(Array), "user_roles should be an array"
         end
       end
     end

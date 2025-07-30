@@ -8,7 +8,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "valid user" do
-    assert @user.valid?
+    assert @user.valid?, "User should be valid, but got errors: #{@user.errors.full_messages.join(', ')}"
   end
 
   test "email validation" do
