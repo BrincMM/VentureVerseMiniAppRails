@@ -1,5 +1,5 @@
 json.success true
-json.message "User created successfully"
+json.message 'User logged in'
 json.data do
   json.user do
     json.partial! 'api/v1/users/shared/user', user: @user

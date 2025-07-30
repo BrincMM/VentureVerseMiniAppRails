@@ -18,6 +18,8 @@ Rails.application.routes.draw do
         post 'email_signup', to: 'registrations#email_signup'
         post 'google_signup', to: 'registrations#google_signup'
         post 'verify_password', to: 'sessions#verify_password'
+        get 'profile', to: 'profiles#show'
+        patch 'profile', to: 'profiles#update'
       end
     end
   end

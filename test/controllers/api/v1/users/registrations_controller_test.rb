@@ -27,7 +27,7 @@ module Api
           assert_equal true, json_response["success"]
           assert_equal "User created successfully", json_response["message"]
           
-          user_data = json_response["data"]
+          user_data = json_response["data"]["user"]
           assert_basic_user_data(user_data)
           assert_equal "google123", user_data["google_id"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
@@ -58,7 +58,7 @@ module Api
           assert_equal true, json_response["success"]
           assert_equal "User created successfully", json_response["message"]
           
-          user_data = json_response["data"]
+          user_data = json_response["data"]["user"]
           assert_basic_user_data(user_data)
           assert_nil user_data["google_id"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
@@ -91,7 +91,7 @@ module Api
           puts "\nEmail Signup with Optional Params Response:"
           puts JSON.pretty_generate(json_response)
           
-          user_data = json_response["data"]
+          user_data = json_response["data"]["user"]
           
           # Check all optional fields
           assert_equal "US", user_data["country"]

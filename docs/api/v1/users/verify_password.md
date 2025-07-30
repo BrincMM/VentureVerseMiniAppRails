@@ -33,26 +33,28 @@ POST /api/v1/users/verify_password
   "success": true,
   "message": "User logged in",
   "data": {
-    "id": 987556849,
-    "email": "user@example.com",
-    "google_id": null,
-    "first_name": "John",
-    "last_name": "Doe",
-    "country": "US",
-    "age_consent": true,
-    "avatar": "https://example.com/avatar.jpg",
-    "nick_name": "johndoe123",
-    "linkedIn": "https://linkedin.com/johndoe",
-    "twitter": "https://twitter.com/johndoe",
-    "monthly_credit_balance": 0.0,
-    "top_up_credit_balance": 0.0,
-    "tier_id": null,
-    "user_roles": [
-      "mentor",
-      "investor"
-    ],
-    "created_at": "2025-07-29T08:34:14.289Z",
-    "updated_at": "2025-07-29T08:34:14.289Z"
+    "user": {
+      "id": 987556849,
+      "email": "user@example.com",
+      "google_id": null,
+      "first_name": "John",
+      "last_name": "Doe",
+      "country": "US",
+      "age_consent": true,
+      "avatar": "https://example.com/avatar.jpg",
+      "nick_name": "johndoe123",
+      "linkedIn": "https://linkedin.com/johndoe",
+      "twitter": "https://twitter.com/johndoe",
+      "monthly_credit_balance": 0.0,
+      "top_up_credit_balance": 0.0,
+      "tier_id": null,
+      "user_roles": [
+        "mentor",
+        "investor"
+      ],
+      "created_at": "2025-07-29T08:34:14.289Z",
+      "updated_at": "2025-07-29T08:34:14.289Z"
+    }
   }
 }
 ```

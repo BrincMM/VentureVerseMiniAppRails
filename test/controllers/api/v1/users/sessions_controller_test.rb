@@ -18,7 +18,7 @@ module Api
           assert_equal true, json_response["success"]
           assert_equal "User logged in", json_response["message"]
           
-          user_data = json_response["data"]
+          user_data = json_response["data"]["user"]
           assert_equal user.id, user_data["id"]
           assert_equal user.email, user_data["email"]
           assert_equal user.first_name, user_data["first_name"]

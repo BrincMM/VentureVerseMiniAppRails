@@ -22,7 +22,7 @@ POST /api/v1/users/google_signup
 | linkedIn    | string  | No       | User's LinkedIn profile URL |
 | twitter     | string  | No       | User's Twitter profile URL |
 | avatar      | string  | No       | User's avatar URL |
-| user_roles  | array   | No       | Array of roles. Possible values: ["Founder", "Mentor", "Investor"] |
+| user_roles  | array   | No       | Array of roles. Possible values: ["founder", "mentor", "investor"] |
 
 ## Request Example
 
@@ -38,7 +38,7 @@ POST /api/v1/users/google_signup
   "linkedIn": "https://linkedin.com/johndoe",
   "twitter": "https://twitter.com/johndoe",
   "avatar": "https://example.com/avatar.jpg",
-  "user_roles": ["Founder", "Mentor"]
+  "user_roles": ["founder", "mentor"]
 }
 ```
 
@@ -51,26 +51,28 @@ POST /api/v1/users/google_signup
   "success": true,
   "message": "User created successfully",
   "data": {
-    "id": 987556849,
-    "email": "newuser@example.com",
-    "google_id": "google123",
-    "first_name": "John",
-    "last_name": "Doe",
-    "country": "US",
-    "age_consent": true,
-    "avatar": "https://example.com/avatar.jpg",
-    "nick_name": "johndoe123",
-    "linkedIn": "https://linkedin.com/johndoe",
-    "twitter": "https://twitter.com/johndoe",
-    "monthly_credit_balance": 0.0,
-    "top_up_credit_balance": 0.0,
-    "tier_id": null,
-    "user_roles": [
-      "founder",
-      "mentor"
-    ],
-    "created_at": "2025-07-29T08:34:14.306Z",
-    "updated_at": "2025-07-29T08:34:14.306Z"
+    "user": {
+      "id": 987556849,
+      "email": "newuser@example.com",
+      "google_id": "google123",
+      "first_name": "John",
+      "last_name": "Doe",
+      "country": "US",
+      "age_consent": true,
+      "avatar": "https://example.com/avatar.jpg",
+      "nick_name": "johndoe123",
+      "linkedIn": "https://linkedin.com/johndoe",
+      "twitter": "https://twitter.com/johndoe",
+      "monthly_credit_balance": 0.0,
+      "top_up_credit_balance": 0.0,
+      "tier_id": null,
+      "user_roles": [
+        "founder",
+        "mentor"
+      ],
+      "created_at": "2025-07-29T08:34:14.306Z",
+      "updated_at": "2025-07-29T08:34:14.306Z"
+    }
   }
 }
 ```
@@ -100,4 +102,4 @@ POST /api/v1/users/google_signup
 5. Age consent must be true
 6. If provided, nick_name must be unique
 7. If provided, linkedIn, twitter, and avatar must be valid URLs
-8. If provided, user_roles must contain valid roles (Founder, Mentor, or Investor) 
+8. If provided, user_roles must contain valid roles (founder, mentor, or investor) 
