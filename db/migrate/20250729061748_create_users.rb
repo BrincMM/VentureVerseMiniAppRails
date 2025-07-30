@@ -7,7 +7,6 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :last_name
       t.string :country
       t.boolean :age_consent, default: false
-      t.string :password
       t.string :avatar
       t.string :nick_name
       t.string :linkedIn
