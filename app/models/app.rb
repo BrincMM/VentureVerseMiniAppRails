@@ -11,7 +11,14 @@ class App < ApplicationRecord
   # Scopes
   scope :by_category, ->(category) { where(category: category) if category.present? }
   scope :by_sector, ->(sector) { where(sector: sector) if sector.present? }
-  scope :with_any_tags, ->(tags) { tagged_with(tags, any: true) if tags.present? }
+  scope :with_any_tags, ->(tags) do
+    if tags.present?
+      tag_list = tags.map { |tag| tag.strip }
+      joins(:taggings, :tags)
+        .where(tags: { name: tag_list })
+        .distinct
+    end
+  end
   scope :with_all_tags, ->(tags) { tagged_with(tags, all: true) if tags.present? }
   scope :accessible_by_user, ->(user_id) { joins(:app_accesses).where(app_accesses: { user_id: user_id }) }
 

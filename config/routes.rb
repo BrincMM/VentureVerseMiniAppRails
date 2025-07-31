@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     get 'health', to: 'health#index'
 
     namespace :v1 do
+      resources :apps, only: [:index]
+
       namespace :users do
         post 'email_signup', to: 'registrations#email_signup'
         post 'google_signup', to: 'registrations#google_signup'
@@ -21,6 +23,8 @@ Rails.application.routes.draw do
         patch 'update_password', to: 'sessions#update_password'
         get 'profile', to: 'profiles#show'
         patch 'profile', to: 'profiles#update'
+        post 'forget_password', to: 'forget_passwords#create'
+        post 'verify_forget_password', to: 'forget_passwords#verify'
       end
     end
   end

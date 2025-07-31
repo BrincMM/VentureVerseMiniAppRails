@@ -1,0 +1,9 @@
+json.id app.id
+json.app_name app.app_name
+json.description app.description
+json.category app.category
+json.sector app.sector
+json.link app.link
+json.tags app.tag_list
+json.created_at app.created_at
+json.updated_at app.updated_at
