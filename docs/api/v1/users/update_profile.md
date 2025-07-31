@@ -46,7 +46,7 @@ Update the current user's profile information and roles. All fields are optional
 
 ```json
 {
-  "status": "success",
+  "success": true,
   "message": "Profile updated successfully",
   "data": {
     "user": {
@@ -78,7 +78,7 @@ Update the current user's profile information and roles. All fields are optional
 
 ```json
 {
-  "status": "error",
+  "success": false,
   "message": "Failed to update profile",
   "errors": [
     "First name can't be blank",

@@ -1,4 +1,4 @@
-json.status 'success'
+json.success true
 json.message 'Profile retrieved successfully'
 json.data do
   json.user do

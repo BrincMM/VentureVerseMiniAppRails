@@ -1,4 +1,4 @@
-json.status 'success'
+json.success true
 json.message 'Profile updated successfully'
 json.data do
   json.user do

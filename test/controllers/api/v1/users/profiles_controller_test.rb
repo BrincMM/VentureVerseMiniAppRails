@@ -21,7 +21,7 @@ module Api
           assert_response :success
           json_response = JSON.parse(response.body)
           
-          assert_equal "success", json_response["status"]
+          assert_equal true, json_response["success"]
           assert_equal "Profile updated successfully", json_response["message"]
           
           user_data = json_response["data"]["user"]
@@ -41,7 +41,7 @@ module Api
           assert_response :success
           json_response = JSON.parse(response.body)
           
-          assert_equal "success", json_response["status"]
+          assert_equal true, json_response["success"]
           assert_equal ["mentor", "investor"].sort, json_response["data"]["user"]["user_roles"].sort
           
           # Verify database state
@@ -97,7 +97,7 @@ module Api
           assert_response :success
           
           json_response = JSON.parse(response.body)
-          assert_equal 'success', json_response['status']
+          assert_equal true, json_response['success']
           assert_equal 'Profile retrieved successfully', json_response['message']
           
           user_data = json_response['data']['user']
