@@ -1,3 +1,9 @@
 class ApiController < ActionController::API
-  # 如果将来需要添加通用的 API 控制器配置，可以在这里添加
+  before_action :set_default_format
+
+  private
+
+  def set_default_format
+    request.format = :json
+  end
 end 

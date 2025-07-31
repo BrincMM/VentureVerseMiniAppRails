@@ -6,9 +6,13 @@ Lists available apps with optional filtering and pagination.
 
 **Method** : `GET`
 
-**Auth required** : No
+## Request Example
 
-## Query Parameters
+```http
+GET /api/v1/apps?category=AI&sector=Technology&tags=ai,machine-learning&per_page=10&page=1
+```
+
+## Parameters
 
 | Parameter | Type   | Required | Description                                |
 |-----------|--------|----------|--------------------------------------------|

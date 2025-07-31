@@ -14,7 +14,12 @@ Rails.application.routes.draw do
     get 'health', to: 'health#index'
 
     namespace :v1 do
-      resources :apps, only: [:index]
+      resources :apps, only: [:index] do
+        collection do
+          post 'add_access'
+          delete 'remove_access'
+        end
+      end
 
       namespace :users do
         post 'email_signup', to: 'registrations#email_signup'
