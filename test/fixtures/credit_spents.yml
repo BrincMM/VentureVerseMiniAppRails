@@ -1,17 +1,20 @@
 spent_one:
   timestamp: <%= Time.current %>
   user: user_one
-  credit_spent: 10.00
+  credits: 10.00
+  cost_in_usd: 0.06
   spend_type: app_usage
 
 spent_two:
   timestamp: <%= Time.current %>
   user: user_one
-  credit_spent: 20.00
+  credits: 20.00
+  cost_in_usd: 0.12
   spend_type: content_procurement
 
 spent_three:
   timestamp: <%= Time.current %>
   user: user_two
-  credit_spent: 15.00
-  spend_type: perks_procurement 
+  credits: 15.00
+  cost_in_usd: 0.09
+  spend_type: perks_procurement

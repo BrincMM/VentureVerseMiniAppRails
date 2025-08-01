@@ -16,17 +16,17 @@ class CreditTopupTest < ActiveSupport::TestCase
   end
 
   test "credit topup validation" do
-    @credit_topup.credit_topup = nil
+    @credit_topup.credits = nil
     assert_not @credit_topup.valid?
-    assert_includes @credit_topup.errors[:credit_topup], "can't be blank"
+    assert_includes @credit_topup.errors[:credits], "can't be blank"
 
-    @credit_topup.credit_topup = 0
+    @credit_topup.credits = 0
     assert_not @credit_topup.valid?
-    assert_includes @credit_topup.errors[:credit_topup], "must be greater than 0"
+    assert_includes @credit_topup.errors[:credits], "must be greater than 0"
 
-    @credit_topup.credit_topup = -1
+    @credit_topup.credits = -1
     assert_not @credit_topup.valid?
-    assert_includes @credit_topup.errors[:credit_topup], "must be greater than 0"
+    assert_includes @credit_topup.errors[:credits], "must be greater than 0"
   end
 
   test "belongs to user association" do

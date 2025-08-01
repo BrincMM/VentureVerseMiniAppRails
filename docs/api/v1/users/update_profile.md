@@ -62,7 +62,7 @@ Update the current user's profile information and roles. All fields are optional
       "linkedIn": "https://linkedin.com/in/johndoe",
       "twitter": "https://twitter.com/johndoe",
       "monthly_credit_balance": 0.0,
-      "top_up_credit_balance": 0.0,
+      "topup_credit_balance": 0.0,
       "tier_id": null,
       "user_roles": ["founder", "mentor"],
       "created_at": "2025-07-29T08:34:14.289Z",

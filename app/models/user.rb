@@ -20,7 +20,8 @@ class User < ApplicationRecord
   validates :first_name, :last_name, :age_consent, presence: true
   validates :nick_name, uniqueness: true, allow_nil: true
   validates :google_id, uniqueness: true, allow_nil: true
-  validates :monthly_credit_balance, :top_up_credit_balance, numericality: { greater_than_or_equal_to: 0 }
+  validates :topup_credit_balance, numericality: { greater_than_or_equal_to: 0 }
+  validates :monthly_credit_balance, presence: true
   validates :linkedIn, :twitter, :avatar, url: true, allow_blank: true
 
   before_validation :set_random_password_for_google_user, if: -> { google_id.present? && encrypted_password.blank? }

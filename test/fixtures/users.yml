@@ -12,7 +12,7 @@ user_one:
   twitter: https://twitter.com/johndoe
   avatar: https://example.com/avatar1.jpg
   monthly_credit_balance: 100.0
-  top_up_credit_balance: 50.0
+  topup_credit_balance: 50.0
   tier: tier_one
 
 user_two:
@@ -27,7 +27,7 @@ user_two:
   twitter: https://twitter.com/janesmith
   avatar: https://example.com/avatar2.jpg
   monthly_credit_balance: 200.0
-  top_up_credit_balance: 75.0
+  topup_credit_balance: 75.0
   tier: tier_two
 
 user_without_tier:
@@ -37,6 +37,6 @@ user_without_tier:
   country: CA
   age_consent: false
   monthly_credit_balance: 0.00
-  top_up_credit_balance: 0.00
+  topup_credit_balance: 0.00
   google_id: google_user3
   # No need to set encrypted_password for Google users as it will be auto-generated 

@@ -13,7 +13,7 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :twitter
       t.decimal :monthly_credit_balance, precision: 10, scale: 2, default: 0
       t.integer :tier, default: 0
-      t.decimal :top_up_credit_balance, precision: 10, scale: 2, default: 0
+      t.decimal :topup_credit_balance, precision: 10, scale: 2, default: 0
 
       t.timestamps
     end

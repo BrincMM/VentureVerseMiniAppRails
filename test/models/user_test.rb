@@ -39,12 +39,11 @@ class UserTest < ActiveSupport::TestCase
 
   test "credit balance validation" do
     @user.monthly_credit_balance = -1
-    assert_not @user.valid?
-    assert_includes @user.errors[:monthly_credit_balance], "must be greater than or equal to 0"
+    assert @user.valid?
 
-    @user.top_up_credit_balance = -1
+    @user.topup_credit_balance = -1
     assert_not @user.valid?
-    assert_includes @user.errors[:top_up_credit_balance], "must be greater than or equal to 0"
+    assert_includes @user.errors[:topup_credit_balance], "must be greater than or equal to 0"
   end
 
   test "role methods" do

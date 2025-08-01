@@ -50,7 +50,7 @@ module Api
 
         test "should verify code successfully" do
           user = users(:user_one)
-          forget_password = forget_passwords(:one)
+          forget_password = forget_passwords(:forget_password_one)
           
           post api_v1_users_verify_forget_password_url, params: {
             email: forget_password.email,
@@ -67,7 +67,7 @@ module Api
 
         test "should fail with invalid code" do
           user = users(:user_one)
-          forget_password = forget_passwords(:one)
+          forget_password = forget_passwords(:forget_password_one)
           
           post api_v1_users_verify_forget_password_url, params: {
             email: forget_password.email,
@@ -83,7 +83,7 @@ module Api
 
         test "should fail with expired code" do
           user = users(:user_one)
-          forget_password = forget_passwords(:one)
+          forget_password = forget_passwords(:forget_password_one)
           
           # Update created_at to be more than 1 hour ago
           forget_password.update_column(:created_at, 2.hours.ago)

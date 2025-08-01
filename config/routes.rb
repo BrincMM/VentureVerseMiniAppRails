@@ -21,6 +21,14 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :app_activities, only: [:index, :create]
+
+      resources :credit_spents, only: [:create] do
+        collection do
+          post 'estimate'
+        end
+      end
+
       namespace :users do
         post 'email_signup', to: 'registrations#email_signup'
         post 'google_signup', to: 'registrations#google_signup'

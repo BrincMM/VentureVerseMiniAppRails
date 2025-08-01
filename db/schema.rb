@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_31_020230) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
   create_table "app_accesses", force: :cascade do |t|
     t.integer "app_id", null: false
     t.integer "user_id", null: false
@@ -52,10 +52,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_020230) do
   create_table "credit_spents", force: :cascade do |t|
     t.datetime "timestamp", null: false
     t.integer "user_id", null: false
-    t.decimal "credit_spent", precision: 10, scale: 2, null: false
+    t.decimal "credits", precision: 10, scale: 2, null: false
     t.integer "spend_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "cost_in_usd", precision: 10, scale: 2, null: false
     t.index ["timestamp"], name: "index_credit_spents_on_timestamp"
     t.index ["user_id", "timestamp"], name: "index_credit_spents_on_user_id_and_timestamp"
     t.index ["user_id"], name: "index_credit_spents_on_user_id"
@@ -64,7 +65,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_020230) do
   create_table "credit_topups", force: :cascade do |t|
     t.datetime "timestamp", null: false
     t.integer "user_id", null: false
-    t.decimal "credit_topup", precision: 10, scale: 2, null: false
+    t.decimal "credits", precision: 10, scale: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["timestamp"], name: "index_credit_topups_on_timestamp"
@@ -162,17 +163,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_020230) do
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "google_id"
-    t.string "first_name"
+    t.string "first_name", null: false
     t.string "last_name"
     t.string "country"
     t.boolean "age_consent", default: false
-    t.string "password"
     t.string "avatar"
     t.string "nick_name"
     t.string "linkedIn"
     t.string "twitter"
     t.decimal "monthly_credit_balance", precision: 10, scale: 2, default: "0.0"
-    t.decimal "top_up_credit_balance", precision: 10, scale: 2, default: "0.0"
+    t.decimal "topup_credit_balance", precision: 10, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tier_id"

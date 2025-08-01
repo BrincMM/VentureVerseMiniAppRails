@@ -31,7 +31,7 @@ module Api
           assert_basic_user_data(user_data)
           assert_equal "google123", user_data["google_id"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
-          assert_equal 0.0, user_data["top_up_credit_balance"]
+          assert_equal 0.0, user_data["topup_credit_balance"]
           assert_equal ["founder"], user_data["user_roles"]
         end
 
@@ -62,7 +62,7 @@ module Api
           assert_basic_user_data(user_data)
           assert_nil user_data["google_id"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
-          assert_equal 0.0, user_data["top_up_credit_balance"]
+          assert_equal 0.0, user_data["topup_credit_balance"]
           assert_equal ["mentor", "investor"], user_data["user_roles"]
         end
 
@@ -100,7 +100,7 @@ module Api
           assert_equal "https://twitter.com/johndoe", user_data["twitter"]
           assert_equal "https://example.com/avatar.jpg", user_data["avatar"]
           assert_equal 0.0, user_data["monthly_credit_balance"]
-          assert_equal 0.0, user_data["top_up_credit_balance"]
+          assert_equal 0.0, user_data["topup_credit_balance"]
 
           # Check roles were created
           user = User.find(user_data["id"])

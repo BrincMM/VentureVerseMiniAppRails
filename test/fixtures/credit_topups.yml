@@ -1,9 +1,9 @@
 topup_one:
   timestamp: <%= Time.current %>
   user: user_one
-  credit_topup: 50.00
+  credits: 50.00
 
 topup_two:
   timestamp: <%= Time.current %>
   user: user_two
-  credit_topup: 100.00 
+  credits: 100.00

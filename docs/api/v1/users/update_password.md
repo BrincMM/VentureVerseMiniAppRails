@@ -46,7 +46,7 @@ PATCH /api/v1/users/update_password
       "linkedIn": "https://linkedin.com/johndoe",
       "twitter": "https://twitter.com/johndoe",
       "monthly_credit_balance": 0.0,
-      "top_up_credit_balance": 0.0,
+      "topup_credit_balance": 0.0,
       "tier_id": null,
       "user_roles": [
         "mentor",

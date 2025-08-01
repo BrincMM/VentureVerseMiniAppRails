@@ -38,7 +38,7 @@ Get user profile by email.
       "linkedIn": "https://linkedin.com/in/johndoe",
       "twitter": "https://twitter.com/johndoe",
       "monthly_credit_balance": 100.0,
-      "top_up_credit_balance": 50.0,
+      "topup_credit_balance": 50.0,
       "tier_id": 1,
       "user_roles": ["user"],
       "created_at": "2024-01-01T00:00:00.000Z",
