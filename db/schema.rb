@@ -37,14 +37,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
   end
 
   create_table "apps", force: :cascade do |t|
-    t.string "app_name", null: false
+    t.string "name", null: false
     t.text "description"
     t.string "category"
     t.string "sector"
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["app_name"], name: "index_apps_on_app_name", unique: true
+    t.index ["name"], name: "index_apps_on_name", unique: true
     t.index ["category"], name: "index_apps_on_category"
     t.index ["sector"], name: "index_apps_on_sector"
   end
@@ -139,7 +139,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
   end
 
   create_table "tiers", force: :cascade do |t|
-    t.string "tier_name", null: false
+    t.string "name", null: false
     t.string "stripe_price_id", null: false
     t.decimal "monthly_credit", precision: 10, scale: 2, null: false
     t.decimal "monthly_tier_price", precision: 10, scale: 2, null: false
@@ -148,7 +148,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["stripe_price_id"], name: "index_tiers_on_stripe_price_id", unique: true
-    t.index ["tier_name"], name: "index_tiers_on_tier_name", unique: true
+    t.index ["name"], name: "index_tiers_on_name", unique: true
   end
 
   create_table "user_roles", force: :cascade do |t|

@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :validatable
 
+  include CreditCalculation
+
   # Override Devise's password validation for Google sign-up
   def password_required?
     super && google_id.blank?
@@ -48,7 +50,7 @@ class User < ApplicationRecord
   end
 
   def current_tier_name
-    tier&.tier_name || 'Free'
+    tier&.name || 'Free'
   end
 
   def has_access_to?(app)

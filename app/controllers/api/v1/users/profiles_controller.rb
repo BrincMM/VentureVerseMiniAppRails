@@ -31,6 +31,16 @@ module Api
           end
         end
 
+        def credit_info
+          @user = User.includes(:tier).find_by(id: params[:user_id])
+          
+          if @user
+            render :credit_info, formats: [:json]
+          else
+            render 'api/v1/shared/error', locals: { message: 'User not found', errors: nil }, status: :not_found, formats: [:json]
+          end
+        end
+
         private
 
         def user_params

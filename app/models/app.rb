@@ -5,7 +5,7 @@ class App < ApplicationRecord
   has_many :app_accesses, dependent: :destroy
   has_many :users, through: :app_accesses
 
-  validates :app_name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: true
   validates :link, url: true, allow_blank: true
 
   # Scopes

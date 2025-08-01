@@ -107,4 +107,28 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user_without_tier.active_subscription?
     assert_nil @user_without_tier.days_until_next_billing
   end
+
+  test "remaining credit ratio calculation" do
+    # Test with normal case
+    @user.monthly_credit_balance = 800
+    @user.topup_credit_balance = 200
+    @user.tier.monthly_credit = 1000
+    assert_equal 0.83, @user.remaining_credit_ratio.round(2)
+
+    # Test with zero monthly credit but has topup
+    @user.monthly_credit_balance = 0
+    @user.topup_credit_balance = 100
+    @user.tier.monthly_credit = 0
+    assert_equal 1.0, @user.remaining_credit_ratio
+
+    # Test with zero credits
+    @user.monthly_credit_balance = 0
+    @user.topup_credit_balance = 0
+    assert_equal 0.0, @user.remaining_credit_ratio
+
+    # Test without tier
+    @user_without_tier.monthly_credit_balance = 0
+    @user_without_tier.topup_credit_balance = 100
+    assert_equal 1.0, @user_without_tier.remaining_credit_ratio
+  end
 end 

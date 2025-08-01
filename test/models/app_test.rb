@@ -12,13 +12,13 @@ class AppTest < ActiveSupport::TestCase
   end
 
   test "app name validation" do
-    @app.app_name = nil
+    @app.name = nil
     assert_not @app.valid?
-    assert_includes @app.errors[:app_name], "can't be blank"
+    assert_includes @app.errors[:name], "can't be blank"
 
-    @app.app_name = apps(:app_two).app_name
+    @app.name = apps(:app_two).name
     assert_not @app.valid?
-    assert_includes @app.errors[:app_name], "has already been taken"
+    assert_includes @app.errors[:name], "has already been taken"
   end
 
   test "url validation" do

@@ -10,13 +10,13 @@ class TierTest < ActiveSupport::TestCase
   end
 
   test "tier name validation" do
-    @tier.tier_name = nil
+    @tier.name = nil
     assert_not @tier.valid?
-    assert_includes @tier.errors[:tier_name], "can't be blank"
+    assert_includes @tier.errors[:name], "can't be blank"
 
-    @tier.tier_name = tiers(:tier_two).tier_name
+    @tier.name = tiers(:tier_two).name
     assert_not @tier.valid?
-    assert_includes @tier.errors[:tier_name], "has already been taken"
+    assert_includes @tier.errors[:name], "has already been taken"
   end
 
   test "stripe price id validation" do

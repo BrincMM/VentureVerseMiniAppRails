@@ -55,7 +55,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
     # Create more apps for pagination testing
     5.times do |i|
       App.create!(
-        app_name: "Paginated App #{i}",
+        name: "Paginated App #{i}",
         category: "Test",
         sector: "Test",
         link: "https://example.com"

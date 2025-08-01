@@ -1,5 +1,5 @@
 json.id app.id
-json.app_name app.app_name
+json.app_name app.name
 json.description app.description
 json.category app.category
 json.sector app.sector
