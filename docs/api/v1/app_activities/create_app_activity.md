@@ -2,53 +2,39 @@
 
 Creates a new app activity record.
 
-**URL** : `/api/v1/app_activities`
+**URL**: `/api/v1/app_activities`
 
-**Method** : `POST`
+**Method**: `POST`
+
+**Authentication required**: Yes
 
 ## Request Parameters
 
-| Parameter | Type   | Required | Description                    |
-|-----------|--------|----------|--------------------------------|
-| app_id    | integer| Yes      | ID of the app                  |
-| action    | string | Yes      | Type of activity               |
-| details   | object | No       | Additional activity details    |
-
-## Request Example
-
-```json
-{
-  "app_id": 1,
-  "action": "view",
-  "details": {
-    "duration": "5m",
-    "source": "recommendation"
-  }
-}
-```
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| app_activity[user_id] | number | Yes | The ID of the user who performed the activity |
+| app_activity[app_id] | number | Yes | The ID of the app the activity is related to |
+| app_activity[activity_type] | string | Yes | The type of activity. Must be one of: `app_usage`, `content_procurement`, `perks_procurement`, `nft_procurement` |
+| app_activity[app_meta] | json | No | Additional metadata about the activity |
 
 ## Success Response
 
-**Code** : `201 Created`
-
-**Response example**
+**Code**: `200 OK`
 
 ```json
 {
   "success": true,
-  "message": "App activity created successfully",
+  "message": "Activity created successfully",
   "data": {
     "app_activity": {
       "id": 1,
+      "activity_type": "app_usage",
       "app_id": 1,
-      "user_id": 123,
-      "action": "view",
-      "details": {
-        "duration": "5m",
-        "source": "recommendation"
-      },
-      "created_at": "2024-03-20T08:34:14.289Z",
-      "updated_at": "2024-03-20T08:34:14.289Z"
+      "user_id": 1,
+      "app_meta": "{\"duration\":\"10m\"}",
+      "timestamp": "2024-01-01T12:00:00Z",
+      "created_at": "2024-01-01T12:00:00Z",
+      "updated_at": "2024-01-01T12:00:00Z"
     }
   }
 }
@@ -56,26 +42,18 @@ Creates a new app activity record.
 
 ## Error Response
 
-**Condition** : If provided parameters are invalid.
+**Condition**: If validation fails or parameters are invalid.
 
-**Code** : `422 UNPROCESSABLE ENTITY`
-
-**Content example**
+**Code**: `422 UNPROCESSABLE ENTITY`
 
 ```json
 {
   "success": false,
-  "message": "Failed to create app activity",
+  "message": "Failed to create activity",
   "errors": [
+    "User must exist",
     "App must exist",
-    "Action can't be blank"
+    "Activity type can't be blank"
   ]
 }
 ```
-
-## Validation Rules
-
-1. App must exist in the system
-2. Action cannot be blank
-3. User must be authenticated
-4. Details must be a valid JSON object if provided

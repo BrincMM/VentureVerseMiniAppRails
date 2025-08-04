@@ -1,22 +1,17 @@
 module Api
   module V1
-    class AppActivitiesController < ApiController
+    class LogInHistoriesController < ApiController
       def create
-        @app_activity = AppActivity.new(app_activity_params)
-        @app_activity.timestamp = Time.current
-        @app_activity.app_meta = params.dig(:app_activity, :app_meta)&.to_json
+        @log_in_history = LogInHistory.new(log_in_history_params)
+        @log_in_history.timestamp = Time.current
 
-        unless @app_activity.save
+        unless @log_in_history.save
           return render 'api/v1/shared/error',
-                      locals: { message: 'Failed to create activity', errors: @app_activity.errors.full_messages },
+                      locals: { message: 'Failed to create login history', errors: @log_in_history.errors.full_messages },
                       status: :unprocessable_entity
         end
 
         render :create
-      rescue ArgumentError => e
-        render 'api/v1/shared/error',
-              locals: { message: 'Failed to create activity', errors: [e.message] },
-              status: :unprocessable_entity
       end
 
       def index
@@ -27,9 +22,8 @@ module Api
                       status: :unprocessable_entity
         end
 
-        query = AppActivity.all
-        query = query.by_type(params[:activity_type]) if params[:activity_type].present?
-        query = query.by_app(params[:app_id]) if params[:app_id].present?
+        query = LogInHistory.all
+        query = query.where(user_id: params[:user_id]) if params[:user_id].present?
         
         if params[:start_date].present? && params[:end_date].present?
           begin
@@ -42,7 +36,7 @@ module Api
                           status: :unprocessable_entity
             end
             
-            query = query.in_date_range(start_date.beginning_of_day, end_date.end_of_day)
+            query = query.where(timestamp: start_date.beginning_of_day..end_date.end_of_day)
           rescue ArgumentError
             return render 'api/v1/shared/error',
                         locals: { message: 'Invalid date format', errors: ['Start date and end date must be valid dates'] },
@@ -51,15 +45,15 @@ module Api
         end
 
         @total_count = query.count
-        @app_activities = query.recent.page(params[:page]).per(per_page)
+        @log_in_histories = query.order(timestamp: :desc).page(params[:page]).per(per_page)
         
         render :index
       end
 
       private
 
-      def app_activity_params
-        params.require(:app_activity).permit(:user_id, :app_id, :activity_type)
+      def log_in_history_params
+        params.require(:log_in_history).permit(:user_id, :metadata)
       end
     end
   end

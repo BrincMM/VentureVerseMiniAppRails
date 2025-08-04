@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       end
 
       resources :app_activities, only: [:index, :create]
+      resources :log_in_histories, only: [:index, :create]
 
       resources :credit_spents, only: [:create] do
         collection do

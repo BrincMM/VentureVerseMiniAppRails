@@ -1,8 +1,8 @@
-# List App Activities
+# List Login Histories
 
-Retrieves a paginated list of app activities with optional filters.
+Retrieves a paginated list of login histories with optional filters.
 
-**URL**: `/api/v1/app_activities`
+**URL**: `/api/v1/log_in_histories`
 
 **Method**: `GET`
 
@@ -12,10 +12,9 @@ Retrieves a paginated list of app activities with optional filters.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| activity_type | string | No | Filter by activity type. Must be one of: `app_usage`, `content_procurement`, `perks_procurement`, `nft_procurement` |
-| app_id | number | No | Filter by app ID |
-| start_date | string | No | Filter activities after this date (inclusive). Format: ISO 8601 |
-| end_date | string | No | Filter activities before this date (inclusive). Format: ISO 8601 |
+| user_id | number | No | Filter by user ID |
+| start_date | string | No | Filter login histories after this date (inclusive). Format: ISO 8601 |
+| end_date | string | No | Filter login histories before this date (inclusive). Format: ISO 8601 |
 | page | number | No | Page number for pagination (default: 1) |
 | per_page | number | No | Number of items per page (default: 10, max: 100) |
 
@@ -26,16 +25,14 @@ Retrieves a paginated list of app activities with optional filters.
 ```json
 {
   "success": true,
-  "message": "Activities retrieved successfully",
+  "message": "Login histories retrieved successfully",
   "data": {
-    "activities": [
+    "log_in_histories": [
       {
         "id": 1,
-        "activity_type": "app_usage",
-        "app_id": 1,
         "user_id": 1,
-        "app_meta": "{\"duration\":\"10m\"}",
         "timestamp": "2024-01-01T12:00:00Z",
+        "metadata": "{\"browser\":\"Chrome\",\"ip\":\"127.0.0.1\"}",
         "created_at": "2024-01-01T12:00:00Z",
         "updated_at": "2024-01-01T12:00:00Z"
       }

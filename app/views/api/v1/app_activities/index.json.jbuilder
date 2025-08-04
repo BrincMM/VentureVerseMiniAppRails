@@ -1,8 +1,8 @@
 json.success true
-json.message 'App activities retrieved successfully'
+json.message 'Activities retrieved successfully'
 json.data do
-  json.app_activities do
-    json.array! @app_activities, partial: 'api/v1/app_activities/app_activity', as: :app_activity
+  json.activities @app_activities do |app_activity|
+    json.partial! 'app_activity', app_activity: app_activity
   end
   json.has_next @app_activities.next_page.present?
   json.total_count @total_count
