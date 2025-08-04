@@ -43,6 +43,7 @@ Rails.application.routes.draw do
         post 'forget_password', to: 'forget_passwords#create'
         post 'verify_forget_password', to: 'forget_passwords#verify'
         post 'change_plan', to: 'change_plan#create'
+        post 'cancel_plan', to: 'cancel_plan#create'
       end
     end
   end
