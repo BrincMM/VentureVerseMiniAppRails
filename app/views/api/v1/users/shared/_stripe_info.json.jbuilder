@@ -1,0 +1,4 @@
+json.stripe_customer_id stripe_info.stripe_customer_id
+json.subscription_id stripe_info.subscription_id
+json.subscription_status stripe_info.subscription_status
+json.next_subscription_time stripe_info.next_subscription_time

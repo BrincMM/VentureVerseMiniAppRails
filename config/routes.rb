@@ -42,6 +42,7 @@ Rails.application.routes.draw do
         get 'profile/credit_info', to: 'profiles#credit_info'
         post 'forget_password', to: 'forget_passwords#create'
         post 'verify_forget_password', to: 'forget_passwords#verify'
+        post 'change_plan', to: 'change_plan#create'
       end
     end
   end

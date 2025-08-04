@@ -2,6 +2,8 @@ class StripeInfo < ApplicationRecord
   belongs_to :user
 
   validates :stripe_customer_id, presence: true, uniqueness: true
+  validates :subscription_id, presence: true, if: -> { subscription_status == 'active' }
+  validates :next_subscription_time, presence: true, if: -> { subscription_status == 'active' }
   validates :subscription_status, inclusion: { 
     in: %w[trialing active past_due canceled unpaid], 
     allow_nil: true 
