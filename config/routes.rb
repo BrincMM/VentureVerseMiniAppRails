@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       end
 
       resources :credit_topups, only: [:create]
+      resources :tiers, only: [:index]
 
       namespace :users do
         post 'email_signup', to: 'registrations#email_signup'
