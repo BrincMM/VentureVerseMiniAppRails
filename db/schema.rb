@@ -44,8 +44,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_apps_on_name", unique: true
     t.index ["category"], name: "index_apps_on_category"
+    t.index ["name"], name: "index_apps_on_name", unique: true
     t.index ["sector"], name: "index_apps_on_sector"
   end
 
@@ -147,8 +147,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["stripe_price_id"], name: "index_tiers_on_stripe_price_id", unique: true
     t.index ["name"], name: "index_tiers_on_name", unique: true
+    t.index ["stripe_price_id"], name: "index_tiers_on_stripe_price_id", unique: true
   end
 
   create_table "user_roles", force: :cascade do |t|
