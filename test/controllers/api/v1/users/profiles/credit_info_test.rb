@@ -3,15 +3,26 @@ require "test_helper"
 module Api
   module V1
     module Users
-      class ProfilesControllerTest < ActionDispatch::IntegrationTest
+      class ProfilesCreditInfoTest < ActionDispatch::IntegrationTest
         setup do
           @user = users(:user_one)
           @tier = tiers(:tier_one)
           @user.update(tier: @tier)
         end
 
-        test "should get credit info" do
+        test "should reject request without token" do
           get api_v1_users_profile_credit_info_path(user_id: @user.id)
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          get api_v1_users_profile_credit_info_path(user_id: @user.id),
+              headers: { 'Authorization' => 'Bearer invalid_token' }
+          assert_response :unauthorized
+        end
+
+        test "should get credit info" do
+          get_with_token api_v1_users_profile_credit_info_path(user_id: @user.id)
           assert_response :success
           
           json_response = JSON.parse(@response.body)
@@ -28,7 +39,7 @@ module Api
         end
 
         test "should return error for non-existent user" do
-          get api_v1_users_profile_credit_info_path(user_id: 999999)
+          get_with_token api_v1_users_profile_credit_info_path(user_id: 999999)
           assert_response :not_found
           
           json_response = JSON.parse(@response.body)

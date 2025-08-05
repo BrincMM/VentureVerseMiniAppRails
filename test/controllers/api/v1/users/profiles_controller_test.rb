@@ -8,8 +8,24 @@ module Api
           @user = users(:user_one)
         end
 
-        test "should update user profile successfully" do
+        test "should reject request without token" do
           patch api_v1_users_profile_url, params: {
+            first_name: "Updated Name"
+          }, as: :json
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          patch api_v1_users_profile_url,
+              headers: { 'Authorization' => 'Bearer invalid_token' },
+              params: {
+                first_name: "Updated Name"
+              }, as: :json
+          assert_response :unauthorized
+        end
+
+        test "should update user profile successfully" do
+          patch_with_token api_v1_users_profile_url, params: {
             first_name: "Updated Name",
             country: "Updated Country",
             nick_name: "updated_nick",
@@ -34,7 +50,7 @@ module Api
         end
 
         test "should update user roles successfully" do
-          patch api_v1_users_profile_url, params: {
+          patch_with_token api_v1_users_profile_url, params: {
             roles: ["mentor", "investor"]
           }, as: :json
 
@@ -51,7 +67,7 @@ module Api
         end
 
         test "should handle invalid profile updates" do
-          patch api_v1_users_profile_url, params: {
+          patch_with_token api_v1_users_profile_url, params: {
             first_name: "",  # first_name cannot be blank
             nick_name: "janesmith"  # nick_name already taken by user_two
           }, as: :json
@@ -66,7 +82,7 @@ module Api
         end
 
         test "should handle invalid roles" do
-          patch api_v1_users_profile_url, params: {
+          patch_with_token api_v1_users_profile_url, params: {
             roles: ["invalid_role"]
           }, as: :json
 
@@ -80,7 +96,7 @@ module Api
         test "should handle partial updates" do
           original_last_name = @user.last_name
           
-          patch api_v1_users_profile_url, params: {
+          patch_with_token api_v1_users_profile_url, params: {
             first_name: "Partial Update"
           }, as: :json
 
@@ -93,7 +109,7 @@ module Api
         end
 
         test "should get user profile" do
-          get api_v1_users_profile_path, params: { email: @user.email }
+          get_with_token api_v1_users_profile_path, params: { email: @user.email }
           assert_response :success
           
           json_response = JSON.parse(response.body)
@@ -108,7 +124,7 @@ module Api
         end
 
         test "should return not found for non-existent user" do
-          get api_v1_users_profile_path, params: { email: 'nonexistent@example.com' }
+          get_with_token api_v1_users_profile_path, params: { email: 'nonexistent@example.com' }
           assert_response :not_found
           
           json_response = JSON.parse(response.body)

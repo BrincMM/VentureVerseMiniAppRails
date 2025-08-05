@@ -8,11 +8,23 @@ module Api
         @log_in_history = log_in_histories(:one)
       end
 
+      test "should reject request without token" do
+        get api_v1_log_in_histories_url, as: :json
+        assert_response :unauthorized
+      end
+
+      test "should reject request with invalid token" do
+        get api_v1_log_in_histories_url,
+            headers: { 'Authorization' => 'Bearer invalid_token' },
+            as: :json
+        assert_response :unauthorized
+      end
+
       test "should create log in history" do
         metadata = { "browser" => "Chrome", "ip" => "127.0.0.1" }
         
         assert_difference("LogInHistory.count") do
-          post api_v1_log_in_histories_url, params: {
+          post_with_token api_v1_log_in_histories_url, params: {
             log_in_history: {
               user_id: @user.id,
               metadata: metadata.to_json
@@ -32,7 +44,7 @@ module Api
       end
 
       test "should not create log in history with invalid metadata" do
-        post api_v1_log_in_histories_url, params: {
+        post_with_token api_v1_log_in_histories_url, params: {
           log_in_history: {
             user_id: @user.id,
             metadata: "invalid json"
@@ -48,7 +60,7 @@ module Api
       end
 
       test "should get list of login histories" do
-        get api_v1_log_in_histories_url, as: :json
+        get_with_token api_v1_log_in_histories_url, as: :json
         
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -64,7 +76,7 @@ module Api
       end
 
       test "should filter login histories by user_id" do
-        get api_v1_log_in_histories_url, params: { user_id: @user.id }, as: :json
+        get_with_token api_v1_log_in_histories_url, params: { user_id: @user.id }, as: :json
         
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -76,7 +88,7 @@ module Api
       end
 
       test "should filter login histories by date range" do
-        get api_v1_log_in_histories_url, params: {
+        get_with_token api_v1_log_in_histories_url, params: {
           start_date: 1.day.ago.iso8601,
           end_date: 1.day.from_now.iso8601
         }, as: :json
@@ -87,7 +99,7 @@ module Api
       end
 
       test "should return error for invalid date format" do
-        get api_v1_log_in_histories_url, params: {
+        get_with_token api_v1_log_in_histories_url, params: {
           start_date: "invalid-date",
           end_date: "invalid-date"
         }, as: :json
@@ -101,7 +113,7 @@ module Api
       end
 
       test "should return error for invalid pagination parameters" do
-        get api_v1_log_in_histories_url, params: { per_page: 0 }, as: :json
+        get_with_token api_v1_log_in_histories_url, params: { per_page: 0 }, as: :json
         
         assert_response :unprocessable_entity
         json_response = JSON.parse(response.body)

@@ -14,7 +14,7 @@ module Api
       end
 
       test "should add access to apps" do
-        post add_access_api_v1_apps_path, as: :json, params: {
+        post_with_token add_access_api_v1_apps_path, as: :json, params: {
           user_id: @user.id,
           app_ids: [@app1.id, @app2.id]
         }
@@ -35,7 +35,7 @@ module Api
         AppAccess.create!(user: @user, app: @app1)
         initial_count = AppAccess.count
 
-        post add_access_api_v1_apps_path, as: :json, params: {
+        post_with_token add_access_api_v1_apps_path, as: :json, params: {
           user_id: @user.id,
           app_ids: [@app1.id, @app2.id]
         }
@@ -51,7 +51,7 @@ module Api
       end
 
       test "should handle invalid user_id" do
-        post add_access_api_v1_apps_path, params: {
+        post_with_token add_access_api_v1_apps_path, params: {
           user_id: 999999,
           app_ids: [@app1.id]
         }
@@ -62,7 +62,7 @@ module Api
       end
 
       test "should handle invalid app_ids" do
-        post add_access_api_v1_apps_path, as: :json, params: {
+        post_with_token add_access_api_v1_apps_path, as: :json, params: {
           user_id: @user.id,
           app_ids: [999999]
         }

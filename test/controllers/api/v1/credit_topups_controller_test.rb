@@ -4,19 +4,38 @@ module Api
   module V1
     class CreditTopupsControllerTest < ActionDispatch::IntegrationTest
       setup do
-        @user = users(:one)
+        @user = users(:user_one)
         @initial_topup_balance = @user.topup_credit_balance
+      end
+
+      test "should reject request without token" do
+        post api_v1_credit_topups_path, params: {
+          user_id: @user.id,
+          credits: 100.0
+        }
+        assert_response :unauthorized
+      end
+
+      test "should reject request with invalid token" do
+        post api_v1_credit_topups_path,
+            headers: { 'Authorization' => 'Bearer invalid_token' },
+            params: {
+              user_id: @user.id,
+              credits: 100.0
+            }
+        assert_response :unauthorized
       end
 
       test "should create credit topup" do
         assert_difference("CreditTopup.count") do
-          post api_v1_credit_topups_path, params: {
+          post_with_token api_v1_credit_topups_path, params: {
             user_id: @user.id,
             credits: 100.0
           }
         end
 
         assert_response :created
+        json_response = JSON.parse(@response.body)
         assert_equal true, json_response["success"]
         assert_equal "Credit topup record created successfully", json_response["message"]
         
@@ -39,13 +58,14 @@ module Api
 
       test "should not create credit topup with invalid credits" do
         assert_no_difference("CreditTopup.count") do
-          post api_v1_credit_topups_path, params: {
+          post_with_token api_v1_credit_topups_path, params: {
             user_id: @user.id,
             credits: -10.0
           }
         end
 
         assert_response :unprocessable_entity
+        json_response = JSON.parse(@response.body)
         assert_equal false, json_response["success"]
         assert_equal "Failed to create credit topup", json_response["message"]
         assert_includes json_response["errors"], "Credits must be greater than 0"
@@ -53,13 +73,14 @@ module Api
 
       test "should not create credit topup for non-existent user" do
         assert_no_difference("CreditTopup.count") do
-          post api_v1_credit_topups_path, params: {
+          post_with_token api_v1_credit_topups_path, params: {
             user_id: 999999,
             credits: 100.0
           }
         end
 
         assert_response :not_found
+        json_response = JSON.parse(@response.body)
         assert_equal false, json_response["success"]
         assert_equal "User not found", json_response["message"]
         assert_includes json_response["errors"], "User not found"

@@ -10,8 +10,30 @@ module Api
           @stripe_info = stripe_infos(:stripe_one)
         end
 
-        test "should change plan successfully" do
+        test "should reject request without token" do
           post api_v1_users_change_plan_path, params: {
+            user_id: @user.id,
+            tier_id: @tier.id,
+            subscription_id: "new_sub_id",
+            next_subscription_time: 1.month.from_now
+          }
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          post api_v1_users_change_plan_path,
+              headers: { 'Authorization' => 'Bearer invalid_token' },
+              params: {
+                user_id: @user.id,
+                tier_id: @tier.id,
+                subscription_id: "new_sub_id",
+                next_subscription_time: 1.month.from_now
+              }
+          assert_response :unauthorized
+        end
+
+        test "should change plan successfully" do
+          post_with_token api_v1_users_change_plan_path, params: {
             user_id: @user.id,
             tier_id: @tier.id,
             subscription_id: "new_sub_id",
@@ -28,7 +50,7 @@ module Api
         end
 
         test "should return error when user not found" do
-          post api_v1_users_change_plan_path, params: {
+          post_with_token api_v1_users_change_plan_path, params: {
             user_id: 999999,
             tier_id: @tier.id,
             subscription_id: "new_sub_id",
@@ -42,7 +64,7 @@ module Api
         end
 
         test "should return error when tier not found" do
-          post api_v1_users_change_plan_path, params: {
+          post_with_token api_v1_users_change_plan_path, params: {
             user_id: @user.id,
             tier_id: 999999,
             subscription_id: "new_sub_id",
@@ -56,7 +78,7 @@ module Api
         end
 
         test "should return error when required params missing" do
-          post api_v1_users_change_plan_path, params: {
+          post_with_token api_v1_users_change_plan_path, params: {
             user_id: @user.id,
             tier_id: @tier.id
           }

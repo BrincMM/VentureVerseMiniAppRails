@@ -86,11 +86,12 @@ class UserTest < ActiveSupport::TestCase
 
   test "record activity" do
     app = apps(:app_one)
-    activity = @user.record_activity(app, :app_usage, "test meta")
+    meta = { message: "test meta" }.to_json
+    activity = @user.record_activity(app, :app_usage, meta)
     
     assert_equal app, activity.app
     assert_equal "app_usage", activity.activity_type
-    assert_equal "test meta", activity.app_meta
+    assert_equal meta, activity.app_meta
     assert_equal @user, activity.user
   end
 

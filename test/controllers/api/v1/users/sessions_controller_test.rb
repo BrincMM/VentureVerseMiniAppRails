@@ -4,10 +4,27 @@ module Api
   module V1
     module Users
       class SessionsControllerTest < ActionDispatch::IntegrationTest
+        test "should reject request without token" do
+          post_with_token api_v1_users_verify_password_url, params: {
+            email: "test@example.com",
+            password: "password123"
+          }, as: :json
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          post api_v1_users_verify_password_url,
+              headers: { 'Authorization' => 'Bearer invalid_token' },
+              params: {
+                email: "test@example.com",
+                password: "password123"
+              }, as: :json
+          assert_response :unauthorized
+        end
         test "should verify password successfully" do
           user = users(:user_one)
           
-          post api_v1_users_verify_password_url, params: {
+          post_with_token api_v1_users_verify_password_url, params: {
             email: user.email,
             password: "password123" # Assuming this is the password in fixtures
           }, as: :json
@@ -29,7 +46,7 @@ module Api
         test "should fail with invalid password" do
           user = users(:user_one)
           
-          post api_v1_users_verify_password_url, params: {
+          post_with_token api_v1_users_verify_password_url, params: {
             email: user.email,
             password: "wrong_password"
           }, as: :json
@@ -42,7 +59,7 @@ module Api
         end
 
         test "should fail with non-existent email" do
-          post api_v1_users_verify_password_url, params: {
+          post_with_token api_v1_users_verify_password_url, params: {
             email: "nonexistent@example.com",
             password: "password123"
           }, as: :json
@@ -55,7 +72,7 @@ module Api
         end
 
         test "should fail with missing parameters" do
-          post api_v1_users_verify_password_url, params: {}, as: :json
+          post_with_token api_v1_users_verify_password_url, params: {}, as: :json
 
           assert_response :unauthorized
           json_response = JSON.parse(response.body)
@@ -67,7 +84,7 @@ module Api
         test "should update password successfully" do
           user = users(:user_one)
           
-          patch api_v1_users_update_password_url, params: {
+          patch_with_token api_v1_users_update_password_url, params: {
             email: user.email,
             password: "newpassword123"
           }, as: :json
@@ -83,7 +100,7 @@ module Api
           assert_equal user.email, user_data["email"]
 
           # Verify new password works
-          post api_v1_users_verify_password_url, params: {
+          post_with_token api_v1_users_verify_password_url, params: {
             email: user.email,
             password: "newpassword123"
           }, as: :json
@@ -91,7 +108,7 @@ module Api
         end
 
         test "should fail to update password with non-existent email" do
-          patch api_v1_users_update_password_url, params: {
+          patch_with_token api_v1_users_update_password_url, params: {
             email: "nonexistent@example.com",
             password: "newpassword123"
           }, as: :json
@@ -104,7 +121,7 @@ module Api
         end
 
         test "should fail to update password with missing parameters" do
-          patch api_v1_users_update_password_url, params: {}, as: :json
+          patch_with_token api_v1_users_update_password_url, params: {}, as: :json
 
           assert_response :not_found
           json_response = JSON.parse(response.body)

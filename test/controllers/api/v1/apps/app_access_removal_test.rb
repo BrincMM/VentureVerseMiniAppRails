@@ -16,7 +16,7 @@ module Api
       end
 
       test "should remove access to apps" do
-        delete remove_access_api_v1_apps_path, as: :json, params: {
+        delete_with_token remove_access_api_v1_apps_path, as: :json, params: {
           user_id: @user.id,
           app_ids: [@app1.id, @app2.id]
         }
@@ -32,7 +32,7 @@ module Api
       end
 
       test "should handle non-existent access" do
-        delete remove_access_api_v1_apps_path, as: :json, params: {
+        delete_with_token remove_access_api_v1_apps_path, as: :json, params: {
           user_id: @user.id,
           app_ids: [999999]
         }
@@ -43,7 +43,7 @@ module Api
       end
 
       test "should handle invalid user_id" do
-        delete remove_access_api_v1_apps_path, params: {
+        delete_with_token remove_access_api_v1_apps_path, params: {
           user_id: 999999,
           app_ids: [@app1.id]
         }
@@ -54,7 +54,7 @@ module Api
       end
 
       test "should handle partial access removal" do
-        delete remove_access_api_v1_apps_path, as: :json, params: {
+        delete_with_token remove_access_api_v1_apps_path, as: :json, params: {
           user_id: @user.id,
           app_ids: [@app1.id, 999999]
         }

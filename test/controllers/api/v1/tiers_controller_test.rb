@@ -6,8 +6,20 @@ class Api::V1::TiersControllerTest < ActionDispatch::IntegrationTest
     @tier_two = tiers(:tier_two)
   end
 
-  test "should get list of active tiers" do
+  test "should reject request without token" do
     get api_v1_tiers_url, as: :json
+    assert_response :unauthorized
+  end
+
+  test "should reject request with invalid token" do
+    get api_v1_tiers_url,
+        headers: { 'Authorization' => 'Bearer invalid_token' },
+        as: :json
+    assert_response :unauthorized
+  end
+
+  test "should get list of active tiers" do
+    get_with_token api_v1_tiers_url, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)

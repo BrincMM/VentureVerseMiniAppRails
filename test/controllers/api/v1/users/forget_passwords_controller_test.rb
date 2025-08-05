@@ -4,11 +4,26 @@ module Api
   module V1
     module Users
       class ForgetPasswordsControllerTest < ActionDispatch::IntegrationTest
+        test "should reject request without token" do
+          post api_v1_users_forget_password_url, params: {
+            email: "test@example.com"
+          }, as: :json
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          post api_v1_users_forget_password_url,
+              headers: { 'Authorization' => 'Bearer invalid_token' },
+              params: {
+                email: "test@example.com"
+              }, as: :json
+          assert_response :unauthorized
+        end
         test "should create forget password code successfully" do
           user = users(:user_one)
           
           assert_difference('ForgetPassword.count') do
-            post api_v1_users_forget_password_url, params: {
+            post_with_token api_v1_users_forget_password_url, params: {
               email: user.email
             }, as: :json
           end
@@ -27,7 +42,7 @@ module Api
         end
 
         test "should fail with non-existent email" do
-          post api_v1_users_forget_password_url, params: {
+          post_with_token api_v1_users_forget_password_url, params: {
             email: "nonexistent@example.com"
           }, as: :json
 
@@ -39,7 +54,7 @@ module Api
         end
 
         test "should fail with missing email parameter" do
-          post api_v1_users_forget_password_url, as: :json
+          post_with_token api_v1_users_forget_password_url, as: :json
 
           assert_response :unprocessable_entity
           json_response = JSON.parse(response.body)
@@ -52,7 +67,7 @@ module Api
           user = users(:user_one)
           forget_password = forget_passwords(:forget_password_one)
           
-          post api_v1_users_verify_forget_password_url, params: {
+          post_with_token api_v1_users_verify_forget_password_url, params: {
             email: forget_password.email,
             code: forget_password.code
           }, as: :json
@@ -69,7 +84,7 @@ module Api
           user = users(:user_one)
           forget_password = forget_passwords(:forget_password_one)
           
-          post api_v1_users_verify_forget_password_url, params: {
+          post_with_token api_v1_users_verify_forget_password_url, params: {
             email: forget_password.email,
             code: "999999" # Wrong code
           }, as: :json
@@ -88,7 +103,7 @@ module Api
           # Update created_at to be more than 1 hour ago
           forget_password.update_column(:created_at, 2.hours.ago)
           
-          post api_v1_users_verify_forget_password_url, params: {
+          post_with_token api_v1_users_verify_forget_password_url, params: {
             email: forget_password.email,
             code: forget_password.code
           }, as: :json
@@ -101,7 +116,7 @@ module Api
         end
 
         test "should fail with missing parameters for verify" do
-          post api_v1_users_verify_forget_password_url, as: :json
+          post_with_token api_v1_users_verify_forget_password_url, as: :json
 
           assert_response :unprocessable_entity
           json_response = JSON.parse(response.body)

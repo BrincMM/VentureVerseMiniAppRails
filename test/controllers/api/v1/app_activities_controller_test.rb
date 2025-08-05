@@ -9,9 +9,21 @@ module Api
         @activity = app_activities(:activity_one)
       end
 
+      test "should reject request without token" do
+        get api_v1_app_activities_url, as: :json
+        assert_response :unauthorized
+      end
+
+      test "should reject request with invalid token" do
+        get api_v1_app_activities_url,
+            headers: { 'Authorization' => 'Bearer invalid_token' },
+            as: :json
+        assert_response :unauthorized
+      end
+
       test "should create app activity" do
         assert_difference("AppActivity.count") do
-          post api_v1_app_activities_url, params: {
+          post_with_token api_v1_app_activities_url, params: {
             app_activity: {
               user_id: @user.id,
               app_id: @app.id,
@@ -35,7 +47,7 @@ module Api
       end
 
       test "should not create app activity with invalid parameters" do
-        post api_v1_app_activities_url, params: {
+        post_with_token api_v1_app_activities_url, params: {
           app_activity: {
             user_id: @user.id,
             app_id: @app.id,
@@ -52,7 +64,7 @@ module Api
       end
 
       test "should get list of activities" do
-        get api_v1_app_activities_url, as: :json
+        get_with_token api_v1_app_activities_url, as: :json
         
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -68,7 +80,7 @@ module Api
       end
 
       test "should filter activities by type" do
-        get api_v1_app_activities_url, params: { activity_type: "app_usage" }, as: :json
+        get_with_token api_v1_app_activities_url, params: { activity_type: "app_usage" }, as: :json
         
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -79,7 +91,7 @@ module Api
       end
 
       test "should filter activities by app_id" do
-        get api_v1_app_activities_url, params: { app_id: @app.id }, as: :json
+        get_with_token api_v1_app_activities_url, params: { app_id: @app.id }, as: :json
         
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -91,7 +103,7 @@ module Api
       end
 
       test "should filter activities by date range" do
-        get api_v1_app_activities_url, params: {
+        get_with_token api_v1_app_activities_url, params: {
           start_date: 1.day.ago.iso8601,
           end_date: 1.day.from_now.iso8601
         }, as: :json
@@ -102,7 +114,7 @@ module Api
       end
 
       test "should return error for invalid date format" do
-        get api_v1_app_activities_url, params: {
+        get_with_token api_v1_app_activities_url, params: {
           start_date: "invalid-date",
           end_date: "invalid-date"
         }, as: :json
@@ -116,7 +128,7 @@ module Api
       end
 
       test "should return error for invalid pagination parameters" do
-        get api_v1_app_activities_url, params: { per_page: 0 }, as: :json
+        get_with_token api_v1_app_activities_url, params: { per_page: 0 }, as: :json
         
         assert_response :unprocessable_entity
         json_response = JSON.parse(response.body)

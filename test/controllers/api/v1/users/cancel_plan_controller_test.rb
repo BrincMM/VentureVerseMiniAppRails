@@ -9,8 +9,24 @@ module Api
           @stripe_info = stripe_infos(:stripe_one)
         end
 
-        test "should cancel plan successfully" do
+        test "should reject request without token" do
           post api_v1_users_cancel_plan_path, params: {
+            user_id: @user.id
+          }
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          post api_v1_users_cancel_plan_path,
+              headers: { 'Authorization' => 'Bearer invalid_token' },
+              params: {
+                user_id: @user.id
+              }
+          assert_response :unauthorized
+        end
+
+        test "should cancel plan successfully" do
+          post_with_token api_v1_users_cancel_plan_path, params: {
             user_id: @user.id
           }
 
@@ -22,7 +38,7 @@ module Api
         end
 
         test "should return error when user not found" do
-          post api_v1_users_cancel_plan_path, params: {
+          post_with_token api_v1_users_cancel_plan_path, params: {
             user_id: 999999
           }
 
@@ -35,7 +51,7 @@ module Api
         test "should return error when no active subscription" do
           @user.stripe_info.update!(subscription_status: 'canceled')
           
-          post api_v1_users_cancel_plan_path, params: {
+          post_with_token api_v1_users_cancel_plan_path, params: {
             user_id: @user.id
           }
 

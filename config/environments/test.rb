@@ -60,7 +60,10 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # Set log level to debug for testing
-  config.log_level = :debug
+  # Set log level to warn for testing (to hide SQL logs)
+  config.log_level = :warn
   config.logger = Logger.new(STDOUT)
+  
+  # Disable SQL logging in test environment
+  config.active_record.logger = nil
 end

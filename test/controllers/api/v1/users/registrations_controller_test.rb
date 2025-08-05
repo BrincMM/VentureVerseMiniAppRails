@@ -4,11 +4,34 @@ module Api
   module V1
     module Users
       class RegistrationsControllerTest < ActionDispatch::IntegrationTest
+        test "should reject request without token" do
+          post api_v1_users_google_signup_url, params: {
+            email: "newuser@example.com",
+            google_id: "google123",
+            first_name: "John",
+            last_name: "Doe",
+            age_consent: true
+          }, as: :json
+          assert_response :unauthorized
+        end
+
+        test "should reject request with invalid token" do
+          post api_v1_users_google_signup_url,
+              headers: { 'Authorization' => 'Bearer invalid_token' },
+              params: {
+                email: "newuser@example.com",
+                google_id: "google123",
+                first_name: "John",
+                last_name: "Doe",
+                age_consent: true
+              }, as: :json
+          assert_response :unauthorized
+        end
         test "should create user with google signup" do
           puts "\nGoogle Signup Endpoint: #{api_v1_users_google_signup_url}"
           
           assert_difference('User.count') do
-            post api_v1_users_google_signup_url, params: {
+            post_with_token api_v1_users_google_signup_url, params: {
               email: "newuser@example.com",
               google_id: "google123",
               first_name: "John",
@@ -39,7 +62,7 @@ module Api
           puts "\nEmail Signup Endpoint: #{api_v1_users_email_signup_url}"
           
           assert_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: "newuser@example.com",
               password: "password123",
               first_name: "John",
@@ -70,7 +93,7 @@ module Api
           puts "\nEmail Signup with Optional Params Endpoint: #{api_v1_users_email_signup_url}"
           
           assert_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: "newuser@example.com",
               password: "password123",
               first_name: "John",
@@ -111,7 +134,7 @@ module Api
 
         test "should not create user with google signup when missing required fields" do
           assert_no_difference('User.count') do
-            post api_v1_users_google_signup_url, params: {
+            post_with_token api_v1_users_google_signup_url, params: {
               email: "newuser@example.com",
               google_id: "google123"
               # missing first_name, last_name, age_consent
@@ -129,7 +152,7 @@ module Api
 
         test "should not create user with email signup when missing required fields" do
           assert_no_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: "newuser@example.com"
               # missing password, first_name, last_name, age_consent
             }, as: :json
@@ -147,7 +170,7 @@ module Api
 
         test "should not create user with invalid email" do
           assert_no_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: "invalid-email",
               password: "password123",
               first_name: "John",
@@ -165,7 +188,7 @@ module Api
           existing_user = users(:user_one)
 
           assert_no_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: existing_user.email,
               password: "password123",
               first_name: "John",
@@ -183,7 +206,7 @@ module Api
           existing_user = users(:user_one)
 
           assert_no_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: "new@example.com",
               password: "password123",
               first_name: "John",
@@ -200,7 +223,7 @@ module Api
 
         test "should not create user with invalid URLs" do
           assert_no_difference('User.count') do
-            post api_v1_users_email_signup_url, params: {
+            post_with_token api_v1_users_email_signup_url, params: {
               email: "new@example.com",
               password: "password123",
               first_name: "John",

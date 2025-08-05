@@ -12,8 +12,20 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
     @app_two.save!
   end
 
-  test "should get list of apps" do
+  test "should reject request without token" do
     get api_v1_apps_url, as: :json
+    assert_response :unauthorized
+  end
+
+  test "should reject request with invalid token" do
+    get api_v1_apps_url, 
+        headers: { 'Authorization' => 'Bearer invalid_token' },
+        as: :json
+    assert_response :unauthorized
+  end
+
+  test "should get list of apps" do
+    get_with_token api_v1_apps_url, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -34,7 +46,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter apps by category" do
-    get api_v1_apps_url, params: { category: "AI" }, as: :json
+    get_with_token api_v1_apps_url, params: { category: "AI" }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -43,7 +55,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter apps by sector" do
-    get api_v1_apps_url, params: { sector: "Finance" }, as: :json
+    get_with_token api_v1_apps_url, params: { sector: "Finance" }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -62,7 +74,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
       )
     end
 
-    get api_v1_apps_url, params: { per_page: 3, page: 1 }, as: :json
+    get_with_token api_v1_apps_url, params: { per_page: 3, page: 1 }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -73,7 +85,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 3, json_response["data"]["per_page"]
 
     # Get next page
-    get api_v1_apps_url, params: { per_page: 3, page: 2 }, as: :json
+    get_with_token api_v1_apps_url, params: { per_page: 3, page: 2 }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -83,7 +95,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter apps by tags" do
-    get api_v1_apps_url, params: { tags: "ai,machine-learning" }, as: :json
+    get_with_token api_v1_apps_url, params: { tags: "ai,machine-learning" }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -92,7 +104,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
     assert_equal ["ai", "machine-learning"].sort, json_response["data"]["apps"][0]["tags"].sort
 
     # Test single tag
-    get api_v1_apps_url, params: { tags: "finance" }, as: :json
+    get_with_token api_v1_apps_url, params: { tags: "finance" }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
@@ -102,7 +114,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle invalid per_page parameter" do
-    get api_v1_apps_url, params: { per_page: 101 }, as: :json
+    get_with_token api_v1_apps_url, params: { per_page: 101 }, as: :json
     assert_response :unprocessable_entity
     
     json_response = JSON.parse(response.body)

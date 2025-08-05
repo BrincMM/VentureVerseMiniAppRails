@@ -7,8 +7,31 @@ module Api
         @user = users(:user_one)
       end
 
-      test "calculate with estimation returns credit amount" do
+      test "should reject request without token" do
         post '/api/v1/credit_spents',
+             params: {
+               cost: 0.5,
+               type: "app_usage",
+               user_id: @user.id,
+               estimation: true
+             }
+        assert_response :unauthorized
+      end
+
+      test "should reject request with invalid token" do
+        post '/api/v1/credit_spents',
+             headers: { 'Authorization' => 'Bearer invalid_token' },
+             params: {
+               cost: 0.5,
+               type: "app_usage",
+               user_id: @user.id,
+               estimation: true
+             }
+        assert_response :unauthorized
+      end
+
+      test "calculate with estimation returns credit amount" do
+        post_with_token '/api/v1/credit_spents',
              params: {
                cost: 0.5,
                type: "app_usage",
@@ -26,7 +49,7 @@ module Api
 
       test "calculate without estimation creates credit spent record" do
         assert_difference "CreditSpent.count", 1 do
-          post '/api/v1/credit_spents',
+          post_with_token '/api/v1/credit_spents',
                params: {
                  cost: 1.0,
                  type: "content_procurement",
@@ -51,7 +74,7 @@ module Api
       end
 
       test "calculate with invalid cost returns error" do
-        post '/api/v1/credit_spents',
+        post_with_token '/api/v1/credit_spents',
              params: {
                cost: 0,
                type: "app_usage",
@@ -67,7 +90,7 @@ module Api
       end
 
       test "calculate with invalid type returns error" do
-        post '/api/v1/credit_spents',
+        post_with_token '/api/v1/credit_spents',
              params: {
                cost: 1.0,
                type: "invalid_type",
@@ -83,7 +106,7 @@ module Api
       end
 
       test "calculate with non-existent user returns error" do
-        post '/api/v1/credit_spents',
+        post_with_token '/api/v1/credit_spents',
              params: {
                cost: 1.0,
                type: "app_usage",
@@ -99,7 +122,7 @@ module Api
       end
 
       test "calculate with missing parameters returns error" do
-        post '/api/v1/credit_spents',
+        post_with_token '/api/v1/credit_spents',
              params: {}
 
         assert_response :unprocessable_entity
