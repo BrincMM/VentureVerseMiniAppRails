@@ -27,6 +27,9 @@ module Api
             )
             
             if forget_password.save
+              # Send verification code email
+              UserMailer.with(email: @user.email, code: code).forgot_password_email.deliver_now
+
               render json: {
                 success: true,
                 message: "Verification code sent successfully",
