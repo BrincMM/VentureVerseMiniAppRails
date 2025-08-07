@@ -43,9 +43,7 @@ Rails.application.configure do
     authentication: 'plain',
     enable_starttls_auto: true,
     open_timeout: 10,
-    read_timeout: 10,
-    ssl: false,
-    tls: true
+    read_timeout: 10
   }
 
   # Make template changes take effect immediately.

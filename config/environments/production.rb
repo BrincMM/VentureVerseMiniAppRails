@@ -72,10 +72,8 @@ Rails.application.configure do
     password: Rails.application.credentials.gmail_app_password,
     authentication: 'plain',
     enable_starttls_auto: true,
-    open_timeout: 5,
-    read_timeout: 5,
-    ssl: false,
-    tls: true
+    open_timeout: 10,
+    read_timeout: 10
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
