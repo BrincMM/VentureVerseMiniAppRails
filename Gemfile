@@ -44,6 +44,7 @@ gem "thruster", require: false
 
 # Use devise for authentication
 gem 'devise', '~> 4.9.3'
+gem 'stripe'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
