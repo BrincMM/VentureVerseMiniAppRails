@@ -13,7 +13,12 @@ module Api
         end
 
         def update
-          @user = User.find_by(email: 'user1@example.com') # 测试用，实际项目中应该是通过认证获取当前用户
+          @user = User.find_by(id: params[:user_id])
+          
+          unless @user
+            render 'api/v1/shared/error', locals: { message: 'User not found', errors: nil }, status: :not_found, formats: [:json]
+            return
+          end
           
           if @user.update(user_params)
             # Handle user roles update if roles are provided

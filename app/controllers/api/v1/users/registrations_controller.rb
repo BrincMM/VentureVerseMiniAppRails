@@ -9,7 +9,6 @@ module Api
             process_user_roles
             render :user, formats: [:json], status: :created
           else
-            puts "\nValidation errors: #{@user.errors.full_messages}"
             render 'api/v1/shared/error', locals: { message: 'Failed to create user', errors: @user.errors.full_messages }, status: :unprocessable_entity, formats: [:json]
           end
         end

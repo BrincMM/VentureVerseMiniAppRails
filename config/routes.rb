@@ -39,7 +39,7 @@ Rails.application.routes.draw do
         post 'verify_password', to: 'sessions#verify_password'
         patch 'update_password', to: 'sessions#update_password'
         get 'profile', to: 'profiles#show'
-        patch 'profile', to: 'profiles#update'
+        patch ':user_id/profile', to: 'profiles#update'
         get 'profile/credit_info', to: 'profiles#credit_info'
         post 'forget_password', to: 'forget_passwords#create'
         post 'verify_forget_password', to: 'forget_passwords#verify'

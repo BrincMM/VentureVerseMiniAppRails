@@ -3,12 +3,18 @@
 ## Endpoint
 
 ```
-PATCH /api/v1/users/profile
+PATCH /api/v1/users/:user_id/profile
 ```
 
 ## Description
 
 Update the current user's profile information and roles. All fields are optional - only the provided fields will be updated.
+
+## URL Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| user_id   | integer | yes   | ID of the user to update |
 
 ## Request Parameters
 
@@ -98,7 +104,7 @@ Update the current user's profile information and roles. All fields are optional
 
 ```bash
 curl -X PATCH \
-  'http://api.example.com/api/v1/users/profile' \
+  'http://api.example.com/api/v1/users/1/profile' \
   -H 'Content-Type: application/json' \
   -d '{
     "first_name": "John",
