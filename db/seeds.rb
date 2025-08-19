@@ -5,45 +5,57 @@
 apps_data = [
   {
     name: "Pitch Deck Analyzer",
-    description: "Upload your pitch deck and get AI feedback on structure and content",
-    category: "Startup Tools",
-    sector: "Pitch & Presentation",
-    tag_list: ["pitch deck", "AI feedback", "startup"]
+    description: "Upload your pitchdeck and get instant feedback on fundability of your business.",
+    category: "Business Strategy",
+    sector: "Web 3",
+    link: "https://drdeck.brincos.io/",
+    tag_list: ["Pitching", "Fund Raising"],
+    sort_order: 1
   },
   {
     name: "Pitch Coach",
-    description: "Practice pitching with simulated VC feedback and scoring",
-    category: "Startup Tools",
-    sector: "Pitch & Presentation",
-    tag_list: ["pitch practice", "VC feedback", "simulation"]
+    description: "Practice your pitch with different AI Investor.",
+    category: "Business Strategy",
+    sector: "Web 3",
+    link: "https://pitchq.brincos.io/",
+    tag_list: ["Pitching", "Fund Raising"],
+    sort_order: 2
   },
   {
     name: "Tokenomics Builder",
-    description: "Design and simulate token vesting models and allocations",
-    category: "Startup Tools",
-    sector: "Blockchain & Tokenomics",
-    tag_list: ["tokenomics", "vesting", "token allocation"]
+    description: "Best tool to learn about tokenomics while building it.",
+    category: "Business Strategy",
+    sector: "Web 3",
+    link: "https://tokenomics.brincos.io/landing",
+    tag_list: ["Tokenomics", "Web 3", "Fund Raising"],
+    sort_order: 3
   },
   {
     name: "Cap Table Visualizer",
-    description: "Model funding rounds and visualize equity dilution",
-    category: "Startup Tools",
-    sector: "Finance & Equity",
-    tag_list: ["cap table", "equity", "funding rounds"]
+    description: "Visualize your current cap table, build scenarios when receiving new investments.",
+    category: "Business Strategy",
+    sector: "General",
+    link: "https://capviz.replit.app/",
+    tag_list: ["Fund Raising", "Cap Table"],
+    sort_order: 4
   },
   {
     name: "Termsheet Analyzer",
-    description: "Analyze and find risk in your termsheets based on your company profile!",
-    category: "Startup Tools",
-    sector: "Legal & Finance",
-    tag_list: ["termsheet", "risk analysis", "legal"]
+    description: "Quick risk analysis tool for your termsheet.",
+    category: "Legal",
+    sector: "Web 3",
+    link: "https://termsheets.brincos.io/",
+    tag_list: ["Termsheet", "Risk Management"],
+    sort_order: 5
   },
   {
     name: "Token Utility Planner",
-    description: "Build your tokenomics!",
-    category: "Startup Tools",
-    sector: "Blockchain & Tokenomics",
-    tag_list: ["token utility", "tokenomics", "blockchain"]
+    description: "Plan your token utility.",
+    category: "Business Strategy",
+    sector: "Web 3",
+    link: "https://utility.brincos.io/",
+    tag_list: ["Tokenomic", "Web 3"],
+    sort_order: 6
   }
 ]
 
@@ -54,7 +66,9 @@ apps_data.each do |app_data|
     description: app_data[:description],
     category: app_data[:category],
     sector: app_data[:sector],
-    tag_list: app_data[:tag_list]
+    link: app_data[:link],
+    tag_list: app_data[:tag_list],
+    sort_order: app_data[:sort_order]
   )
   puts "Created/Updated app: #{app.name}"
 end

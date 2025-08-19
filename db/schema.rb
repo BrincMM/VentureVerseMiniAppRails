@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_19_074258) do
   create_table "app_accesses", force: :cascade do |t|
     t.integer "app_id", null: false
     t.integer "user_id", null: false
@@ -44,9 +44,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_093700) do
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sort_order", default: 0
     t.index ["category"], name: "index_apps_on_category"
     t.index ["name"], name: "index_apps_on_name", unique: true
     t.index ["sector"], name: "index_apps_on_sector"
+    t.index ["sort_order"], name: "index_apps_on_sort_order"
   end
 
   create_table "credit_spents", force: :cascade do |t|

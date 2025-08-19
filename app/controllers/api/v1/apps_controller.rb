@@ -15,7 +15,7 @@ module Api
         query = query.with_any_tags(params[:tags].split(',')) if params[:tags].present?
 
         @total_count = query.count
-        @apps = query.order(created_at: :desc, id: :desc).page(params[:page]).per(per_page)
+        @apps = query.order(sort_order: :asc, id: :asc).page(params[:page]).per(per_page)
         
         render :index
       end
