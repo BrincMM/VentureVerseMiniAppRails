@@ -3,8 +3,6 @@
 module Api
   module V1
     class StripeWebhooksController < ApiController
-      # Skip CSRF protection for webhooks
-      skip_before_action :verify_authenticity_token
       
       def handle
         payload = request.body.read
