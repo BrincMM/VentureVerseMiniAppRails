@@ -1,5 +1,7 @@
 waiting_list_one:
   email: test1@example.com
+  subscribe_type: email
 
 waiting_list_two:
   email: test2@example.com
+  subscribe_type: google
