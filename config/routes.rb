@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
       resources :credit_topups, only: [:create]
       resources :tiers, only: [:index]
+      resources :waiting_lists, only: [:create]
       
       # Stripe subscriptions
       post 'stripe/webhooks', to: 'stripe_webhooks#handle'

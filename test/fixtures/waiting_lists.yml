@@ -1,0 +1,5 @@
+waiting_list_one:
+  email: test1@example.com
+
+waiting_list_two:
+  email: test2@example.com
