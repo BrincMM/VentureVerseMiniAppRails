@@ -32,6 +32,9 @@ Rails.application.routes.draw do
 
       resources :credit_topups, only: [:create]
       resources :tiers, only: [:index]
+      
+      # Stripe subscriptions
+      post 'stripe/webhooks', to: 'stripe_webhooks#handle'
 
       namespace :users do
         post 'email_signup', to: 'registrations#email_signup'
@@ -48,6 +51,15 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Subscription page routes (outside API namespace)
+  get 'subscriptions', to: 'subscriptions#index'
+  post 'subscriptions/:plan', to: 'subscriptions#create', as: 'create_subscription'
+  
+  # Stripe customer management
+  get 'stripe_customers', to: 'stripe_customers#index'
+  post 'stripe_customers/search', to: 'stripe_customers#search'
+  post 'stripe_customers/sync/:customer_id', to: 'stripe_customers#sync', as: 'sync_stripe_customer'
 
   # Defines the root path route ("/")
   # root "posts#index"

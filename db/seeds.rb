@@ -73,4 +73,60 @@ apps_data.each do |app_data|
   puts "Created/Updated app: #{app.name}"
 end
 
+# Create test user
+user = User.find_or_initialize_by(email: 'mafai.ma@brinc.io')
+if user.new_record?
+  user.update!(
+    first_name: 'Mafai',
+    last_name: 'Ma',
+    age_consent: true,
+    password: 'password123',
+    password_confirmation: 'password123',
+    monthly_credit_balance: 1000
+  )
+  puts "Created test user: #{user.email}"
+else
+  puts "Test user already exists: #{user.email}"
+end
+
+# Create tiers with correct price IDs
+tiers_data = [
+  {
+    name: 'Launch',
+    stripe_price_id: 'price_1RxNPYRjEJjLBLjEbYn0WhbN',
+    monthly_credit: 100.00,
+    monthly_tier_price: 9.99,
+    yearly_tier_price: 99.99,
+    active: true
+  },
+  {
+    name: 'Fly',
+    stripe_price_id: 'price_1RxNUZRjEJjLBLjE0dHA6ODF',
+    monthly_credit: 500.00,
+    monthly_tier_price: 29.99,
+    yearly_tier_price: 299.99,
+    active: true
+  },
+  {
+    name: 'Soar',
+    stripe_price_id: 'price_1RxNWtRjEJjLBLjE6e2WnCjF',
+    monthly_credit: 1000.00,
+    monthly_tier_price: 49.99,
+    yearly_tier_price: 499.99,
+    active: true
+  }
+]
+
+tiers_data.each do |tier_data|
+  tier = Tier.find_or_initialize_by(name: tier_data[:name])
+  tier.update!(
+    stripe_price_id: tier_data[:stripe_price_id],
+    monthly_credit: tier_data[:monthly_credit],
+    monthly_tier_price: tier_data[:monthly_tier_price],
+    yearly_tier_price: tier_data[:yearly_tier_price],
+    active: tier_data[:active]
+  )
+  puts "Created/Updated tier: #{tier.name}"
+end
+
 puts "Seed completed successfully!"

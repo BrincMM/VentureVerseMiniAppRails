@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stripe Customer Management</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        margin: 0;
+        padding: 40px 20px;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+      }
+      
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+      }
+      
+      .search-form {
+        background: white;
+        border-radius: 8px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .form-group {
+        margin-bottom: 20px;
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+      
+      input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e1e5e9;
+        border-radius: 6px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+      
+      input[type="email"]:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+      
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      
+      .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      }
+      
+      .btn-success:hover {
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+      }
+      
+      .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-weight: 500;
+      }
+      
+      .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      
+      .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      
+      .info-card {
+        background: white;
+        border-radius: 8px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .info-card h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #2c3e50;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 10px;
+      }
+      
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding: 5px 0;
+      }
+      
+      .info-label {
+        font-weight: 600;
+        color: #495057;
+      }
+      
+      .info-value {
+        color: #6c757d;
+        word-break: break-all;
+      }
+      
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      
+      .status-active { background: #d4edda; color: #155724; }
+      .status-trialing { background: #cce6ff; color: #004085; }
+      .status-past_due { background: #fff3cd; color: #856404; }
+      .status-canceled { background: #f8d7da; color: #721c24; }
+      .status-unpaid { background: #f8d7da; color: #721c24; }
+      
+      .yes { color: #28a745; font-weight: 600; }
+      .no { color: #dc3545; font-weight: 600; }
+      
+      .sync-section {
+        text-align: center;
+        padding: 20px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Stripe Customer Management</h1>
+      
+      <% if notice %>
+        <div class="alert alert-success"><%= notice %></div>
+      <% end %>
+      
+      <% if alert %>
+        <div class="alert alert-danger"><%= alert %></div>
+      <% end %>
+      
+      <div class="search-form">
+        <%= form_with url: stripe_customers_search_path, method: :post, local: true, data: { turbo: false } do |form| %>
+          <div class="form-group">
+            <%= form.label :email, "Search by Email Address:" %>
+            <%= form.email_field :email, value: @email, placeholder: "Enter email address...", required: true %>
+          </div>
+          <%= form.submit "Search Stripe Customers", class: "btn" %>
+        <% end %>
+      </div>
+      
+      <% if @stripe_customer_data %>
+        <% if @all_customers_data && @all_customers_data.count > 1 %>
+          <div class="info-card">
+            <h3>⚠️ Multiple Customers Found</h3>
+            <p style="color: #856404; margin-bottom: 15px;">
+              Found <%= @all_customers_data.count %> customers with this email. Showing the most recent one below.
+            </p>
+            <% @all_customers_data.each_with_index do |customer, index| %>
+              <div style="padding: 8px; background: <%= customer[:id] == @stripe_customer_data[:id] ? '#d4edda' : '#f8f9fa' %>; margin-bottom: 5px; border-radius: 4px;">
+                <strong><%= customer[:id] == @stripe_customer_data[:id] ? '→ ' : '   ' %>Customer <%= index + 1 %>:</strong>
+                <%= customer[:id] %> (Created: <%= Time.at(customer[:created]).strftime("%Y-%m-%d %H:%M:%S") %>)
+                <%= customer[:id] == @stripe_customer_data[:id] ? ' ← Currently Selected' : '' %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        
+        <div class="info-card">
+          <h3>Stripe Customer Information</h3>
+          <div class="info-row">
+            <span class="info-label">Customer ID:</span>
+            <span class="info-value"><%= @stripe_customer_data[:id] %></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span class="info-value"><%= @stripe_customer_data[:email] %></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Name:</span>
+            <span class="info-value"><%= @stripe_customer_data[:name] %></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Created:</span>
+            <span class="info-value"><%= Time.at(@stripe_customer_data[:created]).strftime("%Y-%m-%d %H:%M:%S") %></span>
+          </div>
+        </div>
+        
+        <div class="info-card">
+          <h3>Subscription Information</h3>
+          <% if @subscription_data&.any? %>
+            <% @subscription_data.each_with_index do |sub, index| %>
+              <% if index > 0 %><hr><% end %>
+              <div class="info-row">
+                <span class="info-label">Subscription ID:</span>
+                <span class="info-value"><%= sub[:id] %></span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Status:</span>
+                <span class="info-value">
+                  <span class="status-badge status-<%= sub[:status] %>"><%= sub[:status] %></span>
+                </span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Current Period:</span>
+                <span class="info-value">
+                  <% if sub[:current_period_start] && sub[:current_period_end] %>
+                    <%= Time.at(sub[:current_period_start]).strftime("%Y-%m-%d") %> ~ 
+                    <%= Time.at(sub[:current_period_end]).strftime("%Y-%m-%d") %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Price ID:</span>
+                <span class="info-value"><%= sub[:price_id] %></span>
+              </div>
+            <% end %>
+          <% else %>
+            <p>No subscriptions found for this customer.</p>
+          <% end %>
+        </div>
+        
+        <div class="info-card">
+          <h3>Local Database Status</h3>
+          <div class="info-row">
+            <span class="info-label">User Exists:</span>
+            <span class="info-value <%= @local_user ? 'yes' : 'no' %>">
+              <%= @local_user ? '✅ Yes' : '❌ No' %>
+            </span>
+          </div>
+          <% if @local_user %>
+            <div class="info-row">
+              <span class="info-label">StripeInfo Exists:</span>
+              <span class="info-value <%= @local_user.stripe_info ? 'yes' : 'no' %>">
+                <%= @local_user.stripe_info ? '✅ Yes' : '❌ No' %>
+              </span>
+            </div>
+            <% if @local_user.stripe_info %>
+              <div class="info-row">
+                <span class="info-label">Local Status:</span>
+                <span class="info-value">
+                  <% if @local_user.stripe_info.subscription_status %>
+                    <span class="status-badge status-<%= @local_user.stripe_info.subscription_status %>">
+                      <%= @local_user.stripe_info.subscription_status %>
+                    </span>
+                  <% else %>
+                    None
+                  <% end %>
+                </span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Next Billing:</span>
+                <span class="info-value">
+                  <%= @local_user.stripe_info.next_subscription_time&.strftime("%Y-%m-%d %H:%M:%S") || 'None' %>
+                </span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">User Tier:</span>
+                <span class="info-value"><%= @local_user.tier&.name || 'None' %></span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        
+        <% if @local_user %>
+          <div class="sync-section">
+            <%= form_with url: sync_stripe_customer_path(@stripe_customer_data[:id]), method: :post, local: true, data: { turbo: false } do |form| %>
+              <%= form.submit "Sync to Local Database", class: "btn btn-success" %>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="sync-section">
+            <p style="color: #dc3545; font-weight: 600;">
+              Cannot sync: No local user found with this email address.
+            </p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </body>
+</html>
