@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_062428) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_25_063440) do
   create_table "app_accesses", force: :cascade do |t|
     t.integer "app_id", null: false
     t.integer "user_id", null: false
@@ -189,7 +189,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_062428) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "subscribe_type", default: 0, null: false
     t.index ["email"], name: "index_waiting_lists_on_email", unique: true
+    t.index ["subscribe_type"], name: "index_waiting_lists_on_subscribe_type"
   end
 
   add_foreign_key "app_accesses", "apps"
