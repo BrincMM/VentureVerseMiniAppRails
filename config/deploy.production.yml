@@ -1,17 +1,17 @@
 # Deploy to these servers.
 servers:
   web:
-    - 172.105.202.16
+    - 45.79.198.65
   cron:
     hosts:
-      - 172.105.202.16
+      - 45.79.198.65
     cmd:
       bash -c "(env && cat config/crontab) | crontab - && cron -f"
     options:
       user: root
   job:
     hosts:
-      - 172.105.202.16
+      - 45.79.198.65
     cmd: bin/jobs
 
 registry:
@@ -28,8 +28,8 @@ env:
   secret:
     - RAILS_MASTER_KEY
   clear:
-    # Set Rails environment to staging
-    RAILS_ENV: staging
+    # Set Rails environment to production
+    RAILS_ENV: production
     
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
