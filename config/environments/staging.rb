@@ -24,12 +24,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # For staging, we might not need SSL depending on setup
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = false
+  config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = false
+  config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
@@ -38,8 +37,8 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
-  # More verbose logging for staging to help with debugging
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "debug")
+  # Change to "debug" to log everything (including potentially personally-identifiable information!)
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
@@ -54,17 +53,14 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # Configure SolidCable for staging
-  config.solid_cable.connects_to = { database: { writing: :cable } }
-
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  # Set host to be used by links generated in mailer templates - using staging domain
-  config.action_mailer.default_url_options = { host: "stageminiapp.ventureverse.com", protocol: "http" }
+  # Set host to be used by links generated in mailer templates.
+  config.action_mailer.default_url_options = { host: "stageminiapp.ventureverse.com", protocol: "https" }
 
-  # Configure Gmail SMTP settings for staging
+  # Configure Gmail SMTP settings for production
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
