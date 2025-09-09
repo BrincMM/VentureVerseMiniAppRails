@@ -26,6 +26,14 @@ module Api
           @waiting_list = WaitingList.new(waiting_list_params)
           
           if @waiting_list.save
+            # Send welcome email after successful creation
+            begin
+              UserMailer.with(email: @waiting_list.email).waiting_list_welcome_email.deliver_now
+            rescue => e
+              # Log error but don't affect API response
+              Rails.logger.error "Failed to send waiting list welcome email to #{@waiting_list.email}: #{e.message}"
+            end
+            
             render :create, status: :created
           else
             render 'api/v1/shared/error',
