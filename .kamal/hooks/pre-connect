@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# 如果没有显式目的地（即忘了 -d），直接拒绝
+if [ -z "$KAMAL_DESTINATION" ]; then
+  echo "❌ 你没有指定 --destination；请使用: kamal deploy -d stage 或 -d production"
+  exit 1
+fi
+
+# 也可加更严格的保护：例如只有 main 分支才允许 production
+if [ "$KAMAL_DESTINATION" = "production" ]; then
+  current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+  if [ "$current_branch" != "main" ]; then
+    echo "❌ 非 main 分支禁止部署到 production（当前分支: $current_branch）"
+    exit 1
+  fi
+fi
