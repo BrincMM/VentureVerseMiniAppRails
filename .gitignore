@@ -40,3 +40,5 @@
 /config/credentials/test.key
 
 /config/credentials/staging.key
+
+/config/credentials/stage.key
