@@ -14,11 +14,25 @@ POST /api/v1/users/cancel_plan
 |-----------|--------|----------|-------------|
 | user_id   | number | Yes      | The ID of the user whose plan should be canceled |
 
+## Request Example
+
+```http
+POST /api/v1/users/cancel_plan HTTP/1.1
+Authorization: Bearer <API_TOKEN>
+Content-Type: application/json
+
+{
+  "user_id": 1
+}
+```
+
 ## Success Response
 
 **Code**: 200 OK
 
 **Response Body**:
+
+> **Note:** Cancelling a plan updates only `stripe_info.subscription_status` to `canceled`. Fields on `users`, including `tier_id`, remain unchanged.
 
 ```json
 {
@@ -28,17 +42,26 @@ POST /api/v1/users/cancel_plan
     "user": {
       "id": 1,
       "email": "user@example.com",
-      "name": "John Doe",
-      "tier": {
-        "id": 1,
-        "name": "Basic",
-        "description": "Basic tier",
-        "credit_amount": 100,
-        "price": 10.0
-      },
+      "google_id": null,
+      "first_name": "John",
+      "last_name": "Doe",
+      "country": "US",
+      "age_consent": true,
+      "avatar": null,
+      "nick_name": "johndoe",
+      "linkedIn": null,
+      "twitter": null,
+      "monthly_credit_balance": 100.0,
+      "topup_credit_balance": 0.0,
+      "tier_id": 1,
+      "user_roles": ["founder"],
+      "created_at": "2024-03-19T10:00:00Z",
+      "updated_at": "2024-03-19T10:00:00Z",
       "stripe_info": {
+        "stripe_customer_id": "cus_xxx",
+        "subscription_id": "sub_xxx",
         "subscription_status": "canceled",
-        "next_subscription_time": "2024-02-01T00:00:00.000Z"
+        "next_subscription_time": "2024-04-19T10:00:00Z"
       }
     }
   }
@@ -56,8 +79,7 @@ POST /api/v1/users/cancel_plan
 {
   "success": false,
   "message": "User not found",
-  "errors": null,
-  "data": null
+  "errors": null
 }
 ```
 
@@ -70,8 +92,7 @@ POST /api/v1/users/cancel_plan
 {
   "success": false,
   "message": "No active subscription found",
-  "errors": null,
-  "data": null
+  "errors": null
 }
 ```
 
@@ -84,7 +105,18 @@ POST /api/v1/users/cancel_plan
 {
   "success": false,
   "message": "Failed to cancel plan",
-  "errors": ["Error message details"],
-  "data": null
+  "errors": [
+    "Stripe customer can't be blank"
+  ]
 }
+```
+
+### Unauthorized
+
+**Code**: 401 Unauthorized
+
+**Response Body**:
+
+```
+HTTP Token: Access denied.
 ```
