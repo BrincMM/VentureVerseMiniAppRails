@@ -16,6 +16,8 @@ Subscribes an email to the waiting list. If the email already exists, returns su
 | first_name     | string | No       | First name of the user (optional) |
 | last_name      | string | No       | Last name of the user (optional) |
 
+When an existing waiting list entry is found by email, any provided `name`, `first_name`, or `last_name` parameters will update the stored record. Missing fields remain unchanged.
+
 ## Request Example
 
 ### Email Subscription
@@ -97,6 +99,34 @@ If you provide only the `name` field (without `first_name` or `last_name`), the 
 }
 ```
 
+### Updating an Existing Entry Example
+If the email already exists, sending another request with new personal details will update the stored values and return a `200 OK` response.
+
+#### Request
+```json
+{
+  "email": "user@example.com",
+  "name": "Updated Name",
+  "first_name": "Updated",
+  "last_name": "Person"
+}
+```
+
+#### Response
+```json
+{
+  "success": true,
+  "message": "Successfully subscribed to waiting list",
+  "data": {
+    "email": "user@example.com",
+    "subscribe_type": "email",
+    "name": "Updated Name",
+    "first_name": "Updated",
+    "last_name": "Person"
+  }
+}
+```
+
 #### Response
 ```json
 {
@@ -143,9 +173,9 @@ If you provide only the `name` field (without `first_name` or `last_name`), the 
   "data": {
     "email": "user@example.com",
     "subscribe_type": "email",
-    "name": "John Doe",
-    "first_name": "John",
-    "last_name": "Doe"
+    "name": "Updated Name",
+    "first_name": "Updated",
+    "last_name": "Person"
   }
 }
 ```
