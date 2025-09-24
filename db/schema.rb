@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_063440) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_23_011500) do
   create_table "app_accesses", force: :cascade do |t|
     t.integer "app_id", null: false
     t.integer "user_id", null: false
@@ -190,6 +190,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_063440) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "subscribe_type", default: 0, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "name"
+    t.datetime "beehiiv_synced_at"
+    t.boolean "beehiiv_sync_is_success"
+    t.text "beehiiv_sync_error"
+    t.string "beehiiv_subscriber_id"
     t.index ["email"], name: "index_waiting_lists_on_email", unique: true
     t.index ["subscribe_type"], name: "index_waiting_lists_on_subscribe_type"
   end

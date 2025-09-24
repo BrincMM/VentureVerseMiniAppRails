@@ -33,7 +33,8 @@ module Api
               # Log error but don't affect API response
               Rails.logger.error "Failed to send waiting list welcome email to #{@waiting_list.email}: #{e.message}"
             end
-            
+            # 异步调用 BeehiivSubscribeJob
+            BeehiivSubscribeJob.perform_later(@waiting_list.id)
             render :create, status: :created
           else
             render 'api/v1/shared/error',
@@ -46,7 +47,7 @@ module Api
       private
 
       def waiting_list_params
-        params.permit(:email, :subscribe_type)
+        params.permit(:email, :subscribe_type, :name, :first_name, :last_name)
       end
     end
   end

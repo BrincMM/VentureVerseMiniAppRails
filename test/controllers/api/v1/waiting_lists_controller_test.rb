@@ -63,6 +63,53 @@ module Api
         assert_equal "email", json_response.dig("data", "subscribe_type")
       end
 
+      test "should accept name and return split first_name and last_name" do
+        assert_difference("WaitingList.count") do
+          post_with_token api_v1_waiting_lists_path, params: {
+            email: "namecase@example.com",
+            subscribe_type: "email",
+            name: "Alice Bob Carol"
+          }
+        end
+
+        assert_response :created
+        json_response = JSON.parse(@response.body)
+        assert_equal true, json_response["success"]
+        assert_equal "namecase@example.com", json_response.dig("data", "email")
+        assert_equal "email", json_response.dig("data", "subscribe_type")
+        assert_equal "Alice Bob Carol", json_response.dig("data", "name")
+        assert_equal "Alice Bob", json_response.dig("data", "first_name")
+        assert_equal "Carol", json_response.dig("data", "last_name")
+
+        record = WaitingList.find_by!(email: "namecase@example.com")
+        assert_equal "Alice Bob Carol", record.name
+        assert_equal "Alice Bob", record.first_name
+        assert_equal "Carol", record.last_name
+      end
+
+      test "should respect explicit first_name and last_name over derived name" do
+        assert_difference("WaitingList.count") do
+          post_with_token api_v1_waiting_lists_path, params: {
+            email: "explicit@example.com",
+            subscribe_type: "email",
+            name: "Baz Qux Quux",
+            first_name: "Given",
+            last_name: "Family"
+          }
+        end
+
+        assert_response :created
+        json_response = JSON.parse(@response.body)
+        assert_equal "Given", json_response.dig("data", "first_name")
+        assert_equal "Family", json_response.dig("data", "last_name")
+        assert_equal "Baz Qux Quux", json_response.dig("data", "name")
+
+        record = WaitingList.find_by!(email: "explicit@example.com")
+        assert_equal "Given", record.first_name
+        assert_equal "Family", record.last_name
+        assert_equal "Baz Qux Quux", record.name
+      end
+
       test "should not create duplicate entry for existing email" do
         existing_email = waiting_lists(:waiting_list_one).email
         

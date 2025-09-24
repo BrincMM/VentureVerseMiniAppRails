@@ -68,4 +68,16 @@ class WaitingListTest < ActiveSupport::TestCase
     assert_equal newer.id, recent_list.first.id
     assert_equal older.id, recent_list.second.id
   end
+
+  test "should split three-word name into first_name and last_name" do
+    wl = WaitingList.new(
+      email: "threewords@example.com",
+      subscribe_type: "email",
+      name: "Alice Bob Carol"
+    )
+
+    assert wl.valid?, "waiting list should be valid"
+    assert_equal "Alice Bob", wl.first_name
+    assert_equal "Carol", wl.last_name
+  end
 end
