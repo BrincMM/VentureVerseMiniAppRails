@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     end
     resources :waiting_list, only: [:index, :show] do
       post :sync_beehiiv, on: :member
+      post :resend_welcome_email, on: :member
     end
   end
 

@@ -37,7 +37,7 @@ module Api
           if @waiting_list.save
             # Send welcome email after successful creation
             begin
-              WelcomeEmailJob.perform_later(@waiting_list.email)
+              WelcomeEmailJob.perform_later(@waiting_list.id)
             rescue => e
               # Log error but don't affect API response
               Rails.logger.error "Failed to enqueue welcome email job for #{@waiting_list.email}: #{e.message}"

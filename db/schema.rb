@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_24_014545) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_24_064025) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -209,6 +209,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_014545) do
     t.boolean "beehiiv_sync_is_success"
     t.text "beehiiv_sync_error"
     t.string "beehiiv_subscriber_id"
+    t.boolean "send_welcome_email_is_success"
+    t.datetime "send_welcome_email_at"
     t.index ["email"], name: "index_waiting_lists_on_email", unique: true
     t.index ["subscribe_type"], name: "index_waiting_lists_on_subscribe_type"
   end

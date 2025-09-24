@@ -34,6 +34,28 @@ class Admin::WaitingListController < ApplicationController
     redirect_to admin_waiting_list_index_path
   end
 
+  def resend_welcome_email
+    @waiting_list = WaitingList.find(params[:id])
+
+    begin
+      UserMailer.with(email: @waiting_list.email).waiting_list_welcome_email.deliver_now
+      @waiting_list.update(
+        send_welcome_email_is_success: true,
+        send_welcome_email_at: Time.current
+      )
+      flash[:notice] = "Welcome email sent successfully."
+    rescue => e
+      Rails.logger.error("Failed to resend welcome email for WaitingList##{@waiting_list.id}: #{e.message}")
+      @waiting_list.update(
+        send_welcome_email_is_success: false,
+        send_welcome_email_at: Time.current
+      )
+      flash[:alert] = "Failed to resend welcome email."
+    end
+
+    redirect_to admin_waiting_list_index_path
+  end
+
   private
 
   def waiting_list_csv
@@ -45,6 +67,8 @@ class Admin::WaitingListController < ApplicationController
         "last_name",
         "name",
         "subscribe_type",
+        "send_welcome_email_is_success",
+        "send_welcome_email_at",
         "beehiiv_sync_is_success",
         "beehiiv_synced_at",
         "beehiiv_subscriber_id",
@@ -61,6 +85,8 @@ class Admin::WaitingListController < ApplicationController
           waiting_list.last_name,
           waiting_list.name,
           waiting_list.subscribe_type,
+        waiting_list.send_welcome_email_is_success,
+        waiting_list.send_welcome_email_at,
           waiting_list.beehiiv_sync_is_success,
           waiting_list.beehiiv_synced_at,
           waiting_list.beehiiv_subscriber_id,

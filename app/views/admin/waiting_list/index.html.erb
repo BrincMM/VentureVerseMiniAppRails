@@ -11,6 +11,7 @@
       <th>Last Name</th>
       <th>Name</th>
       <th>Type</th>
+      <th>Welcome Email</th>
       <th>Beehiiv Sync Success</th>
       <th>Registered At</th>
       <th></th>
@@ -25,6 +26,30 @@
         <td><%= wl.last_name %></td>
         <td><%= [wl.first_name, wl.last_name].compact.join(' ') %></td>
         <td><%= wl.subscribe_type %></td>
+        <td>
+          <% welcome_status = wl.send_welcome_email_is_success %>
+          <% welcome_sent_at = wl.send_welcome_email_at %>
+
+          <% if welcome_status == true %>
+            <span class="badge bg-success">sent</span>
+            <% if welcome_sent_at.present? %>
+              <div class="text-muted small">Sent at <%= welcome_sent_at.strftime('%Y-%m-%d %H:%M') %></div>
+            <% end %>
+          <% elsif welcome_status == false %>
+            <div class="d-inline-flex align-items-center gap-2">
+              <span class="badge bg-danger">failed</span>
+              <%= button_to resend_welcome_email_admin_waiting_list_path(wl), method: :post, form: { data: { turbo: true } }, class: 'btn btn-sm btn-outline-secondary', title: 'Resend welcome email' do %>
+                <i class="bi bi-envelope"></i>
+                Resend
+              <% end %>
+            </div>
+            <% if welcome_sent_at.present? %>
+              <div class="text-muted small">Last attempt <%= welcome_sent_at.strftime('%Y-%m-%d %H:%M') %></div>
+            <% end %>
+          <% else %>
+            <span class="badge bg-secondary">pending</span>
+          <% end %>
+        </td>
         <td>
           <% if wl.beehiiv_sync_is_success == true %>
             <span class="badge bg-success">true</span>
