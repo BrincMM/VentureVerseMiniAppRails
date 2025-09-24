@@ -115,8 +115,7 @@ module Api
         
         assert_no_difference("WaitingList.count") do
           post_with_token api_v1_waiting_lists_path, params: {
-            email: existing_email,
-            subscribe_type: "google"
+            email: existing_email
           }
         end
 
@@ -126,6 +125,29 @@ module Api
         assert_equal "Successfully subscribed to waiting list", json_response["message"]
         assert_equal existing_email, json_response.dig("data", "email")
         assert_equal "email", json_response.dig("data", "subscribe_type") # Should return existing record's type
+      end
+
+      test "should update existing waiting list entry with provided attributes" do
+        waiting_list = waiting_lists(:waiting_list_one)
+
+        post_with_token api_v1_waiting_lists_path, params: {
+          email: waiting_list.email,
+          name: "Updated Name",
+          first_name: "Updated",
+          last_name: "Person",
+          subscribe_type: "google"
+        }
+
+        assert_response :ok
+        json_response = JSON.parse(@response.body)
+        assert_equal true, json_response["success"]
+        assert_equal "Successfully subscribed to waiting list", json_response["message"]
+
+        waiting_list.reload
+        assert_equal "Updated Name", waiting_list.name
+        assert_equal "Updated", waiting_list.first_name
+        assert_equal "Person", waiting_list.last_name
+        assert_equal "google", waiting_list.subscribe_type
       end
 
       test "should reject request without email" do

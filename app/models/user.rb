@@ -16,6 +16,8 @@ class User < ApplicationRecord
   has_many :app_accesses, dependent: :destroy
   has_many :accessible_apps, through: :app_accesses, source: :app
   has_many :log_in_histories, dependent: :destroy
+  has_many :credit_topups, dependent: :destroy
+  has_many :credit_spents, dependent: :destroy
   has_one :stripe_info, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

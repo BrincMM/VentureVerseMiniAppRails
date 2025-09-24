@@ -20,7 +20,16 @@ module Api
         @waiting_list = WaitingList.find_by(email: params[:email])
         
         if @waiting_list
-          # Email already exists, return success without creating duplicate
+          update_attributes = waiting_list_params.to_h.except('email').compact_blank
+
+          if update_attributes.present? && !@waiting_list.update(update_attributes)
+            render 'api/v1/shared/error',
+                   locals: { message: 'Failed to update waiting list entry', errors: @waiting_list.errors.full_messages },
+                   status: :unprocessable_entity
+            return
+          end
+
+          # Email already exists, return success after optional update
           render :create, status: :ok
         else
           @waiting_list = WaitingList.new(waiting_list_params)

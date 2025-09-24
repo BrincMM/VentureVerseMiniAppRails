@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :admins
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -50,6 +51,19 @@ Rails.application.routes.draw do
         post 'change_plan', to: 'change_plan#create'
         post 'cancel_plan', to: 'cancel_plan#create'
       end
+    end
+  end
+
+  namespace :admin do
+    resources :dashboard, only: [:index]
+    resources :users, only: [:index, :show] do
+      member do
+        get :credit_topups
+        get :credit_spents
+      end
+    end
+    resources :waiting_list, only: [:index, :show] do
+      post :sync_beehiiv, on: :member
     end
   end
 

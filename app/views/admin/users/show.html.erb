@@ -1,0 +1,80 @@
+<h1>User Detail</h1>
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title"><%= @user.first_name %> <%= @user.last_name %></h5>
+    <p class="card-text"><strong>Email:</strong> <%= @user.email %></p>
+    <p class="card-text"><strong>Tier:</strong> <%= @tier&.name || 'Free' %></p>
+    <p class="card-text"><strong>Monthly Credit Balance:</strong> <%= @credit_info[:monthly_credit_balance] %></p>
+    <p class="card-text"><strong>Topup Credit Balance:</strong> <%= @credit_info[:topup_credit_balance] %></p>
+    <p class="card-text"><strong>Registered At:</strong> <%= @user.created_at.strftime('%Y-%m-%d') %></p>
+  </div>
+</div>
+
+<h3>Topup Credits</h3>
+<div class="d-flex justify-content-between align-items-start mb-2">
+  <div>
+    <p class="mb-1"><strong>Total Records:</strong> <%= @credit_topups_count %></p>
+    <p class="mb-1"><strong>Total Credits:</strong> <%= @credit_topups_total %></p>
+    <p class="text-muted mb-0">Showing latest 10 records.</p>
+  </div>
+  <%= link_to "View All", credit_topups_admin_user_path(@user), class: "btn btn-sm btn-outline-primary" %>
+</div>
+<% if @credit_topups.any? %>
+  <table class="table table-bordered table-sm mb-4">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Credits</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @credit_topups.each do |topup| %>
+        <tr>
+          <td><%= topup.id %></td>
+          <td><%= topup.credits %></td>
+          <td><%= topup.timestamp.strftime('%Y-%m-%d %H:%M') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="text-muted">No credit topups found.</p>
+<% end %>
+
+<h3>Spend Credits</h3>
+<div class="d-flex justify-content-between align-items-start mb-2">
+  <div>
+    <p class="mb-1"><strong>Total Records:</strong> <%= @credit_spents_count %></p>
+    <p class="mb-1"><strong>Total Credits:</strong> <%= @credit_spents_total %></p>
+    <p class="mb-1"><strong>Total Cost (USD):</strong> <%= number_to_currency(@credit_spents_total_cost) %></p>
+    <p class="text-muted mb-0">Showing latest 10 records.</p>
+  </div>
+  <%= link_to "View All", credit_spents_admin_user_path(@user), class: "btn btn-sm btn-outline-primary" %>
+</div>
+<% if @credit_spents.any? %>
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Credits</th>
+        <th>Type</th>
+        <th>Cost (USD)</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @credit_spents.each do |spent| %>
+        <tr>
+          <td><%= spent.id %></td>
+          <td><%= spent.credits %></td>
+          <td><%= spent.spend_type.humanize %></td>
+          <td><%= number_to_currency(spent.cost_in_usd) %></td>
+          <td><%= spent.timestamp.strftime('%Y-%m-%d %H:%M') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="text-muted">No credit spents found.</p>
+<% end %>

@@ -1,0 +1,39 @@
+<h1>Credit Topups</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <p class="mb-0"><strong>User:</strong> <%= @user.first_name %> <%= @user.last_name %> (<%= @user.email %>)</p>
+  <%= link_to "Back to User Detail", admin_user_path(@user), class: "btn btn-outline-secondary btn-sm" %>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title mb-3">Summary</h5>
+    <p class="mb-1"><strong>Total Records:</strong> <%= @credit_topups_count %></p>
+    <p class="mb-0"><strong>Total Credits:</strong> <%= @credit_topups_total %></p>
+  </div>
+</div>
+
+<% if @credit_topups.any? %>
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Credits</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @credit_topups.each do |topup| %>
+        <tr>
+          <td><%= topup.id %></td>
+          <td><%= topup.credits %></td>
+          <td><%= topup.timestamp.strftime('%Y-%m-%d %H:%M') %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="mt-3">
+    <%= paginate @credit_topups %>
+  </div>
+<% else %>
+  <p class="text-muted">No credit topups found for this user.</p>
+<% end %>
