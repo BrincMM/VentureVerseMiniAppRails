@@ -28,20 +28,21 @@ module Api
           if @waiting_list.save
             # Send welcome email after successful creation
             begin
-              UserMailer.with(email: @waiting_list.email).waiting_list_welcome_email.deliver_now
+              WelcomeEmailJob.perform_later(@waiting_list.email)
             rescue => e
               # Log error but don't affect API response
-              Rails.logger.error "Failed to send waiting list welcome email to #{@waiting_list.email}: #{e.message}"
+              Rails.logger.error "Failed to enqueue welcome email job for #{@waiting_list.email}: #{e.message}"
             end
-            # 异步调用 BeehiivSubscribeJob
-            BeehiivSubscribeJob.perform_later(@waiting_list.id)
             render :create, status: :created
           else
             render 'api/v1/shared/error',
                    locals: { message: 'Failed to subscribe to waiting list', errors: @waiting_list.errors.full_messages },
                    status: :unprocessable_entity
+            return
           end
         end
+        # 无论新建还是已存在，都调用 BeehiivSubscribeJob
+        BeehiivSubscribeJob.perform_later(@waiting_list.id)
       end
 
       private
