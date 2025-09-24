@@ -99,6 +99,21 @@ If you provide only the `name` field (without `first_name` or `last_name`), the 
 }
 ```
 
+#### Response
+```json
+{
+  "success": true,
+  "message": "Successfully subscribed to waiting list",
+  "data": {
+    "email": "nameonly@example.com",
+    "subscribe_type": "email",
+    "name": "Alice Bob Carol",
+    "first_name": "Alice Bob",
+    "last_name": "Carol"
+  }
+}
+```
+
 ### Updating an Existing Entry Example
 If the email already exists, sending another request with new personal details will update the stored values and return a `200 OK` response.
 
@@ -127,20 +142,7 @@ If the email already exists, sending another request with new personal details w
 }
 ```
 
-#### Response
-```json
-{
-  "success": true,
-  "message": "Successfully subscribed to waiting list",
-  "data": {
-    "email": "nameonly@example.com",
-    "subscribe_type": "email",
-    "name": "Alice Bob Carol",
-    "first_name": "Alice Bob",
-    "last_name": "Carol"
-  }
-}
-```
+
 
 ## Success Response
 
@@ -223,6 +225,18 @@ If the email already exists, sending another request with new personal details w
   ]
 }
 ```
+
+## Beehiiv Sync Field Mapping
+
+When a waiting list entry is synced to Beehiiv (see `Beehiiv::SubscribeService`), fields are mapped as follows:
+
+| Source (WaitingList) | Beehiiv Field / Value | Notes |
+|----------------------|------------------------|-------|
+| `email` | Subscriber email | Always required |
+| `first_name` | Custom field "First Name" | Only sent if present after normalization |
+| `name` or `[first_name, last_name].join(' ')` | Custom field "Full Name" | Uses explicit `name` first, otherwise derived from first/last names |
+| _n/a_ | `utm_source: "Venture Verse"` | Hardcoded value |
+| _n/a_ | `referring_site: "www.ventureverse.com"` | Hardcoded value |
 
 ## Notes
 
