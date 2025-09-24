@@ -16,7 +16,23 @@ POST /api/v1/users/change_plan
 | tier_id | integer | Yes | The ID of the new tier |
 | subscription_id | string | Yes | The Stripe subscription ID |
 | next_subscription_time | datetime | Yes | The next billing cycle date |
-| stripe_customer_id | string | No | The Stripe customer ID (optional) |
+| stripe_customer_id | string | Yes | The Stripe customer ID |
+
+## Request Example
+
+```http
+POST /api/v1/users/change_plan HTTP/1.1
+Authorization: Bearer <API_TOKEN>
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "tier_id": 2,
+  "subscription_id": "sub_123",
+  "next_subscription_time": "2024-04-19T10:00:00Z",
+  "stripe_customer_id": "cus_456"
+}
+```
 
 ## Success Response
 
@@ -91,7 +107,7 @@ POST /api/v1/users/change_plan
   "success": false,
   "message": "Failed to change plan",
   "errors": [
-    "Subscription id can't be blank",
+    "Subscription can't be blank",
     "Next subscription time can't be blank"
   ]
 }
