@@ -28,18 +28,11 @@ class Admin::UsersController < ApplicationController
   end
 
   def credit_topups
-    credit_topup_scope = @user.credit_topups.order(timestamp: :desc)
-    @credit_topups = credit_topup_scope.page(params[:page]).per(20)
-    @credit_topups_count = credit_topup_scope.count
-    @credit_topups_total = credit_topup_scope.sum(:credits)
+    redirect_to admin_credit_topups_path(user_id: @user.id)
   end
 
   def credit_spents
-    credit_spent_scope = @user.credit_spents.order(timestamp: :desc)
-    @credit_spents = credit_spent_scope.page(params[:page]).per(20)
-    @credit_spents_count = credit_spent_scope.count
-    @credit_spents_total = credit_spent_scope.sum(:credits)
-    @credit_spents_total_cost = credit_spent_scope.sum(:cost_in_usd)
+    redirect_to admin_credit_spents_path(user_id: @user.id)
   end
 
   private

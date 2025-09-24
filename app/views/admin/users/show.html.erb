@@ -17,7 +17,7 @@
     <p class="mb-1"><strong>Total Credits:</strong> <%= @credit_topups_total %></p>
     <p class="text-muted mb-0">Showing latest 10 records.</p>
   </div>
-  <%= link_to "View All", credit_topups_admin_user_path(@user), class: "btn btn-sm btn-outline-primary" %>
+  <%= link_to "View All", admin_credit_topups_path(user_id: @user.id), class: "btn btn-sm btn-outline-primary" %>
 </div>
 <% if @credit_topups.any? %>
   <table class="table table-bordered table-sm mb-4">
@@ -50,7 +50,7 @@
     <p class="mb-1"><strong>Total Cost (USD):</strong> <%= number_to_currency(@credit_spents_total_cost) %></p>
     <p class="text-muted mb-0">Showing latest 10 records.</p>
   </div>
-  <%= link_to "View All", credit_spents_admin_user_path(@user), class: "btn btn-sm btn-outline-primary" %>
+  <%= link_to "View All", admin_credit_spents_path(user_id: @user.id), class: "btn btn-sm btn-outline-primary" %>
 </div>
 <% if @credit_spents.any? %>
   <table class="table table-bordered table-sm">

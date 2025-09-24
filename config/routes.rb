@@ -56,6 +56,8 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :dashboard, only: [:index]
+    resources :credit_topups, only: [:index]
+    resources :credit_spents, only: [:index]
     resources :users, only: [:index, :show] do
       member do
         get :credit_topups
