@@ -8,6 +8,14 @@ Get user's credit information including tier details, credit balances, and remai
 
 **Auth required** : YES
 
+## Request Example
+
+```http
+GET /api/v1/users/profiles/1/credit_info HTTP/1.1
+Authorization: Bearer <API_TOKEN>
+Content-Type: application/json
+```
+
 **Parameters**
 
 | Name | Type | Description | Required |

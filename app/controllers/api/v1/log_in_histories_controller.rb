@@ -2,7 +2,10 @@ module Api
   module V1
     class LogInHistoriesController < ApiController
       def create
+        metadata_param = params.dig(:log_in_history, :metadata)
+
         @log_in_history = LogInHistory.new(log_in_history_params)
+        @log_in_history.metadata = normalize_metadata(metadata_param)
         @log_in_history.timestamp = Time.current
 
         unless @log_in_history.save
@@ -53,7 +56,19 @@ module Api
       private
 
       def log_in_history_params
-        params.require(:log_in_history).permit(:user_id, :metadata)
+        params.require(:log_in_history).permit(:user_id)
+      end
+
+      def normalize_metadata(metadata)
+        return if metadata.nil?
+
+        if metadata.is_a?(ActionController::Parameters)
+          metadata = metadata.permit!.to_h
+        end
+
+        return metadata if metadata.is_a?(String)
+
+        metadata.to_json
       end
     end
   end

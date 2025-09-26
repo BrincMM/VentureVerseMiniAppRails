@@ -17,6 +17,25 @@ Creates a new app activity record.
 | app_activity[activity_type] | string | Yes | The type of activity. Must be one of: `app_usage`, `content_procurement`, `perks_procurement`, `nft_procurement` |
 | app_activity[app_meta] | json | No | Additional metadata about the activity |
 
+## Request Example
+
+```http
+POST /api/v1/app_activities HTTP/1.1
+Authorization: Bearer <API_TOKEN>
+Content-Type: application/json
+
+{
+  "app_activity": {
+    "user_id": 1,
+    "app_id": 1,
+    "activity_type": "app_usage",
+    "app_meta": {
+      "duration": "10m"
+    }
+  }
+}
+```
+
 ## Success Response
 
 **Code**: `200 OK`

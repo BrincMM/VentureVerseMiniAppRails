@@ -27,7 +27,7 @@ module Api
           post_with_token api_v1_log_in_histories_url, params: {
             log_in_history: {
               user_id: @user.id,
-              metadata: metadata.to_json
+              metadata: metadata
             }
           }, as: :json
         end

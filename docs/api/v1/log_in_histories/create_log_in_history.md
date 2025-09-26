@@ -15,6 +15,24 @@ Creates a new login history record.
 | log_in_history[user_id] | number | Yes | The ID of the user who logged in |
 | log_in_history[metadata] | json | Yes | Additional metadata about the login (e.g. browser info, IP address) |
 
+## Request Example
+
+```http
+POST /api/v1/log_in_histories HTTP/1.1
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "log_in_history": {
+    "user_id": 1,
+    "metadata": {
+      "browser": "Chrome",
+      "ip": "127.0.0.1"
+    }
+  }
+}
+```
+
 ## Success Response
 
 **Code**: `200 OK`

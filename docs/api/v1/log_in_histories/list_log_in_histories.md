@@ -18,6 +18,14 @@ Retrieves a paginated list of login histories with optional filters.
 | page | number | No | Page number for pagination (default: 1) |
 | per_page | number | No | Number of items per page (default: 10, max: 100) |
 
+## Request Example
+
+```http
+GET /api/v1/log_in_histories?user_id=1&start_date=2024-01-01T00:00:00Z&end_date=2024-01-31T23:59:59Z&page=1&per_page=10 HTTP/1.1
+Authorization: Bearer <token>
+Accept: application/json
+```
+
 ## Success Response
 
 **Code**: `200 OK`
