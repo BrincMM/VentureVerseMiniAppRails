@@ -22,6 +22,9 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :perks, only: [:index, :create, :update, :destroy]
+      resources :perk_accesses, only: [:create, :destroy]
+
       resources :app_activities, only: [:index, :create]
       resources :log_in_histories, only: [:index, :create]
 
@@ -35,6 +38,10 @@ Rails.application.routes.draw do
       resources :tiers, only: [:index]
       resources :waiting_lists, only: [:create]
       
+      resources :users, only: [] do
+        resources :perks, only: [:index], module: :users
+      end
+
       # Stripe subscriptions
       post 'stripe/webhooks', to: 'stripe_webhooks#handle'
 

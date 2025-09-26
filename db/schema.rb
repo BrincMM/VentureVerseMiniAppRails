@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_24_064025) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_26_024721) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -105,6 +105,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_064025) do
     t.index ["timestamp"], name: "index_log_in_histories_on_timestamp"
     t.index ["user_id", "timestamp"], name: "index_log_in_histories_on_user_id_and_timestamp"
     t.index ["user_id"], name: "index_log_in_histories_on_user_id"
+  end
+
+  create_table "perk_accesses", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "perk_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["perk_id"], name: "index_perk_accesses_on_perk_id"
+    t.index ["user_id", "perk_id"], name: "index_perk_accesses_on_user_id_and_perk_id", unique: true
+    t.index ["user_id"], name: "index_perk_accesses_on_user_id"
+  end
+
+  create_table "perks", force: :cascade do |t|
+    t.string "partner_name", null: false
+    t.string "category"
+    t.string "sector"
+    t.string "company_website", null: false
+    t.string "contact_email", null: false
+    t.string "contact", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "stripe_infos", force: :cascade do |t|
@@ -222,6 +243,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_064025) do
   add_foreign_key "credit_spents", "users"
   add_foreign_key "credit_topups", "users"
   add_foreign_key "log_in_histories", "users"
+  add_foreign_key "perk_accesses", "perks"
+  add_foreign_key "perk_accesses", "users"
   add_foreign_key "stripe_infos", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "user_roles", "users"

@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :app_activities, dependent: :destroy
   has_many :app_accesses, dependent: :destroy
   has_many :accessible_apps, through: :app_accesses, source: :app
+  has_many :perk_accesses, dependent: :destroy
+  has_many :accessible_perks, through: :perk_accesses, source: :perk
   has_many :log_in_histories, dependent: :destroy
   has_many :credit_topups, dependent: :destroy
   has_many :credit_spents, dependent: :destroy
