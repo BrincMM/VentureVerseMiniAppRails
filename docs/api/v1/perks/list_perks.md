@@ -9,7 +9,10 @@ Lists available perks with optional filtering and pagination.
 ## Request Example
 
 ```http
-GET /api/v1/perks?category=Technology&sector=AI&tags=remote,discount&per_page=10&page=1
+GET /api/v1/perks?category=Technology&sector=AI&tags=remote,discount&per_page=10&page=1 HTTP/1.1
+Host: api.ventureverse.example
+Authorization: Bearer <access_token>
+Accept: application/json
 ```
 
 ## Parameters

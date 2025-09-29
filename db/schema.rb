@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_024721) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_29_084438) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -61,6 +61,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_024721) do
     t.index ["name"], name: "index_apps_on_name", unique: true
     t.index ["sector"], name: "index_apps_on_sector"
     t.index ["sort_order"], name: "index_apps_on_sort_order"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
   create_table "credit_spents", force: :cascade do |t|
@@ -126,6 +133,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_024721) do
     t.string "contact", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "sectors", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_sectors_on_name", unique: true
   end
 
   create_table "stripe_infos", force: :cascade do |t|

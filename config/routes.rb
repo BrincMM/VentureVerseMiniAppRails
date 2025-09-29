@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 
       resources :perks, only: [:index, :create, :update, :destroy]
       resources :perk_accesses, only: [:create, :destroy]
+      resources :categories, only: [:index, :create, :update, :destroy]
+      resources :sectors, only: [:index, :create, :update, :destroy]
 
       resources :app_activities, only: [:index, :create]
       resources :log_in_histories, only: [:index, :create]

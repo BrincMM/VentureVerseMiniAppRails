@@ -6,9 +6,11 @@ module Api
       def index
         per_page = params.fetch(:per_page, 10).to_i
         if per_page <= 0 || per_page > 100
-          return render 'api/v1/shared/error',
-                      locals: { message: 'Invalid parameters', errors: ['Per page must be between 1 and 100'] },
-                      status: :unprocessable_entity
+          return render_general_error(
+            message: 'Invalid parameters',
+            errors: ['Per page must be between 1 and 100'],
+            status: :unprocessable_entity
+          )
         end
 
         query = Perk.all
@@ -29,18 +31,22 @@ module Api
         if @perk.save
           render :create, status: :created
         else
-          render 'api/v1/shared/error',
-                 locals: { message: 'Failed to create perk', errors: @perk.errors.full_messages },
-                 status: :unprocessable_entity
+          render_general_error(
+            message: 'Failed to create perk',
+            errors: @perk.errors.full_messages,
+            status: :unprocessable_entity
+          )
         end
       end
 
       def update
         @perk = Perk.find_by(id: params[:id])
         unless @perk
-          return render 'api/v1/shared/error',
-                      locals: { message: 'Perk not found', errors: ['Perk does not exist'] },
-                      status: :not_found
+          return render_general_error(
+            message: 'Perk not found',
+            errors: ['Perk does not exist'],
+            status: :not_found
+          )
         end
 
         @perk.assign_attributes(perk_params)
@@ -49,18 +55,22 @@ module Api
         if @perk.save
           render :update
         else
-          render 'api/v1/shared/error',
-                 locals: { message: 'Failed to update perk', errors: @perk.errors.full_messages },
-                 status: :unprocessable_entity
+          render_general_error(
+            message: 'Failed to update perk',
+            errors: @perk.errors.full_messages,
+            status: :unprocessable_entity
+          )
         end
       end
 
       def destroy
         perk = Perk.find_by(id: params[:id])
         unless perk
-          return render 'api/v1/shared/error',
-                      locals: { message: 'Perk not found', errors: ['Perk does not exist'] },
-                      status: :not_found
+          return render_general_error(
+            message: 'Perk not found',
+            errors: ['Perk does not exist'],
+            status: :not_found
+          )
         end
 
         tags_snapshot = perk.tag_list.dup
@@ -70,9 +80,11 @@ module Api
           @perk.tag_list = tags_snapshot
           render :destroy
         else
-          render 'api/v1/shared/error',
-                 locals: { message: 'Failed to delete perk', errors: perk.errors.full_messages },
-                 status: :unprocessable_entity
+          render_general_error(
+            message: 'Failed to delete perk',
+            errors: perk.errors.full_messages,
+            status: :unprocessable_entity
+          )
         end
       end
 
@@ -102,9 +114,17 @@ module Api
       end
 
       def handle_parameter_missing(exception)
-        render 'api/v1/shared/error',
-               locals: { message: 'Invalid parameters', errors: ["#{exception.param.to_s.humanize} parameters are required"] },
-               status: :unprocessable_entity
+        render_general_error(
+          message: 'Invalid parameters',
+          errors: ["#{exception.param.to_s.humanize} parameters are required"],
+          status: :unprocessable_entity
+        )
+      end
+
+      def render_general_error(message:, errors:, status:)
+        render 'api/v1/general/errors',
+               locals: { message: message, errors: Array(errors) },
+               status: status
       end
     end
   end

@@ -205,6 +205,11 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
   test "should return not found when updating missing perk" do
     patch_with_token api_v1_perk_url(-1), params: { perk: { partner_name: "Missing" } }, as: :json
     assert_response :not_found
+
+    json_response = JSON.parse(response.body)
+    assert_equal false, json_response["success"]
+    assert_equal "Perk not found", json_response["message"]
+    assert_includes json_response["errors"], "Perk does not exist"
   end
 
   test "should delete perk" do
@@ -230,6 +235,11 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
   test "should return not found when deleting missing perk" do
     delete_with_token api_v1_perk_url(-1), as: :json
     assert_response :not_found
+
+    json_response = JSON.parse(response.body)
+    assert_equal false, json_response["success"]
+    assert_equal "Perk not found", json_response["message"]
+    assert_includes json_response["errors"], "Perk does not exist"
   end
 
   test "should handle missing perk payload" do
@@ -238,6 +248,7 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
 
     json_response = JSON.parse(response.body)
     assert_equal false, json_response["success"]
+    assert_equal "Invalid parameters", json_response["message"]
     assert_includes json_response["errors"], "Perk parameters are required"
   end
 end
