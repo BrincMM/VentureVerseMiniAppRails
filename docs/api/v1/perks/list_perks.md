@@ -9,7 +9,7 @@ Lists available perks with optional filtering and pagination.
 ## Request Example
 
 ```http
-GET /api/v1/perks?category=Technology&sector=AI&tags=remote,discount&per_page=10&page=1 HTTP/1.1
+GET /api/v1/perks?category_id=1&sector_id=2&tags=remote,discount&per_page=10&page=1 HTTP/1.1
 Host: api.ventureverse.example
 Authorization: Bearer <access_token>
 Accept: application/json
@@ -19,8 +19,8 @@ Accept: application/json
 
 | Parameter | Type   | Required | Description                                      |
 |-----------|--------|----------|--------------------------------------------------|
-| category  | string | No       | Filter perks by category                         |
-| sector    | string | No       | Filter perks by sector                           |
+| category_id  | number | No    | Filter perks by category ID                      |
+| sector_id    | number | No    | Filter perks by sector ID                        |
 | tags      | string | No       | Filter perks by tags (comma-separated)           |
 | per_page  | number | No       | Number of records per page (max 100, default 10) |
 | page      | number | No       | Page number (default 1)                          |
@@ -40,8 +40,14 @@ Accept: application/json
       {
         "id": 1,
         "partner_name": "Alpha Partner",
-        "category": "Technology",
-        "sector": "AI",
+        "category": {
+          "id": 1,
+          "name": "Technology"
+        },
+        "sector": {
+          "id": 2,
+          "name": "AI"
+        },
         "company_website": "https://alpha.example.com",
         "contact_email": "contact@alpha.example.com",
         "contact": "Alice",

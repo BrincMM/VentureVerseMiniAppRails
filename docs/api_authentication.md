@@ -113,8 +113,14 @@ A successful API call (e.g., listing apps) will return:
         "id": 1,
         "app_name": "Example App",
         "description": "App description",
-        "category": "Category",
-        "sector": "Sector",
+        "category": {
+          "id": 1,
+          "name": "Category"
+        },
+        "sector": {
+          "id": 2,
+          "name": "Sector"
+        },
         "tags": ["tag1", "tag2"]
       }
     ],

@@ -1,6 +1,9 @@
 class App < ApplicationRecord
   acts_as_taggable_on :tags
 
+  belongs_to :category
+  belongs_to :sector
+
   has_many :app_activities, dependent: :destroy
   has_many :app_accesses, dependent: :destroy
   has_many :users, through: :app_accesses
@@ -9,8 +12,8 @@ class App < ApplicationRecord
   validates :link, url: true, allow_blank: true
 
   # Scopes
-  scope :by_category, ->(category) { where(category: category) if category.present? }
-  scope :by_sector, ->(sector) { where(sector: sector) if sector.present? }
+  scope :by_category, ->(category_id) { where(category_id:) if category_id.present? }
+  scope :by_sector, ->(sector_id) { where(sector_id:) if sector_id.present? }
   scope :with_any_tags, ->(tags) do
     if tags.present?
       tag_list = tags.map { |tag| tag.strip }

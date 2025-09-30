@@ -14,8 +14,8 @@ module Api
         end
 
         query = Perk.all
-        query = query.by_category(params[:category]) if params[:category].present?
-        query = query.by_sector(params[:sector]) if params[:sector].present?
+        query = query.by_category(params[:category_id]) if params[:category_id].present?
+        query = query.by_sector(params[:sector_id]) if params[:sector_id].present?
         query = query.with_any_tags(params[:tags].split(',')) if params[:tags].present?
 
         @total_count = query.count
@@ -91,7 +91,7 @@ module Api
       private
 
       def perk_params
-        params.require(:perk).permit(:partner_name, :category, :sector, :company_website, :contact_email, :contact)
+        params.require(:perk).permit(:partner_name, :category_id, :sector_id, :company_website, :contact_email, :contact)
       end
 
       def assign_tags(perk)

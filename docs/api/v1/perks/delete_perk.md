@@ -35,8 +35,14 @@ Accept: application/json
     "perk": {
       "id": 1,
       "partner_name": "Alpha Partner",
-      "category": "Technology",
-      "sector": "AI",
+      "category": {
+        "id": 1,
+        "name": "Technology"
+      },
+      "sector": {
+        "id": 2,
+        "name": "AI"
+      },
       "company_website": "https://alpha.example.com",
       "contact_email": "contact@alpha.example.com",
       "contact": "Alice",

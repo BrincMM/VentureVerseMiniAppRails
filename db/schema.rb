@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_29_084438) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_30_000000) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -51,15 +51,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_29_084438) do
   create_table "apps", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.string "category"
-    t.string "sector"
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sort_order", default: 0
-    t.index ["category"], name: "index_apps_on_category"
+    t.integer "category_id"
+    t.integer "sector_id"
+    t.index ["category_id"], name: "index_apps_on_category_id"
     t.index ["name"], name: "index_apps_on_name", unique: true
-    t.index ["sector"], name: "index_apps_on_sector"
+    t.index ["sector_id"], name: "index_apps_on_sector_id"
     t.index ["sort_order"], name: "index_apps_on_sort_order"
   end
 
@@ -126,13 +126,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_29_084438) do
 
   create_table "perks", force: :cascade do |t|
     t.string "partner_name", null: false
-    t.string "category"
-    t.string "sector"
     t.string "company_website", null: false
     t.string "contact_email", null: false
     t.string "contact", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category_id"
+    t.integer "sector_id"
+    t.index ["category_id"], name: "index_perks_on_category_id"
+    t.index ["sector_id"], name: "index_perks_on_sector_id"
   end
 
   create_table "sectors", force: :cascade do |t|
@@ -254,11 +256,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_29_084438) do
   add_foreign_key "app_accesses", "users"
   add_foreign_key "app_activities", "apps"
   add_foreign_key "app_activities", "users"
+  add_foreign_key "apps", "categories"
+  add_foreign_key "apps", "sectors"
   add_foreign_key "credit_spents", "users"
   add_foreign_key "credit_topups", "users"
   add_foreign_key "log_in_histories", "users"
   add_foreign_key "perk_accesses", "perks"
   add_foreign_key "perk_accesses", "users"
+  add_foreign_key "perks", "categories"
+  add_foreign_key "perks", "sectors"
   add_foreign_key "stripe_infos", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "user_roles", "users"

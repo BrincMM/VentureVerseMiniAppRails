@@ -17,8 +17,8 @@ Content-Type: application/json
 {
   "perk": {
     "partner_name": "Gamma Partner",
-    "category": "Technology",
-    "sector": "AI",
+    "category_id": 1,
+    "sector_id": 2,
     "company_website": "https://gamma.example.com",
     "contact_email": "contact@gamma.example.com",
     "contact": "Grace",
@@ -33,8 +33,8 @@ Content-Type: application/json
 |------------------|--------|----------|--------------------------------------------------------|
 | perk             | object | Yes      | Wrapper for perk attributes                            |
 | partner_name     | string | Yes      | Name of the partner providing the perk                 |
-| category         | string | Yes      | Category associated with the perk                      |
-| sector           | string | Yes      | Sector associated with the perk                        |
+| category_id      | number | Yes      | ID of the category associated with the perk            |
+| sector_id        | number | Yes      | ID of the sector associated with the perk              |
 | company_website  | string | Yes      | Company website URL                                    |
 | contact_email    | string | Yes      | Contact email address                                  |
 | contact          | string | Yes      | Contact person name                                    |
@@ -54,8 +54,14 @@ Content-Type: application/json
     "perk": {
       "id": 10,
       "partner_name": "Gamma Partner",
-      "category": "Technology",
-      "sector": "AI",
+      "category": {
+        "id": 1,
+        "name": "Technology"
+      },
+      "sector": {
+        "id": 2,
+        "name": "AI"
+      },
       "company_website": "https://gamma.example.com",
       "contact_email": "contact@gamma.example.com",
       "contact": "Grace",

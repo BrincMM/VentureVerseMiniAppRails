@@ -9,7 +9,7 @@ Retrieves all perks accessible to a specific user with optional filtering and pa
 ## Request Example
 
 ```http
-GET /api/v1/users/1/perks?category=Technology&tags=remote&per_page=10&page=1
+GET /api/v1/users/1/perks?category_id=1&tags=remote&per_page=10&page=1
 ```
 
 ## Parameters
@@ -17,8 +17,8 @@ GET /api/v1/users/1/perks?category=Technology&tags=remote&per_page=10&page=1
 | Parameter | Type   | Required | Description                                      |
 |-----------|--------|----------|--------------------------------------------------|
 | user_id   | number | Yes      | ID of the user                                   |
-| category  | string | No       | Filter perks by category                         |
-| sector    | string | No       | Filter perks by sector                           |
+| category_id  | number | No    | Filter perks by category ID                      |
+| sector_id    | number | No    | Filter perks by sector ID                        |
 | tags      | string | No       | Filter perks by tags (comma-separated)           |
 | per_page  | number | No       | Number of records per page (max 100, default 10) |
 | page      | number | No       | Page number (default 1)                          |
@@ -38,8 +38,14 @@ GET /api/v1/users/1/perks?category=Technology&tags=remote&per_page=10&page=1
       {
         "id": 2,
         "partner_name": "Beta Partner",
-        "category": "Finance",
-        "sector": "Banking",
+        "category": {
+          "id": 2,
+          "name": "Finance"
+        },
+        "sector": {
+          "id": 3,
+          "name": "Banking"
+        },
         "company_website": "https://beta.example.com",
         "contact_email": "contact@beta.example.com",
         "contact": "Bob",

@@ -31,8 +31,8 @@ class AppTest < ActiveSupport::TestCase
   end
 
   test "scopes" do
-    assert_includes App.by_category("AI"), @app
-    assert_includes App.by_sector("Technology"), @app
+    assert_includes App.by_category(@app.category_id), @app
+    assert_includes App.by_sector(@app.sector_id), @app
     assert_includes App.accessible_by_user(@user.id), @app
   end
 

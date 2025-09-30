@@ -44,12 +44,15 @@ class Api::V1::Users::PerksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter user perks by category" do
-    get_with_token api_v1_user_perks_url(@user), params: { category: "Technology" }, as: :json
+    category = categories(:category_one)
+    get_with_token api_v1_user_perks_url(@user), params: { category_id: category.id }, as: :json
     assert_response :success
 
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["perks"].length
-    assert_equal "Technology", json_response["data"]["perks"].first["category"]
+    perk_payload = json_response["data"]["perks"].first
+    assert_equal category.id, perk_payload["category"]["id"]
+    assert_equal category.name, perk_payload["category"]["name"]
   end
 
   test "should filter user perks by tags" do

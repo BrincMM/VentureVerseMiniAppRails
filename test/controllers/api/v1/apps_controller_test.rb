@@ -46,31 +46,40 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter apps by category" do
-    get_with_token api_v1_apps_url, params: { category: "AI" }, as: :json
+    category = categories(:category_one)
+    get_with_token api_v1_apps_url, params: { category_id: category.id }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["apps"].length
-    assert_equal "AI", json_response["data"]["apps"][0]["category"]
+    app_payload = json_response["data"]["apps"].first
+    assert_equal category.id, app_payload["category"]["id"]
+    assert_equal category.name, app_payload["category"]["name"]
   end
 
   test "should filter apps by sector" do
-    get_with_token api_v1_apps_url, params: { sector: "Finance" }, as: :json
+    sector = sectors(:sector_two)
+    get_with_token api_v1_apps_url, params: { sector_id: sector.id }, as: :json
     assert_response :success
     
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["apps"].length
-    assert_equal "Finance", json_response["data"]["apps"][0]["sector"]
+    app_payload = json_response["data"]["apps"].first
+    assert_equal sector.id, app_payload["sector"]["id"]
+    assert_equal sector.name, app_payload["sector"]["name"]
   end
 
   test "should paginate apps" do
     # Create more apps for pagination testing
+    category = Category.create!(name: "Pagination Category")
+    sector = Sector.create!(name: "Pagination Sector")
+
     5.times do |i|
       App.create!(
         name: "Paginated App #{i}",
-        category: "Test",
-        sector: "Test",
-        link: "https://example.com"
+        category: category,
+        sector: sector,
+        link: "https://example.com/#{i}"
       )
     end
 

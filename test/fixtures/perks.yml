@@ -2,16 +2,16 @@
 
 perk_one:
   partner_name: Alpha Partner
-  category: Technology
-  sector: AI
+  category: category_one
+  sector: sector_one
   company_website: https://alpha.example.com
   contact_email: contact@alpha.example.com
   contact: Alice
 
 perk_two:
   partner_name: Beta Partner
-  category: Finance
-  sector: Banking
+  category: category_two
+  sector: sector_two
   company_website: https://beta.example.com
   contact_email: contact@beta.example.com
   contact: Bob

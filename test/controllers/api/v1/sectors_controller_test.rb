@@ -21,12 +21,12 @@ class Api::V1::SectorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter sectors by search" do
-    get_with_token api_v1_sectors_url, params: { search: "health" }, as: :json
+    get_with_token api_v1_sectors_url, params: { search: "fin" }, as: :json
     assert_response :success
 
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["sectors"].length
-    assert_equal "Healthcare", json_response["data"]["sectors"].first["name"]
+    assert_equal "Finance", json_response["data"]["sectors"].first["name"]
   end
 
   test "should handle invalid per_page" do

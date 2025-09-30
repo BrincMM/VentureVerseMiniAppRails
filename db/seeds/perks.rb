@@ -1,8 +1,8 @@
 perks_data = [
   {
     partner_name: "Acme Cloud",
-    category: "Cloud Infrastructure",
-    sector: "SaaS",
+    category_name: "Cloud Infrastructure",
+    sector_name: "SaaS",
     company_website: "https://acmecloud.example.com",
     contact_email: "alliances@acmecloud.example.com",
     contact: "Jordan Smith",
@@ -10,8 +10,8 @@ perks_data = [
   },
   {
     partner_name: "GrowthFuel Marketing",
-    category: "Marketing",
-    sector: "B2B",
+    category_name: "Marketing",
+    sector_name: "B2B",
     company_website: "https://growthfuel.example.com",
     contact_email: "partnerships@growthfuel.example.com",
     contact: "Priya Patel",
@@ -19,8 +19,8 @@ perks_data = [
   },
   {
     partner_name: "LegalEase Advisors",
-    category: "Legal",
-    sector: "Professional Services",
+    category_name: "Legal",
+    sector_name: "Professional Services",
     company_website: "https://legalease.example.com",
     contact_email: "hello@legalease.example.com",
     contact: "Carlos Alvarez",
@@ -28,8 +28,8 @@ perks_data = [
   },
   {
     partner_name: "FinSight Analytics",
-    category: "Finance",
-    sector: "FinTech",
+    category_name: "Finance",
+    sector_name: "FinTech",
     company_website: "https://finsight.example.com",
     contact_email: "team@finsight.example.com",
     contact: "Mei Chen",
@@ -37,8 +37,8 @@ perks_data = [
   },
   {
     partner_name: "TalentBridge HR",
-    category: "Human Resources",
-    sector: "Services",
+    category_name: "Human Resources",
+    sector_name: "Services",
     company_website: "https://talentbridge.example.com",
     contact_email: "partners@talentbridge.example.com",
     contact: "Omar Hassan",
@@ -47,8 +47,15 @@ perks_data = [
 ]
 
 perks_data.each do |perk_attrs|
-  perk = Perk.find_or_initialize_by(partner_name: perk_attrs[:partner_name])
-  perk.update!(perk_attrs)
+  attrs = perk_attrs.dup
+  category = Category.find_or_create_by!(name: attrs.delete(:category_name))
+  sector = Sector.find_or_create_by!(name: attrs.delete(:sector_name))
+  tag_list = attrs.delete(:tag_list)
+
+  perk = Perk.find_or_initialize_by(partner_name: attrs[:partner_name])
+  perk.assign_attributes(attrs.merge(category:, sector:))
+  perk.tag_list = tag_list if tag_list.present?
+  perk.save!
   puts "Created/Updated perk: #{perk.partner_name}"
 end
 

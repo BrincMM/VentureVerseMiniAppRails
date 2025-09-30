@@ -17,7 +17,7 @@ Content-Type: application/json
 {
   "perk": {
     "partner_name": "Updated Partner",
-    "category": "Updated Category",
+    "category_id": 5,
     "tags": "remote,global"
   }
 }
@@ -30,8 +30,8 @@ Content-Type: application/json
 | id           | number | Yes      | ID of the perk to update                  |
 | perk         | object | Yes      | Wrapper for attributes to be updated      |
 | partner_name | string | No       | Updated partner name                      |
-| category     | string | No       | Updated category                          |
-| sector       | string | No       | Updated sector                            |
+| category_id  | number | No       | Updated category ID                       |
+| sector_id    | number | No       | Updated sector ID                         |
 | company_website | string | No   | Updated company website                   |
 | contact_email   | string | No   | Updated contact email                     |
 | contact         | string | No   | Updated contact person                    |
@@ -51,8 +51,14 @@ Content-Type: application/json
     "perk": {
       "id": 1,
       "partner_name": "Updated Partner",
-      "category": "Updated Category",
-      "sector": "AI",
+      "category": {
+        "id": 5,
+        "name": "Updated Category"
+      },
+      "sector": {
+        "id": 2,
+        "name": "AI"
+      },
       "company_website": "https://alpha.example.com",
       "contact_email": "contact@alpha.example.com",
       "contact": "Alice",

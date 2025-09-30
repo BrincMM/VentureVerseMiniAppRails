@@ -45,21 +45,27 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should filter perks by category" do
-    get_with_token api_v1_perks_url, params: { category: "Technology" }, as: :json
+    category = categories(:category_one)
+    get_with_token api_v1_perks_url, params: { category_id: category.id }, as: :json
     assert_response :success
 
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["perks"].length
-    assert_equal "Technology", json_response["data"]["perks"].first["category"]
+    perk_payload = json_response["data"]["perks"].first
+    assert_equal category.id, perk_payload["category"]["id"]
+    assert_equal category.name, perk_payload["category"]["name"]
   end
 
   test "should filter perks by sector" do
-    get_with_token api_v1_perks_url, params: { sector: "Banking" }, as: :json
+    sector = sectors(:sector_two)
+    get_with_token api_v1_perks_url, params: { sector_id: sector.id }, as: :json
     assert_response :success
 
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["perks"].length
-    assert_equal "Banking", json_response["data"]["perks"].first["sector"]
+    perk_payload = json_response["data"]["perks"].first
+    assert_equal sector.id, perk_payload["sector"]["id"]
+    assert_equal sector.name, perk_payload["sector"]["name"]
   end
 
   test "should filter perks by tags" do
@@ -80,10 +86,12 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
 
   test "should paginate perks" do
     5.times do |i|
+      category = Category.create!(name: "Category #{i}")
+      sector = Sector.create!(name: "Sector #{i}")
       Perk.create!(
         partner_name: "Paginated Perk #{i}",
-        category: "Category",
-        sector: "Sector",
+        category: category,
+        sector: sector,
         company_website: "https://paginated#{i}.example.com",
         contact_email: "contact#{i}@example.com",
         contact: "Contact #{i}"
@@ -119,13 +127,16 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create perk" do
+    category = Category.create!(name: "Technology Partners")
+    sector = Sector.create!(name: "AI Services")
+
     assert_difference("Perk.count", 1) do
       post_with_token api_v1_perks_url,
                       params: {
                         perk: {
                           partner_name: "Gamma Partner",
-                          category: "Technology",
-                          sector: "AI",
+                          category_id: category.id,
+                          sector_id: sector.id,
                           company_website: "https://gamma.example.com",
                           contact_email: "contact@gamma.example.com",
                           contact: "Grace",
@@ -140,14 +151,21 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, json_response["success"]
     assert_equal "Perk created successfully", json_response["message"]
     assert_equal ["ai", "innovation"].sort, json_response["data"]["perk"]["tags"].sort
+    assert_equal category.id, json_response["data"]["perk"]["category"]["id"]
+    assert_equal sector.id, json_response["data"]["perk"]["sector"]["id"]
   end
 
   test "should not create perk with invalid data" do
+    category = categories(:category_one)
+    sector = sectors(:sector_one)
+
     assert_no_difference("Perk.count") do
       post_with_token api_v1_perks_url,
                       params: {
                         perk: {
                           partner_name: "",
+                          category_id: category.id,
+                          sector_id: sector.id,
                           company_website: "https://invalid.example.com",
                           contact_email: "invalid@example.com",
                           contact: "Invalid"
@@ -163,11 +181,12 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update perk" do
+    new_category = Category.create!(name: "Updated Category")
     patch_with_token api_v1_perk_url(@perk_one),
                      params: {
                        perk: {
                          partner_name: "Updated Partner",
-                         category: "Updated Category",
+                         category_id: new_category.id,
                          tags: "remote,global"
                        }
                      },
@@ -181,7 +200,8 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
 
     @perk_one.reload
     assert_equal "Updated Partner", @perk_one.partner_name
-    assert_equal "Updated Category", @perk_one.category
+    assert_equal new_category.id, @perk_one.category_id
+    assert_equal new_category.name, @perk_one.category.name
     assert_equal ["global", "remote"].sort, @perk_one.tag_list.sort
   end
 
@@ -213,10 +233,12 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should delete perk" do
+    category = Category.create!(name: "Temp Category")
+    sector = Sector.create!(name: "Temp Sector")
     perk = Perk.create!(
       partner_name: "Temp Partner",
-      category: "Temp",
-      sector: "Temp",
+      category: category,
+      sector: sector,
       company_website: "https://temp.example.com",
       contact_email: "temp@example.com",
       contact: "Temp"

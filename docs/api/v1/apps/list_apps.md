@@ -9,15 +9,15 @@ Lists available apps with optional filtering and pagination.
 ## Request Example
 
 ```http
-GET /api/v1/apps?category=AI&sector=Technology&tags=ai,machine-learning&per_page=10&page=1
+GET /api/v1/apps?category_id=1&sector_id=2&tags=ai,machine-learning&per_page=10&page=1
 ```
 
 ## Parameters
 
 | Parameter | Type   | Required | Description                                |
 |-----------|--------|----------|--------------------------------------------|
-| category  | string | No       | Filter apps by category                    |
-| sector    | string | No       | Filter apps by sector                      |
+| category_id | number | No    | Filter apps by category ID                 |
+| sector_id   | number | No    | Filter apps by sector ID                   |
 | tags      | string | No       | Filter apps by tags (comma-separated)      |
 | per_page  | number | No       | Number of records per page (max 100, default 10) |
 | page      | number | No       | Page number (default 1) |
@@ -38,8 +38,14 @@ GET /api/v1/apps?category=AI&sector=Technology&tags=ai,machine-learning&per_page
         "id": 1,
         "app_name": "Test App",
         "description": "A test application",
-        "category": "AI",
-        "sector": "Technology",
+        "category": {
+          "id": 1,
+          "name": "AI"
+        },
+        "sector": {
+          "id": 2,
+          "name": "Technology"
+        },
         "link": "https://example.com",
         "tags": ["ai", "machine-learning"],
         "created_at": "2024-01-01T00:00:00Z",
