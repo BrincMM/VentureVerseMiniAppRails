@@ -15,14 +15,19 @@ Rails.application.routes.draw do
     get 'health', to: 'health#index'
 
     namespace :v1 do
-      resources :apps, only: [:index] do
+      resources :apps, only: [:index, :create, :update, :destroy] do
         collection do
+          get 'filters'
           post 'add_access'
           delete 'remove_access'
         end
       end
 
-      resources :perks, only: [:index, :create, :update, :destroy]
+      resources :perks, only: [:index, :create, :update, :destroy] do
+        collection do
+          get 'filters'
+        end
+      end
       resources :perk_accesses, only: [:create, :destroy]
       resources :categories, only: [:index, :create, :update, :destroy]
       resources :sectors, only: [:index, :create, :update, :destroy]

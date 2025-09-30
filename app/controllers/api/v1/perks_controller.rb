@@ -24,6 +24,62 @@ module Api
         render :index
       end
 
+      def filters
+        query = Perk.all
+        query = query.by_category(params[:category_id]) if params[:category_id].present?
+        query = query.by_sector(params[:sector_id]) if params[:sector_id].present?
+
+        tag_list = []
+        if params[:tags].present?
+          tag_list = parse_tags(params[:tags])
+          query = query.with_any_tags(tag_list) if tag_list.present?
+        end
+
+        filtered_perks = query || Perk.none
+
+        category_counts = filtered_perks.group(:category_id).count
+        sector_counts = filtered_perks.group(:sector_id).count
+
+        categories = Category.where(id: category_counts.keys).index_by(&:id)
+        sectors = Sector.where(id: sector_counts.keys).index_by(&:id)
+
+        @used_categories = category_counts.each_with_object([]) do |(category_id, count), collection|
+          category = categories[category_id]
+          next unless category
+
+          collection << { id: category.id, name: category.name, count: count }
+        end.sort_by { |category| category[:name].to_s.downcase }
+
+        @used_sectors = sector_counts.each_with_object([]) do |(sector_id, count), collection|
+          sector = sectors[sector_id]
+          next unless sector
+
+          collection << { id: sector.id, name: sector.name, count: count }
+        end.sort_by { |sector| sector[:name].to_s.downcase }
+
+        tag_counts = ActsAsTaggableOn::Tagging
+                     .joins(:tag)
+                     .where(taggable_type: 'Perk', taggable_id: filtered_perks.select(:id))
+                     .group('tags.name')
+                     .order('tags.name ASC')
+                     .count
+
+        @used_tags = if tag_list.present?
+                       tag_list.each_with_object([]) do |tag_name, collection|
+                         count = tag_counts[tag_name]
+                         next unless count
+
+                         collection << { name: tag_name, count: count }
+                       end
+                     else
+                       tag_counts.map do |name, count|
+                         { name: name, count: count }
+                       end
+                     end
+
+        render :filters
+      end
+
       def create
         @perk = Perk.new(perk_params)
         assign_tags(@perk)

@@ -23,6 +23,18 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "should reject filters request without token" do
+    get filters_api_v1_perks_path, as: :json
+    assert_response :unauthorized
+  end
+
+  test "should reject filters request with invalid token" do
+    get filters_api_v1_perks_path,
+        headers: { 'Authorization' => 'Bearer invalid_token' },
+        as: :json
+    assert_response :unauthorized
+  end
+
   test "should list perks" do
     get_with_token api_v1_perks_url, as: :json
     assert_response :success
@@ -82,6 +94,50 @@ class Api::V1::PerksControllerTest < ActionDispatch::IntegrationTest
     json_response = JSON.parse(response.body)
     assert_equal 1, json_response["data"]["perks"].length
     assert_equal @perk_two.id, json_response["data"]["perks"].first["id"]
+  end
+
+  test "should return perk filters" do
+    get_with_token filters_api_v1_perks_path, as: :json
+    assert_response :success
+
+    json_response = JSON.parse(response.body)
+    assert_equal true, json_response["success"]
+    assert_equal "Perk filters retrieved successfully", json_response["message"]
+
+    categories = json_response.dig("data", "used_categories")
+    sectors = json_response.dig("data", "used_sectors")
+    tags = json_response.dig("data", "used_tags")
+
+    assert_equal 2, categories.length
+    assert_equal 2, sectors.length
+    assert_equal 4, tags.length
+
+    technology_category = categories.find { |category| category["name"] == categories(:category_one).name }
+    assert_equal 1, technology_category["count"]
+
+    ai_sector = sectors.find { |sector| sector["name"] == sectors(:sector_one).name }
+    assert_equal 1, ai_sector["count"]
+
+    remote_tag = tags.find { |tag| tag["name"] == "remote" }
+    assert_equal 1, remote_tag["count"]
+  end
+
+  test "should filter perk filters by tags" do
+    get_with_token filters_api_v1_perks_path, params: { tags: "remote" }, as: :json
+    assert_response :success
+
+    json_response = JSON.parse(response.body)
+    categories = json_response.dig("data", "used_categories")
+    sectors = json_response.dig("data", "used_sectors")
+    tags = json_response.dig("data", "used_tags")
+
+    assert_equal 1, categories.length
+    assert_equal 1, sectors.length
+    assert_equal 1, tags.length
+
+    assert_equal categories(:category_one).id, categories.first["id"]
+    assert_equal sectors(:sector_one).id, sectors.first["id"]
+    assert_equal "remote", tags.first["name"]
   end
 
   test "should paginate perks" do
