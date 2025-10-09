@@ -91,7 +91,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
         name: "Paginated App #{i}",
         category: category,
         sector: sector,
-        link: "https://example.com/#{i}"
+        app_url: "https://example.com/#{i}"
       )
     end
 
@@ -197,7 +197,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
                         app: {
                           name: "New Test App",
                           description: "A brand new app",
-                          link: "https://new-app.example.com",
+                          app_url: "https://new-app.example.com",
                           category_id: category.id,
                           sector_id: sector.id,
                           sort_order: 15,
@@ -226,7 +226,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
                       params: {
                         app: {
                           name: "",
-                          link: "invalid-url"
+                          app_url: "invalid-url"
                         }
                       },
                       as: :json
@@ -320,7 +320,7 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
     app = App.create!(
       name: "Disposable App",
       description: "Temporary app",
-      link: "https://disposable.example.com",
+      app_url: "https://disposable.example.com",
       category: category,
       sector: sector
     )

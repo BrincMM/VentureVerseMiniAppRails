@@ -9,7 +9,11 @@ json.sector do
   json.id app.sector_id
   json.name app.sector&.name
 end
-json.link app.link
+json.app_url app.app_url
+json.status app.status
+json.developer_id app.developer_id
+json.rate_limit_max_requests app.rate_limit_max_requests
+json.rate_limit_window_ms app.rate_limit_window_ms
 json.tags app.tag_list
 json.created_at app.created_at
 json.updated_at app.updated_at

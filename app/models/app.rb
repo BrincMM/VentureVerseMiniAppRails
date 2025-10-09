@@ -8,8 +8,22 @@ class App < ApplicationRecord
   has_many :app_accesses, dependent: :destroy
   has_many :users, through: :app_accesses
 
+  # Rails 8 enum syntax
+  enum :status, { active: 0, disabled: 1, reviewing: 2, dev: 3 }
+
   validates :name, presence: true, uniqueness: true
-  validates :link, url: true, allow_blank: true
+  validates :app_url, url: true, allow_blank: true
+
+  # Set default status to dev for new records
+  after_initialize :set_default_status, if: :new_record?
+
+  private
+
+  def set_default_status
+    self.status ||= :dev
+  end
+
+  public
 
   # Scopes
   scope :by_category, ->(category_id) { where(category_id:) if category_id.present? }

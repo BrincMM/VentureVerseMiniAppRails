@@ -31,10 +31,14 @@ Content-Type: application/json
 | app | object | Yes | Wrapper for the app payload |
 | name | string | No | Updated app name (must remain unique) |
 | description | string | No | Updated description |
-| link | string | No | Updated link (must be a valid URL if provided) |
+| app_url | string | No | Updated app URL (must be a valid URL if provided) |
 | category_id | number | No | Updated category association |
 | sector_id | number | No | Updated sector association |
 | sort_order | number | No | Updated sort order |
+| status | string | No | Updated app status (active, disabled, reviewing, dev) |
+| developer_id | number | No | Updated developer ID |
+| rate_limit_max_requests | number | No | Updated maximum number of requests allowed |
+| rate_limit_window_ms | number | No | Updated rate limit time window in milliseconds |
 | tags | array<string> or string | No | Replaces the tag list; send an empty array to clear tags |
 
 ## Success Response
@@ -58,7 +62,11 @@ Content-Type: application/json
         "id": 2,
         "name": "Technology"
       },
-      "link": "https://productivity.example.com",
+      "app_url": "https://productivity.example.com",
+      "status": "active",
+      "developer_id": 123,
+      "rate_limit_max_requests": 1000,
+      "rate_limit_window_ms": 60000,
       "tags": ["automation", "workflow"],
       "created_at": "2025-01-01T00:00:00Z",
       "updated_at": "2025-01-02T12:00:00Z"

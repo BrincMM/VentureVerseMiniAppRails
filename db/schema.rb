@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_30_000000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_063627) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -51,13 +51,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_000000) do
   create_table "apps", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.string "link"
+    t.string "app_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sort_order", default: 0
     t.integer "category_id"
     t.integer "sector_id"
+    t.integer "developer_id"
+    t.integer "status"
+    t.integer "rate_limit_max_requests"
+    t.integer "rate_limit_window_ms"
     t.index ["category_id"], name: "index_apps_on_category_id"
+    t.index ["developer_id"], name: "index_apps_on_developer_id"
     t.index ["name"], name: "index_apps_on_name", unique: true
     t.index ["sector_id"], name: "index_apps_on_sector_id"
     t.index ["sort_order"], name: "index_apps_on_sort_order"

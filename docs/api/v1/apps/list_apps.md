@@ -46,7 +46,11 @@ GET /api/v1/apps?category_id=1&sector_id=2&tags=ai,machine-learning&per_page=10&
           "id": 2,
           "name": "Technology"
         },
-        "link": "https://example.com",
+        "app_url": "https://example.com",
+        "status": "active",
+        "developer_id": null,
+        "rate_limit_max_requests": 1000,
+        "rate_limit_window_ms": 60000,
         "tags": ["ai", "machine-learning"],
         "created_at": "2024-01-01T00:00:00Z",
         "updated_at": "2024-01-01T00:00:00Z"

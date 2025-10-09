@@ -22,11 +22,11 @@ class AppTest < ActiveSupport::TestCase
   end
 
   test "url validation" do
-    @app.link = "invalid-url"
+    @app.app_url = "invalid-url"
     assert_not @app.valid?
-    assert_includes @app.errors[:link], "must be a valid URL"
+    assert_includes @app.errors[:app_url], "must be a valid URL"
 
-    @app.link = "https://valid-url.com"
+    @app.app_url = "https://valid-url.com"
     assert @app.valid?
   end
 

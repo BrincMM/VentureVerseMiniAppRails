@@ -18,10 +18,14 @@ Content-Type: application/json
   "app": {
     "name": "New Productivity Tool",
     "description": "Helps automate repetitive workflows",
-    "link": "https://productivity.example.com",
+    "app_url": "https://productivity.example.com",
     "category_id": 1,
     "sector_id": 2,
     "sort_order": 5,
+    "status": "active",
+    "developer_id": 123,
+    "rate_limit_max_requests": 1000,
+    "rate_limit_window_ms": 60000,
     "tags": ["automation", "productivity"]
   }
 }
@@ -34,10 +38,14 @@ Content-Type: application/json
 | app | object | Yes | Wrapper for the app payload |
 | name | string | Yes | App name (must be unique) |
 | description | string | No | App description |
-| link | string | No | App link (must be a valid URL if provided) |
+| app_url | string | No | App URL (must be a valid URL if provided) |
 | category_id | number | No | Category association |
 | sector_id | number | No | Sector association |
 | sort_order | number | No | Sort order used when listing apps |
+| status | string | No | App status (active, disabled, reviewing, dev) |
+| developer_id | number | No | Developer ID |
+| rate_limit_max_requests | number | No | Maximum number of requests allowed |
+| rate_limit_window_ms | number | No | Rate limit time window in milliseconds |
 | tags | array<string> or string | No | Tags to assign; send an array or a comma-separated string |
 
 ## Success Response
@@ -61,7 +69,11 @@ Content-Type: application/json
         "id": 2,
         "name": "Technology"
       },
-      "link": "https://productivity.example.com",
+      "app_url": "https://productivity.example.com",
+      "status": "active",
+      "developer_id": 123,
+      "rate_limit_max_requests": 1000,
+      "rate_limit_window_ms": 60000,
       "tags": ["automation", "productivity"],
       "created_at": "2025-01-01T00:00:00Z",
       "updated_at": "2025-01-01T00:00:00Z"

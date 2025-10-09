@@ -3,11 +3,13 @@ app_one:
   description: A test application
   category: category_one
   sector: sector_one
-  link: https://testapp1.example.com
+  app_url: https://testapp1.example.com
+  status: 0
 
 app_two:
   name: Test App 2
   description: Another test application
   category: category_two
   sector: sector_two
-  link: https://testapp2.example.com 
+  app_url: https://testapp2.example.com
+  status: 0 
