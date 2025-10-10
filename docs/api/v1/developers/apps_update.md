@@ -69,23 +69,11 @@ All parameters are optional. Only provide the fields you want to update.
       "app_url": "https://newurl.example.com/webhook",
       "status": "active",
       "developer_id": 456,
-      "rate_limit_max_requests": null,
-      "rate_limit_window_ms": null,
+      "rate_limit_requests_per_day": null,
+      "rate_limit_requests_per_minute": null,
       "tags": ["tag1", "tag2"],
       "created_at": "2025-01-15T10:30:00.000Z",
-      "updated_at": "2025-01-20T14:30:00.000Z",
-      "api_keys": [
-        {
-          "id": 1,
-          "api_key": "abc123def456...",
-          "rate_limit_per_minute": 100,
-          "rate_limit_per_day": 10000,
-          "status": "active",
-          "expires_at": null,
-          "last_used_at": "2025-01-20T14:30:00.000Z",
-          "created_at": "2025-01-15T10:30:00.000Z"
-        }
-      ]
+      "updated_at": "2025-01-20T14:30:00.000Z"
     }
   }
 }
@@ -137,7 +125,7 @@ When validation fails:
 - No ownership verification is performed (any valid API key can update any app)
 - Only the provided fields are updated; other fields remain unchanged
 - To update API key rate limits, use the API Keys endpoints (not this endpoint)
-- `rate_limit_max_requests` and `rate_limit_window_ms` are legacy fields on the app model
+- `rate_limit_requests_per_day` and `rate_limit_requests_per_minute` control app-level rate limits
 - Use the `status` field to activate, disable, or mark apps for review
 - The `updated_at` timestamp is automatically updated
 

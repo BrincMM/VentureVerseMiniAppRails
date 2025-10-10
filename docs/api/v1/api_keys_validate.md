@@ -60,8 +60,8 @@ curl -X POST \
       "id": 123,
       "name": "My App",
       "status": "active",
-      "rate_limit_max_requests": 1000,
-      "rate_limit_window_ms": 60000
+      "rate_limit_requests_per_day": 10000,
+      "rate_limit_requests_per_minute": 100
     },
     "developer": {
       "id": 789,
@@ -154,8 +154,8 @@ When authorization header is missing or invalid:
 - `id`: Unique identifier for the app
 - `name`: App name
 - `status`: App status ("active", "disabled", "reviewing", or "dev")
-- `rate_limit_max_requests`: App-level rate limit (number of requests)
-- `rate_limit_window_ms`: App-level rate limit window (in milliseconds)
+- `rate_limit_requests_per_day`: App-level rate limit (maximum requests per day)
+- `rate_limit_requests_per_minute`: App-level rate limit (maximum requests per minute)
 
 ### Developer Object
 - `id`: Unique identifier for the developer

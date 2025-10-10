@@ -42,8 +42,8 @@ No request body is required.
       "app_url": "https://productivity.example.com",
       "status": "active",
       "developer_id": 123,
-      "rate_limit_max_requests": 1000,
-      "rate_limit_window_ms": 60000,
+      "rate_limit_requests_per_day": 10000,
+      "rate_limit_requests_per_minute": 100,
       "tags": ["automation", "workflow"],
       "created_at": "2025-01-01T00:00:00Z",
       "updated_at": "2025-01-02T12:00:00Z"

@@ -2,15 +2,7 @@
 
 This API endpoint retrieves all apps for a developer.
 
-## Endpoints
-
-### Option 1: Get apps by email parameter
-
-```
-GET /api/v1/developers/apps?email={developer_email}
-```
-
-### Option 2: Get apps by developer_id
+## Endpoint
 
 ```
 GET /api/v1/developers/:developer_id/apps
@@ -25,44 +17,24 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Request Parameters
 
-### For Option 1 (Query Parameter)
-
-| Parameter | Type   | Required | Description |
-|-----------|--------|----------|-------------|
-| email     | string | Yes      | Developer's email address |
-| status    | string | No       | Filter by app status: "active", "disabled", "reviewing", "dev" |
-
-### For Option 2 (URL Parameter)
-
 | Parameter    | Type    | Required | Description |
 |--------------|---------|----------|-------------|
-| developer_id | integer | Yes      | Developer's ID |
+| developer_id | integer | Yes      | Developer's ID (in URL path) |
 | status       | string  | No       | Filter by app status: "active", "disabled", "reviewing", "dev" |
 
 ## Request Examples
 
-### Option 1 - Get all apps
-```
-GET /api/v1/developers/apps?email=developer@example.com
-```
-
-### Option 1 - Filter by status
-```
-GET /api/v1/developers/apps?email=developer@example.com&status=active
-GET /api/v1/developers/apps?email=developer@example.com&status=dev
-GET /api/v1/developers/apps?email=developer@example.com&status=reviewing
-GET /api/v1/developers/apps?email=developer@example.com&status=disabled
-```
-
-### Option 2 - Get all apps
+### Get all apps
 ```
 GET /api/v1/developers/123/apps
 ```
 
-### Option 2 - Filter by status
+### Filter by status
 ```
 GET /api/v1/developers/123/apps?status=active
 GET /api/v1/developers/123/apps?status=dev
+GET /api/v1/developers/123/apps?status=reviewing
+GET /api/v1/developers/123/apps?status=disabled
 ```
 
 ## Success Response
@@ -90,23 +62,11 @@ GET /api/v1/developers/123/apps?status=dev
         "app_url": "https://example.com/webhook",
         "status": "dev",
         "developer_id": 123,
-        "rate_limit_max_requests": null,
-        "rate_limit_window_ms": null,
+        "rate_limit_requests_per_day": null,
+        "rate_limit_requests_per_minute": null,
         "tags": ["tag1", "tag2"],
         "created_at": "2025-01-15T10:30:00.000Z",
-        "updated_at": "2025-01-15T10:30:00.000Z",
-        "api_keys": [
-          {
-            "id": 1,
-            "api_key": "abc123def456...",
-            "rate_limit_per_minute": 100,
-            "rate_limit_per_day": 10000,
-            "status": "active",
-            "expires_at": null,
-            "last_used_at": "2025-01-20T14:30:00.000Z",
-            "created_at": "2025-01-15T10:30:00.000Z"
-          }
-        ]
+        "updated_at": "2025-01-15T10:30:00.000Z"
       }
     ],
     "total_count": 1
@@ -115,18 +75,6 @@ GET /api/v1/developers/123/apps?status=dev
 ```
 
 ## Error Responses
-
-### Status Code: 400 Bad Request (Option 1 only)
-
-When email parameter is missing:
-
-```json
-{
-  "success": false,
-  "message": "Email parameter is required",
-  "errors": null
-}
-```
 
 ### Status Code: 404 Not Found
 
@@ -152,27 +100,13 @@ When developer is not found:
 | category                 | object   | Category information (id, name) |
 | sector                   | object   | Sector information (id, name) |
 | app_url                  | string   | Webhook URL |
-| status                   | string   | App status: "active", "disabled", "reviewing", "dev" |
-| developer_id             | integer  | Developer ID |
-| rate_limit_max_requests  | integer  | Max requests (legacy field) |
-| rate_limit_window_ms     | integer  | Rate limit window (legacy field) |
-| tags                     | array    | Array of tag strings |
-| created_at               | string   | ISO 8601 timestamp |
-| updated_at               | string   | ISO 8601 timestamp |
-| api_keys                 | array    | Array of active API key objects |
-
-### API Key Object
-
-| Field                  | Type     | Description |
-|------------------------|----------|-------------|
-| id                     | integer  | API key ID |
-| api_key                | string   | The actual API key |
-| rate_limit_per_minute  | integer  | Rate limit per minute |
-| rate_limit_per_day     | integer  | Rate limit per day |
-| status                 | string   | Status: "active", "revoked", "expired" |
-| expires_at             | string   | Expiration timestamp (nullable) |
-| last_used_at           | string   | Last usage timestamp (nullable) |
-| created_at             | string   | ISO 8601 timestamp |
+| status                          | string   | App status: "active", "disabled", "reviewing", "dev" |
+| developer_id                    | integer  | Developer ID |
+| rate_limit_requests_per_day     | integer  | Maximum number of requests allowed per day |
+| rate_limit_requests_per_minute  | integer  | Maximum number of requests allowed per minute |
+| tags                            | array    | Array of tag strings |
+| created_at                      | string   | ISO 8601 timestamp |
+| updated_at                      | string   | ISO 8601 timestamp |
 
 ## Status Filter
 
@@ -189,10 +123,10 @@ If an invalid status value is provided, all apps are returned (filter is ignored
 
 ## Notes
 
-- Only active API keys are included in the response
 - Apps are returned with all their associated data (category, sector, tags)
+- API keys are not included in the list response (use the show endpoint or API keys endpoints to retrieve keys)
 - No pagination is currently implemented
-- Both endpoints return the same response format
 - Status filtering is case-insensitive and strips whitespace
 - Developer can see all their apps regardless of status (unlike the public API which only shows active/reviewing apps)
+- The `developer_id` must be provided in the URL path
 

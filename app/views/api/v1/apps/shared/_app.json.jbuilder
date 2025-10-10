@@ -12,8 +12,8 @@ end
 json.app_url app.app_url
 json.status app.status
 json.developer_id app.developer_id
-json.rate_limit_max_requests app.rate_limit_max_requests
-json.rate_limit_window_ms app.rate_limit_window_ms
+json.rate_limit_requests_per_day app.rate_limit_requests_per_day
+json.rate_limit_requests_per_minute app.rate_limit_requests_per_minute
 json.tags app.tag_list
 json.created_at app.created_at
 json.updated_at app.updated_at

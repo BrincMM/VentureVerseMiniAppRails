@@ -24,8 +24,8 @@ Content-Type: application/json
     "sort_order": 5,
     "status": "active",
     "developer_id": 123,
-    "rate_limit_max_requests": 1000,
-    "rate_limit_window_ms": 60000,
+    "rate_limit_requests_per_day": 10000,
+    "rate_limit_requests_per_minute": 100,
     "tags": ["automation", "productivity"]
   }
 }
@@ -44,8 +44,8 @@ Content-Type: application/json
 | sort_order | number | No | Sort order used when listing apps |
 | status | string | No | App status (active, disabled, reviewing, dev) |
 | developer_id | number | No | Developer ID |
-| rate_limit_max_requests | number | No | Maximum number of requests allowed |
-| rate_limit_window_ms | number | No | Rate limit time window in milliseconds |
+| rate_limit_requests_per_day | number | No | Maximum number of requests allowed per day |
+| rate_limit_requests_per_minute | number | No | Maximum number of requests allowed per minute |
 | tags | array<string> or string | No | Tags to assign; send an array or a comma-separated string |
 
 ## Success Response
@@ -72,8 +72,8 @@ Content-Type: application/json
       "app_url": "https://productivity.example.com",
       "status": "active",
       "developer_id": 123,
-      "rate_limit_max_requests": 1000,
-      "rate_limit_window_ms": 60000,
+      "rate_limit_requests_per_day": 10000,
+      "rate_limit_requests_per_minute": 100,
       "tags": ["automation", "productivity"],
       "created_at": "2025-01-01T00:00:00Z",
       "updated_at": "2025-01-01T00:00:00Z"

@@ -14,13 +14,13 @@ module Api
             return
           end
           
-          @apps = filter_apps_by_status(developer.apps).includes(:api_keys)
+          @apps = filter_apps_by_status(developer.apps)
           render :index, formats: [:json]
         end
 
         # GET /api/v1/developers/apps/:id
         def show
-          @app = App.includes(:api_keys, :category, :sector).find_by(id: params[:id])
+          @app = App.includes(:category, :sector).find_by(id: params[:id])
           
           unless @app
             render 'api/v1/shared/error', 
@@ -45,7 +45,11 @@ module Api
             return
           end
           
-          @app = developer.apps.build(app_params)
+          permitted_params = app_params
+          attributes = permitted_params.except(:tags)
+          
+          @app = developer.apps.build(attributes)
+          assign_tags(@app, permitted_params[:tags])
           
           if @app.save
             render :create, formats: [:json], status: :created
@@ -105,14 +109,25 @@ module Api
         private
 
         def app_params
-          params.permit(
+          permitted = params.permit(
             :name,
             :description,
             :app_url,
             :status,
             :category_id,
-            :sector_id
+            :sector_id,
+            :rate_limit_requests_per_day,
+            :rate_limit_requests_per_minute,
+            :tags,
+            tags: []
           )
+          
+          # Handle tags parameter - permit both string and array
+          if params[:tags].present? && !permitted[:tags].present?
+            permitted[:tags] = params[:tags]
+          end
+          
+          permitted
         end
 
         def filter_apps_by_status(apps_relation)
@@ -127,6 +142,22 @@ module Api
           end
           
           apps_relation.where(status: status)
+        end
+
+        def assign_tags(app, tags)
+          return if tags.nil?
+
+          tag_list = case tags
+                     when String
+                       tags.split(',')
+                     when Array
+                       tags
+                     else
+                       []
+                     end
+
+          tag_list = tag_list.map { |tag| tag.to_s.strip }.reject(&:blank?)
+          app.tag_list = tag_list
         end
       end
     end

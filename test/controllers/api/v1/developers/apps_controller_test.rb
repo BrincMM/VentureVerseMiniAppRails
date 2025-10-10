@@ -259,6 +259,74 @@ module Api
           assert_includes json_response["errors"], "Name can't be blank"
         end
 
+        test "should create app with rate limit parameters" do
+          assert_difference('App.count', 1) do
+            post_with_token api_v1_developers_apps_url, params: {
+              developer_id: @developer.id,
+              name: "Rate Limited App",
+              description: "App with rate limits",
+              category_id: @category.id,
+              sector_id: @sector.id,
+              rate_limit_requests_per_day: 10000,
+              rate_limit_requests_per_minute: 100
+            }, as: :json
+          end
+
+          assert_response :created
+          json_response = JSON.parse(response.body)
+          
+          assert_equal true, json_response["success"]
+          
+          app_data = json_response["data"]["app"]
+          assert_equal "Rate Limited App", app_data["name"]
+          assert_equal 10000, app_data["rate_limit_requests_per_day"]
+          assert_equal 100, app_data["rate_limit_requests_per_minute"]
+        end
+
+        test "should create app with tags as array" do
+          assert_difference('App.count', 1) do
+            post_with_token api_v1_developers_apps_url, params: {
+              developer_id: @developer.id,
+              name: "Tagged App",
+              description: "App with tags",
+              category_id: @category.id,
+              sector_id: @sector.id,
+              tags: ["productivity", "automation", "api"]
+            }, as: :json
+          end
+
+          assert_response :created
+          json_response = JSON.parse(response.body)
+          
+          assert_equal true, json_response["success"]
+          
+          app_data = json_response["data"]["app"]
+          assert_equal "Tagged App", app_data["name"]
+          assert_equal ["api", "automation", "productivity"], app_data["tags"].sort
+        end
+
+        test "should create app with tags as comma-separated string" do
+          assert_difference('App.count', 1) do
+            post_with_token api_v1_developers_apps_url, params: {
+              developer_id: @developer.id,
+              name: "String Tagged App",
+              description: "App with string tags",
+              category_id: @category.id,
+              sector_id: @sector.id,
+              tags: "workflow, integration, saas"
+            }, as: :json
+          end
+
+          assert_response :created
+          json_response = JSON.parse(response.body)
+          
+          assert_equal true, json_response["success"]
+          
+          app_data = json_response["data"]["app"]
+          assert_equal "String Tagged App", app_data["name"]
+          assert_equal ["integration", "saas", "workflow"], app_data["tags"].sort
+        end
+
         # UPDATE tests
         test "should update app" do
           patch_with_token api_v1_developers_app_url(@app_one), params: {
