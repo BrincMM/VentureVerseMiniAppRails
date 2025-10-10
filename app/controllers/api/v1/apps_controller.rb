@@ -217,7 +217,7 @@ module Api
       private
 
       def app_params
-        params.require(:app).permit(:name, :description, :app_url, :category_id, :sector_id, :sort_order, :status, :developer_id, :rate_limit_requests_per_day, :rate_limit_requests_per_minute, tags: [])
+        params.require(:app).permit(:name, :description, :app_url, :category_id, :sector_id, :sort_order, :status, :developer_id, tags: [])
       end
 
       def set_app

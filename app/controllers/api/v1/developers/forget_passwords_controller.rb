@@ -27,8 +27,8 @@ module Api
             )
             
             if forget_password.save
-              # TODO: Send verification code email to developer
-              # DeveloperMailer.with(email: @developer.email, code: code).forgot_password_email.deliver_now
+              # Send verification code email to developer
+              DeveloperMailer.with(email: @developer.email, code: code).forgot_password_email.deliver_now
 
               render json: {
                 success: true,

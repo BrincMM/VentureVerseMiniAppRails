@@ -62,8 +62,6 @@ GET /api/v1/developers/123/apps?status=disabled
         "app_url": "https://example.com/webhook",
         "status": "dev",
         "developer_id": 123,
-        "rate_limit_requests_per_day": null,
-        "rate_limit_requests_per_minute": null,
         "tags": ["tag1", "tag2"],
         "created_at": "2025-01-15T10:30:00.000Z",
         "updated_at": "2025-01-15T10:30:00.000Z"
@@ -102,8 +100,6 @@ When developer is not found:
 | app_url                  | string   | Webhook URL |
 | status                          | string   | App status: "active", "disabled", "reviewing", "dev" |
 | developer_id                    | integer  | Developer ID |
-| rate_limit_requests_per_day     | integer  | Maximum number of requests allowed per day |
-| rate_limit_requests_per_minute  | integer  | Maximum number of requests allowed per minute |
 | tags                            | array    | Array of tag strings |
 | created_at                      | string   | ISO 8601 timestamp |
 | updated_at                      | string   | ISO 8601 timestamp |

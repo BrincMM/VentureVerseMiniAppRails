@@ -30,7 +30,7 @@ module Api
               email: "newdev@example.com",
               password: "password123",
               name: "New Developer",
-              github: "newdev"
+              github: "https://github.com/newdev"
             }, as: :json
           end
 
@@ -44,8 +44,8 @@ module Api
           assert developer_data["id"].present?
           assert_equal "newdev@example.com", developer_data["email"]
           assert_equal "New Developer", developer_data["name"]
-          assert_equal "newdev", developer_data["github"]
-          assert_equal "pending", developer_data["status"]
+          assert_equal "https://github.com/newdev", developer_data["github"]
+          assert_equal "active", developer_data["status"]
           assert_equal "developer", developer_data["role"]
         end
 
@@ -122,21 +122,19 @@ module Api
           assert_includes json_response["errors"], "Email has already been taken"
         end
 
-        test "should not create developer with duplicate github" do
-          existing_developer = developers(:one)
-
+        test "should not create developer with invalid github url" do
           assert_no_difference('Developer.count') do
             post_with_token api_v1_developers_email_signup_url, params: {
               email: "newdev@example.com",
               password: "password123",
               name: "Developer",
-              github: existing_developer.github
+              github: "not-a-valid-url"
             }, as: :json
           end
 
           assert_response :unprocessable_entity
           json_response = JSON.parse(response.body)
-          assert_includes json_response["errors"], "Github has already been taken"
+          assert_includes json_response["errors"], "Github must be a valid URL"
         end
 
         test "should not create developer with short password" do

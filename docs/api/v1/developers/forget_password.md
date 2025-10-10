@@ -77,7 +77,7 @@ Authorization: Bearer YOUR_API_KEY
 - A 6-digit verification code is generated (e.g., 123456)
 - The verification code is valid for 1 hour from creation
 - The code is stored in the `forget_passwords` table
-- In production, an email with the verification code should be sent to the developer
+- An email with the verification code is automatically sent to the developer's email address
 - Multiple codes can be generated for the same email, but only the most recent one is valid
 - Use the `/api/v1/developers/verify_forget_password` endpoint to verify the code
 
@@ -85,7 +85,7 @@ Authorization: Bearer YOUR_API_KEY
 
 1. Developer requests password reset
 2. System generates a 6-digit code
-3. Code is sent to developer's email (when email service is configured)
+3. Code is sent to developer's email
 4. Developer uses the code with `/verify_forget_password` endpoint
 5. After verification, developer can update password with `/update_password` endpoint
 

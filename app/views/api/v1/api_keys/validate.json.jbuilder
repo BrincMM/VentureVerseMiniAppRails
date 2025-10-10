@@ -14,8 +14,6 @@ json.data do
     json.id @app.id
     json.name @app.name
     json.status @app.status
-    json.rate_limit_requests_per_day @app.rate_limit_requests_per_day
-    json.rate_limit_requests_per_minute @app.rate_limit_requests_per_minute
   end
   
   if @developer

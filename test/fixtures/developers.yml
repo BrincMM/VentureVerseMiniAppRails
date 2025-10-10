@@ -3,7 +3,7 @@
 one:
   name: "John Doe"
   email: "developer1@example.com"
-  github: "johndoe"
+  github: "https://github.com/johndoe"
   encrypted_password: <%= Devise::Encryptor.digest(Developer, 'password123') %>
   status: 1 # active
   role: 0 # developer
@@ -17,7 +17,7 @@ one:
 two:
   name: "Jane Smith"
   email: "developer2@example.com"
-  github: "janesmith"
+  github: "https://github.com/janesmith"
   encrypted_password: <%= Devise::Encryptor.digest(Developer, 'password456') %>
   status: 0 # pending
   role: 0 # developer

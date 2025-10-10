@@ -21,7 +21,7 @@ Authorization: Bearer YOUR_API_KEY
 |-----------|--------|----------|-------------|
 | email     | string | Yes      | Developer's email address (for identification) |
 | name      | string | No       | Developer's full name |
-| github    | string | No       | GitHub username (must be unique) |
+| github    | string | No       | GitHub profile URL |
 
 ## Request Example
 
@@ -29,7 +29,7 @@ Authorization: Bearer YOUR_API_KEY
 {
   "email": "developer@example.com",
   "name": "John Updated Developer",
-  "github": "johndev"
+  "github": "https://github.com/johndev"
 }
 ```
 
@@ -46,7 +46,7 @@ Authorization: Bearer YOUR_API_KEY
       "id": 1,
       "email": "developer@example.com",
       "name": "John Updated Developer",
-      "github": "johndev",
+      "github": "https://github.com/johndev",
       "status": "active",
       "role": "developer",
       "sign_in_count": 15,
@@ -79,7 +79,7 @@ Authorization: Bearer YOUR_API_KEY
   "success": false,
   "message": "Failed to update profile",
   "errors": [
-    "Github has already been taken"
+    "Github must be a valid URL"
   ]
 }
 ```
@@ -87,7 +87,7 @@ Authorization: Bearer YOUR_API_KEY
 ## Validation Rules
 
 1. Email must match an existing developer account
-2. If provided, github username must be unique
+2. If provided, github must be a valid URL
 3. Email cannot be changed through this endpoint (for security)
 
 ## Notes
@@ -112,7 +112,7 @@ Authorization: Bearer YOUR_API_KEY
 ```json
 {
   "email": "developer@example.com",
-  "github": "newgithubusername"
+  "github": "https://github.com/newgithubusername"
 }
 ```
 
@@ -122,7 +122,7 @@ Authorization: Bearer YOUR_API_KEY
 {
   "email": "developer@example.com",
   "name": "Full Name Update",
-  "github": "updatedgithub"
+  "github": "https://github.com/updatedgithub"
 }
 ```
 

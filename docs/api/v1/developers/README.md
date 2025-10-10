@@ -82,8 +82,8 @@ Authorization: Bearer YOUR_API_KEY
 
 Developers can have one of the following statuses:
 
-- **pending** - Account created but email not confirmed
-- **active** - Account is active and can be used
+- **pending** - Reserved for future use
+- **active** - Account is active and can be used (default status)
 - **suspended** - Account has been suspended
 
 ## Password Reset Flow
@@ -99,7 +99,7 @@ Developers can have one of the following statuses:
   "id": 1,
   "email": "developer@example.com",
   "name": "Developer Name",
-  "github": "githubusername",
+  "github": "https://github.com/githubusername",
   "status": "active",
   "role": "developer",
   "sign_in_count": 10,
@@ -116,7 +116,7 @@ Developers can have one of the following statuses:
 - All timestamps are in ISO 8601 format (UTC)
 - Password fields are never included in responses
 - Email addresses must be unique across all developers
-- GitHub usernames must be unique if provided
+- GitHub profile URLs must be valid URLs if provided
 - Passwords must be at least 6 characters long
 
 

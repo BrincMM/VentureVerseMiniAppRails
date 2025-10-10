@@ -37,8 +37,6 @@ Content-Type: application/json
 | sort_order | number | No | Updated sort order |
 | status | string | No | Updated app status (active, disabled, reviewing, dev) |
 | developer_id | number | No | Updated developer ID |
-| rate_limit_requests_per_day | number | No | Updated maximum number of requests allowed per day |
-| rate_limit_requests_per_minute | number | No | Updated maximum number of requests allowed per minute |
 | tags | array<string> or string | No | Replaces the tag list; send an empty array to clear tags |
 
 ## Success Response
@@ -65,8 +63,6 @@ Content-Type: application/json
       "app_url": "https://productivity.example.com",
       "status": "active",
       "developer_id": 123,
-      "rate_limit_requests_per_day": 10000,
-      "rate_limit_requests_per_minute": 100,
       "tags": ["automation", "workflow"],
       "created_at": "2025-01-01T00:00:00Z",
       "updated_at": "2025-01-02T12:00:00Z"

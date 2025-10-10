@@ -22,7 +22,7 @@ Authorization: Bearer YOUR_API_KEY
 | email     | string | Yes      | Developer's email address |
 | password  | string | Yes      | Developer's password (minimum 6 characters) |
 | name      | string | No       | Developer's full name |
-| github    | string | No       | Developer's GitHub username (must be unique) |
+| github    | string | No       | Developer's GitHub profile URL |
 
 ## Request Example
 
@@ -31,7 +31,7 @@ Authorization: Bearer YOUR_API_KEY
   "email": "developer@example.com",
   "password": "password123",
   "name": "John Developer",
-  "github": "johndeveloper"
+  "github": "https://github.com/johndeveloper"
 }
 ```
 
@@ -48,8 +48,8 @@ Authorization: Bearer YOUR_API_KEY
       "id": 1,
       "email": "developer@example.com",
       "name": "John Developer",
-      "github": "johndeveloper",
-      "status": "pending",
+      "github": "https://github.com/johndeveloper",
+      "status": "active",
       "role": "developer",
       "sign_in_count": 0,
       "current_sign_in_at": null,
@@ -76,7 +76,7 @@ Authorization: Bearer YOUR_API_KEY
     "Email has already been taken",
     "Password can't be blank",
     "Password is too short (minimum is 6 characters)",
-    "Github has already been taken"
+    "Github must be a valid URL"
   ]
 }
 ```
@@ -94,14 +94,13 @@ Authorization: Bearer YOUR_API_KEY
 1. Email must be a valid email format
 2. Email must be unique in the system
 3. Password must be at least 6 characters
-4. If provided, github username must be unique
-5. New developers are created with status "pending" (requires email confirmation)
+4. If provided, github must be a valid URL
+5. New developers are created with status "active" by default
 6. Default role is "developer"
 
 ## Notes
 
-- After registration, the developer account will be in "pending" status until email confirmation
-- A confirmation email will be sent to the provided email address (if email service is configured)
+- After registration, the developer account will be in "active" status and can be used immediately
 - The password is automatically hashed using bcrypt before storage
 
 

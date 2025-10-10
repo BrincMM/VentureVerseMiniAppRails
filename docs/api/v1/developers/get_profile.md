@@ -40,7 +40,7 @@ GET /api/v1/developers/profile?email=developer@example.com
       "id": 1,
       "email": "developer@example.com",
       "name": "John Developer",
-      "github": "johndeveloper",
+      "github": "https://github.com/johndeveloper",
       "status": "active",
       "role": "developer",
       "sign_in_count": 15,
@@ -73,7 +73,7 @@ GET /api/v1/developers/profile?email=developer@example.com
 | id                 | integer  | Unique developer ID |
 | email              | string   | Developer's email address |
 | name               | string   | Developer's full name |
-| github             | string   | GitHub username (nullable) |
+| github             | string   | GitHub profile URL (nullable) |
 | status             | string   | Account status: "pending", "active", or "suspended" |
 | role               | string   | Developer role (currently always "developer") |
 | sign_in_count      | integer  | Total number of successful sign-ins |

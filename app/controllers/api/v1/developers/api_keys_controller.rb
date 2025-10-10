@@ -14,28 +14,25 @@ module Api
             return
           end
           
-          # Find current active key
+          # Find current active key (if exists)
           current_key = app.api_keys.find_by(status: :active)
           
-          unless current_key
-            render 'api/v1/shared/error', 
-                   locals: { message: 'No active API key found for this app', errors: nil }, 
-                   status: :not_found, 
-                   formats: [:json]
-            return
-          end
+          # Determine rate limits
+          rate_limit_per_minute = params[:rate_limit_per_minute] || current_key&.rate_limit_per_minute || 100
+          rate_limit_per_day = params[:rate_limit_per_day] || current_key&.rate_limit_per_day || 10000
+          expires_at = params[:expires_at] || current_key&.expires_at
           
           # Use transaction to ensure atomicity
           ActiveRecord::Base.transaction do
-            # Expire the current key
-            current_key.update!(status: :expired)
+            # Expire the current key if it exists
+            current_key.update!(status: :expired) if current_key
             
             # Create new active key
             @api_key = app.api_keys.create!(
               status: :active,
-              rate_limit_per_minute: current_key.rate_limit_per_minute,
-              rate_limit_per_day: current_key.rate_limit_per_day,
-              expires_at: current_key.expires_at
+              rate_limit_per_minute: rate_limit_per_minute,
+              rate_limit_per_day: rate_limit_per_day,
+              expires_at: expires_at
             )
           end
           

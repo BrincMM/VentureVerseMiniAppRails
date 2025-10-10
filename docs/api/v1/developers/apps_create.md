@@ -26,8 +26,6 @@ Authorization: Bearer YOUR_API_KEY
 | category_id                      | integer | No       | Category ID |
 | sector_id                        | integer | No       | Sector ID |
 | status                           | string  | No       | App status: "active", "disabled", "reviewing", "dev" (defaults to "dev") |
-| rate_limit_requests_per_day      | integer | No       | Maximum number of requests allowed per day |
-| rate_limit_requests_per_minute   | integer | No       | Maximum number of requests allowed per minute |
 | tags                             | array   | No       | Array of tag strings or comma-separated string |
 
 ## Request Example
@@ -41,8 +39,6 @@ Authorization: Bearer YOUR_API_KEY
   "category_id": 1,
   "sector_id": 1,
   "status": "dev",
-  "rate_limit_requests_per_day": 10000,
-  "rate_limit_requests_per_minute": 100,
   "tags": ["productivity", "automation"]
 }
 ```
@@ -71,8 +67,6 @@ Authorization: Bearer YOUR_API_KEY
       "app_url": "https://example.com/webhook",
       "status": "dev",
       "developer_id": 456,
-      "rate_limit_requests_per_day": null,
-      "rate_limit_requests_per_minute": null,
       "tags": [],
       "created_at": "2025-01-15T10:30:00.000Z",
       "updated_at": "2025-01-15T10:30:00.000Z"
@@ -125,9 +119,7 @@ When validation fails:
    - Defaults to "dev" if not provided
 5. **category_id**: Optional, must reference an existing category
 6. **sector_id**: Optional, must reference an existing sector
-7. **rate_limit_requests_per_day**: Optional, integer value for maximum requests allowed per day
-8. **rate_limit_requests_per_minute**: Optional, integer value for maximum requests allowed per minute
-9. **tags**: 
+7. **tags**: 
    - Optional
    - Can be provided as an array of strings or a comma-separated string
    - Empty tags will be ignored

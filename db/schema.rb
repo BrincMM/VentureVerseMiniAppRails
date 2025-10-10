@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_072310) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_10_082638) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -74,8 +74,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_072310) do
     t.integer "sector_id"
     t.integer "developer_id"
     t.integer "status"
-    t.integer "rate_limit_requests_per_day"
-    t.integer "rate_limit_requests_per_minute"
     t.index ["category_id"], name: "index_apps_on_category_id"
     t.index ["developer_id"], name: "index_apps_on_developer_id"
     t.index ["name"], name: "index_apps_on_name"

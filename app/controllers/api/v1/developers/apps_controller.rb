@@ -116,8 +116,6 @@ module Api
             :status,
             :category_id,
             :sector_id,
-            :rate_limit_requests_per_day,
-            :rate_limit_requests_per_minute,
             :tags,
             tags: []
           )

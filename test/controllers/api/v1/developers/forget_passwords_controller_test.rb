@@ -26,9 +26,11 @@ module Api
 
         test "should create forget password code successfully" do
           assert_difference('ForgetPassword.count') do
-            post_with_token api_v1_developers_forget_password_url, params: {
-              email: @developer.email
-            }, as: :json
+            assert_emails 1 do
+              post_with_token api_v1_developers_forget_password_url, params: {
+                email: @developer.email
+              }, as: :json
+            end
           end
 
           assert_response :created
@@ -42,6 +44,24 @@ module Api
           forget_password = ForgetPassword.where(email: @developer.email).last
           assert_not_nil forget_password
           assert forget_password.code.to_s.length == 6
+        end
+
+        test "should send email with correct content" do
+          post_with_token api_v1_developers_forget_password_url, params: {
+            email: @developer.email
+          }, as: :json
+
+          assert_response :created
+          
+          # Check email was sent
+          email = ActionMailer::Base.deliveries.last
+          assert_not_nil email
+          assert_equal [@developer.email], email.to
+          assert_equal "Reset Your Password - VentureVerse Developer", email.subject
+          
+          # Verify email contains the verification code
+          forget_password = ForgetPassword.where(email: @developer.email).last
+          assert_includes email.body.to_s, forget_password.code.to_s
         end
 
         test "should fail with non-existent email" do

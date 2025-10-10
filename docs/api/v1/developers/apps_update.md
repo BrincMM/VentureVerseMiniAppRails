@@ -33,8 +33,6 @@ All parameters are optional. Only provide the fields you want to update.
 | category_id                      | integer | No       | Category ID |
 | sector_id                        | integer | No       | Sector ID |
 | status                           | string  | No       | App status: "active", "disabled", "reviewing", "dev" |
-| rate_limit_requests_per_day      | integer | No       | Maximum requests per day |
-| rate_limit_requests_per_minute   | integer | No       | Maximum requests per minute |
 
 ## Request Example
 
@@ -43,9 +41,7 @@ All parameters are optional. Only provide the fields you want to update.
   "name": "Updated App Name",
   "description": "Updated description",
   "app_url": "https://newurl.example.com/webhook",
-  "status": "active",
-  "rate_limit_requests_per_day": 5000,
-  "rate_limit_requests_per_minute": 100
+  "status": "active"
 }
 ```
 
@@ -73,8 +69,6 @@ All parameters are optional. Only provide the fields you want to update.
       "app_url": "https://newurl.example.com/webhook",
       "status": "active",
       "developer_id": 456,
-      "rate_limit_requests_per_day": 5000,
-      "rate_limit_requests_per_minute": 100,
       "tags": ["tag1", "tag2"],
       "created_at": "2025-01-15T10:30:00.000Z",
       "updated_at": "2025-01-20T14:30:00.000Z"

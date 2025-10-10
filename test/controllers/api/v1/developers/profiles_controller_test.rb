@@ -52,7 +52,7 @@ module Api
           patch_with_token api_v1_developers_profile_url, params: {
             email: @developer.email,
             name: "Updated Developer Name",
-            github: "updated_github"
+            github: "https://github.com/updated_github"
           }, as: :json
 
           assert_response :success
@@ -63,12 +63,12 @@ module Api
           
           developer_data = json_response["data"]["developer"]
           assert_equal "Updated Developer Name", developer_data["name"]
-          assert_equal "updated_github", developer_data["github"]
+          assert_equal "https://github.com/updated_github", developer_data["github"]
 
           # Verify database state
           @developer.reload
           assert_equal "Updated Developer Name", @developer.name
-          assert_equal "updated_github", @developer.github
+          assert_equal "https://github.com/updated_github", @developer.github
         end
 
         test "should update only name" do
@@ -92,7 +92,7 @@ module Api
           
           patch_with_token api_v1_developers_profile_url, params: {
             email: @developer.email,
-            github: "new_github_username"
+            github: "https://github.com/new_github_username"
           }, as: :json
 
           assert_response :success
@@ -100,15 +100,13 @@ module Api
           developer_data = json_response["data"]["developer"]
           
           assert_equal original_name, developer_data["name"]
-          assert_equal "new_github_username", developer_data["github"]
+          assert_equal "https://github.com/new_github_username", developer_data["github"]
         end
 
-        test "should fail to update with duplicate github" do
-          other_developer = developers(:two)
-          
+        test "should fail to update with invalid github url" do
           patch_with_token api_v1_developers_profile_url, params: {
             email: @developer.email,
-            github: other_developer.github
+            github: "not-a-valid-url"
           }, as: :json
 
           assert_response :unprocessable_entity
@@ -116,7 +114,7 @@ module Api
           
           assert_equal false, json_response["success"]
           assert_equal "Failed to update profile", json_response["message"]
-          assert_includes json_response["errors"], "Github has already been taken"
+          assert_includes json_response["errors"], "Github must be a valid URL"
         end
 
         test "should return not found when updating non-existent developer" do

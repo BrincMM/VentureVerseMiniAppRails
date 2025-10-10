@@ -59,9 +59,7 @@ curl -X POST \
     "app": {
       "id": 123,
       "name": "My App",
-      "status": "active",
-      "rate_limit_requests_per_day": 10000,
-      "rate_limit_requests_per_minute": 100
+      "status": "active"
     },
     "developer": {
       "id": 789,
@@ -154,8 +152,6 @@ When authorization header is missing or invalid:
 - `id`: Unique identifier for the app
 - `name`: App name
 - `status`: App status ("active", "disabled", "reviewing", or "dev")
-- `rate_limit_requests_per_day`: App-level rate limit (maximum requests per day)
-- `rate_limit_requests_per_minute`: App-level rate limit (maximum requests per minute)
 
 ### Developer Object
 - `id`: Unique identifier for the developer
@@ -174,7 +170,7 @@ When authorization header is missing or invalid:
 ### SDK Initialization
 SDKs should call this endpoint during initialization to:
 1. Verify the provided credentials are valid
-2. Retrieve rate limit information for the app
+2. Retrieve rate limit information for the API key
 3. Get developer and app metadata
 
 ### Example SDK Usage
@@ -191,7 +187,7 @@ await sdk.init(); // Validates key and stores rate limits
 ## Notes
 
 - This endpoint updates `last_used_at` on every successful validation
-- Rate limits are provided at both key level and app level
+- Rate limits are provided at the API key level (not at app level)
 - SDKs should cache the validation response to avoid repeated calls
 - Consider caching the validation result for 5-15 minutes
 - If developer is null (app not associated with a developer), the developer object won't be included in the response
@@ -214,6 +210,6 @@ This endpoint itself is subject to rate limiting:
 ## Related Endpoints
 
 - To rotate an API key, use `POST /api/v1/developers/apps/:app_id/api_keys/rotate`
-- To view all app details, use `GET /api/v1/developers/apps/:id`
-- To list all apps for a developer, use `GET /api/v1/developers/apps?email={email}`
+- To view app details, use `GET /api/v1/developers/apps/:id`
+- To list all apps for a developer, use `GET /api/v1/developers/:developer_id/apps`
 
