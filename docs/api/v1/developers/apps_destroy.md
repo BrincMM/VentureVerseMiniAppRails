@@ -131,3 +131,4 @@ PATCH /api/v1/developers/apps/123
 
 Currently, only soft delete is supported via the API. Hard delete requires direct database access.
 
+

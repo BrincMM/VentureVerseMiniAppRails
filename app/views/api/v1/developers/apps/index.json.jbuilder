@@ -7,3 +7,4 @@ json.data do
   json.total_count @apps.size
 end
 
+

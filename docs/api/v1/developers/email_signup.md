@@ -1,11 +1,11 @@
-# Developer Registration API
+# Developer Email Sign Up API
 
 This API endpoint allows developers to register an account using their email and password.
 
 ## Endpoint
 
 ```
-POST /api/v1/developers/register
+POST /api/v1/developers/email_signup
 ```
 
 ## Authentication
@@ -103,5 +103,6 @@ Authorization: Bearer YOUR_API_KEY
 - After registration, the developer account will be in "pending" status until email confirmation
 - A confirmation email will be sent to the provided email address (if email service is configured)
 - The password is automatically hashed using bcrypt before storage
+
 
 

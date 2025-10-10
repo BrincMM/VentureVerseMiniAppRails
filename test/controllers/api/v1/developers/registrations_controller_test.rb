@@ -5,7 +5,7 @@ module Api
     module Developers
       class RegistrationsControllerTest < ActionDispatch::IntegrationTest
         test "should reject request without token" do
-          post api_v1_developers_register_url, params: {
+          post api_v1_developers_email_signup_url, params: {
             email: "newdev@example.com",
             password: "password123",
             name: "New Developer"
@@ -14,7 +14,7 @@ module Api
         end
 
         test "should reject request with invalid token" do
-          post api_v1_developers_register_url,
+          post api_v1_developers_email_signup_url,
               headers: { 'Authorization' => 'Bearer invalid_token' },
               params: {
                 email: "newdev@example.com",
@@ -26,7 +26,7 @@ module Api
 
         test "should create developer successfully" do
           assert_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: "newdev@example.com",
               password: "password123",
               name: "New Developer",
@@ -51,7 +51,7 @@ module Api
 
         test "should create developer without github" do
           assert_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: "newdev2@example.com",
               password: "password123",
               name: "Developer Two"
@@ -67,7 +67,7 @@ module Api
 
         test "should not create developer with missing email" do
           assert_no_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               password: "password123",
               name: "Developer"
             }, as: :json
@@ -81,7 +81,7 @@ module Api
 
         test "should not create developer with missing password" do
           assert_no_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: "newdev@example.com",
               name: "Developer"
             }, as: :json
@@ -94,7 +94,7 @@ module Api
 
         test "should not create developer with invalid email" do
           assert_no_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: "invalid-email",
               password: "password123",
               name: "Developer"
@@ -110,7 +110,7 @@ module Api
           existing_developer = developers(:one)
 
           assert_no_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: existing_developer.email,
               password: "password123",
               name: "Developer"
@@ -126,7 +126,7 @@ module Api
           existing_developer = developers(:one)
 
           assert_no_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: "newdev@example.com",
               password: "password123",
               name: "Developer",
@@ -141,7 +141,7 @@ module Api
 
         test "should not create developer with short password" do
           assert_no_difference('Developer.count') do
-            post_with_token api_v1_developers_register_url, params: {
+            post_with_token api_v1_developers_email_signup_url, params: {
               email: "newdev@example.com",
               password: "12345",
               name: "Developer"
@@ -156,5 +156,6 @@ module Api
     end
   end
 end
+
 
 

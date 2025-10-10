@@ -96,3 +96,4 @@ GET /api/v1/developers/profile?email=developer@example.com
 - Use the email parameter to identify which developer's profile to retrieve
 
 
+

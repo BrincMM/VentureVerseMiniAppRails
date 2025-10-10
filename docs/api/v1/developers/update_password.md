@@ -96,3 +96,4 @@ Authorization: Bearer YOUR_API_KEY
 - For security reasons, consider requiring additional verification before allowing password updates
 
 
+

@@ -82,3 +82,4 @@ Authorization: Bearer YOUR_API_KEY
 - This endpoint can be used for both login and password verification scenarios
 
 
+

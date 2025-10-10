@@ -14,8 +14,8 @@ Authorization: Bearer YOUR_API_KEY
 
 ### Account Management
 
-1. **[Developer Registration](register.md)**
-   - `POST /api/v1/developers/register`
+1. **[Developer Email Sign Up](email_signup.md)**
+   - `POST /api/v1/developers/email_signup`
    - Create a new developer account
 
 2. **[Verify Password (Login)](verify_password.md)**
@@ -118,5 +118,6 @@ Developers can have one of the following statuses:
 - Email addresses must be unique across all developers
 - GitHub usernames must be unique if provided
 - Passwords must be at least 6 characters long
+
 
 

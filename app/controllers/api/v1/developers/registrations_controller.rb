@@ -2,11 +2,11 @@ module Api
   module V1
     module Developers
       class RegistrationsController < ApiController
-        def register
+        def email_signup
           @developer = Developer.new(developer_params)
           
           if @developer.save
-            render :register, formats: [:json], status: :created
+            render :email_signup, formats: [:json], status: :created
           else
             render 'api/v1/shared/error', locals: { message: 'Failed to create developer', errors: @developer.errors.full_messages }, status: :unprocessable_entity, formats: [:json]
           end
@@ -26,5 +26,6 @@ module Api
     end
   end
 end
+
 
 

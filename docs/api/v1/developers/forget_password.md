@@ -90,3 +90,4 @@ Authorization: Bearer YOUR_API_KEY
 5. After verification, developer can update password with `/update_password` endpoint
 
 
+

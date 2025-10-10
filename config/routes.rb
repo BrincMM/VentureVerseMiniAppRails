@@ -73,7 +73,7 @@ Rails.application.routes.draw do
       end
 
       namespace :developers do
-        post 'register', to: 'registrations#register'
+        post 'email_signup', to: 'registrations#email_signup'
         post 'verify_password', to: 'sessions#verify_password'
         patch 'update_password', to: 'sessions#update_password'
         post 'forget_password', to: 'forget_passwords#create'
