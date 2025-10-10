@@ -3,15 +3,18 @@ class App < ApplicationRecord
 
   belongs_to :category
   belongs_to :sector
+  belongs_to :developer, optional: true
 
   has_many :app_activities, dependent: :destroy
   has_many :app_accesses, dependent: :destroy
   has_many :users, through: :app_accesses
+  has_many :api_keys, dependent: :destroy
 
   # Rails 8 enum syntax
   enum :status, { active: 0, disabled: 1, reviewing: 2, dev: 3 }
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
+  validates :name, uniqueness: { conditions: -> { where.not(status: :disabled) } }
   validates :app_url, url: true, allow_blank: true
 
   # Set default status to dev for new records
@@ -26,6 +29,7 @@ class App < ApplicationRecord
   public
 
   # Scopes
+  scope :published, -> { where(status: [:active, :reviewing]) }
   scope :by_category, ->(category_id) { where(category_id:) if category_id.present? }
   scope :by_sector, ->(sector_id) { where(sector_id:) if sector_id.present? }
   scope :with_any_tags, ->(tags) do

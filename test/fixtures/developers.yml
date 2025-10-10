@@ -1,0 +1,24 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: "John Doe"
+  email: "developer1@example.com"
+  github: "johndoe"
+  encrypted_password: <%= Devise::Encryptor.digest(Developer, 'password123') %>
+  status: 1 # active
+  role: 0 # developer
+  confirmed_at: <%= Time.current %>
+  sign_in_count: 5
+  current_sign_in_at: <%= 1.day.ago %>
+  last_sign_in_at: <%= 2.days.ago %>
+  current_sign_in_ip: "127.0.0.1"
+  last_sign_in_ip: "127.0.0.1"
+
+two:
+  name: "Jane Smith"
+  email: "developer2@example.com"
+  github: "janesmith"
+  encrypted_password: <%= Devise::Encryptor.digest(Developer, 'password456') %>
+  status: 0 # pending
+  role: 0 # developer
+  sign_in_count: 0

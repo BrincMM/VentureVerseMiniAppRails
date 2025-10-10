@@ -15,7 +15,7 @@ module Api
           )
         end
 
-        query = App.all
+        query = App.published
         query = query.by_category(params[:category_id]) if params[:category_id].present?
         query = query.by_sector(params[:sector_id]) if params[:sector_id].present?
         query = query.with_any_tags(params[:tags].split(',')) if params[:tags].present?
@@ -27,7 +27,7 @@ module Api
       end
 
       def filters
-        query = App.all
+        query = App.published
         query = query.by_category(params[:category_id]) if params[:category_id].present?
         query = query.by_sector(params[:sector_id]) if params[:sector_id].present?
 

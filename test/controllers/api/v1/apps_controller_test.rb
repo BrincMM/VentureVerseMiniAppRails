@@ -91,7 +91,8 @@ class Api::V1::AppsControllerTest < ActionDispatch::IntegrationTest
         name: "Paginated App #{i}",
         category: category,
         sector: sector,
-        app_url: "https://example.com/#{i}"
+        app_url: "https://example.com/#{i}",
+        status: :active
       )
     end
 

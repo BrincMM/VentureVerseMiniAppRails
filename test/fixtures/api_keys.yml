@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  app: app_one
+  api_key: "active_api_key_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+  rate_limit_per_minute: 100
+  rate_limit_per_day: 10000
+  status: 0 # active
+  expires_at: <%= 30.days.from_now %>
+  last_used_at: <%= 1.hour.ago %>
+
+two:
+  app: app_two
+  api_key: "revoked_api_key_abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+  rate_limit_per_minute: 50
+  rate_limit_per_day: 5000
+  status: 1 # revoked
+  expires_at: <%= 30.days.from_now %>
+  last_used_at: <%= 1.day.ago %>
+
+expired:
+  app: app_one
+  api_key: "expired_api_key_fedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321"
+  rate_limit_per_minute: 100
+  rate_limit_per_day: 10000
+  status: 2 # expired
+  expires_at: <%= 1.day.ago %>
+  last_used_at: <%= 2.days.ago %>

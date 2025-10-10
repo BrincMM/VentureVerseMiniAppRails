@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_063627) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_10_020104) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -21,6 +21,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_063627) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "api_keys", force: :cascade do |t|
+    t.integer "app_id", null: false
+    t.string "api_key", null: false
+    t.integer "rate_limit_per_minute", default: 100
+    t.integer "rate_limit_per_day", default: 10000
+    t.integer "status", default: 0, null: false
+    t.datetime "expires_at"
+    t.datetime "last_used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key"], name: "index_api_keys_on_api_key", unique: true
+    t.index ["app_id"], name: "index_api_keys_on_app_id"
+    t.index ["status"], name: "index_api_keys_on_status"
   end
 
   create_table "app_accesses", force: :cascade do |t|
@@ -63,7 +78,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_063627) do
     t.integer "rate_limit_window_ms"
     t.index ["category_id"], name: "index_apps_on_category_id"
     t.index ["developer_id"], name: "index_apps_on_developer_id"
-    t.index ["name"], name: "index_apps_on_name", unique: true
+    t.index ["name"], name: "index_apps_on_name"
     t.index ["sector_id"], name: "index_apps_on_sector_id"
     t.index ["sort_order"], name: "index_apps_on_sort_order"
   end
@@ -97,6 +112,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_063627) do
     t.index ["timestamp"], name: "index_credit_topups_on_timestamp"
     t.index ["user_id", "timestamp"], name: "index_credit_topups_on_user_id_and_timestamp"
     t.index ["user_id"], name: "index_credit_topups_on_user_id"
+  end
+
+  create_table "developers", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "name"
+    t.string "github"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.integer "status", default: 0, null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["confirmation_token"], name: "index_developers_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_developers_on_email", unique: true
+    t.index ["github"], name: "index_developers_on_github", unique: true
   end
 
   create_table "forget_passwords", force: :cascade do |t|
@@ -257,11 +295,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_063627) do
     t.index ["subscribe_type"], name: "index_waiting_lists_on_subscribe_type"
   end
 
+  add_foreign_key "api_keys", "apps"
   add_foreign_key "app_accesses", "apps"
   add_foreign_key "app_accesses", "users"
   add_foreign_key "app_activities", "apps"
   add_foreign_key "app_activities", "users"
   add_foreign_key "apps", "categories"
+  add_foreign_key "apps", "developers", on_delete: :nullify
   add_foreign_key "apps", "sectors"
   add_foreign_key "credit_spents", "users"
   add_foreign_key "credit_topups", "users"

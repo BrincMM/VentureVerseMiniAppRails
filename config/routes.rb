@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :developers
   devise_for :admins
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -64,6 +65,37 @@ Rails.application.routes.draw do
         post 'verify_forget_password', to: 'forget_passwords#verify'
         post 'change_plan', to: 'change_plan#create'
         post 'cancel_plan', to: 'cancel_plan#create'
+      end
+
+      # Developer resources (nested for RESTful access by ID)
+      resources :developers, only: [], path: 'developers', module: 'developers' do
+        resources :apps, only: [:index], controller: 'apps'
+      end
+
+      namespace :developers do
+        post 'register', to: 'registrations#register'
+        post 'verify_password', to: 'sessions#verify_password'
+        patch 'update_password', to: 'sessions#update_password'
+        post 'forget_password', to: 'forget_passwords#create'
+        post 'verify_forget_password', to: 'forget_passwords#verify'
+        get 'profile', to: 'profiles#show'
+        patch 'profile', to: 'profiles#update'
+        
+        # Apps management
+        resources :apps, only: [:show, :create, :update, :destroy] do
+          resources :api_keys, only: [] do
+            collection do
+              post :rotate
+            end
+          end
+        end
+      end
+
+      # API Keys validation (public endpoint for SDK)
+      resources :api_keys, only: [] do
+        collection do
+          post :validate
+        end
       end
     end
   end

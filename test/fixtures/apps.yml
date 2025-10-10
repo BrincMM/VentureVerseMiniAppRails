@@ -3,6 +3,7 @@ app_one:
   description: A test application
   category: category_one
   sector: sector_one
+  developer: one
   app_url: https://testapp1.example.com
   status: 0
 
@@ -11,5 +12,15 @@ app_two:
   description: Another test application
   category: category_two
   sector: sector_two
+  developer: one
   app_url: https://testapp2.example.com
-  status: 0 
+  status: 0
+
+app_three:
+  name: Test App 3
+  description: Third test application
+  category: category_one
+  sector: sector_one
+  developer: two
+  app_url: https://testapp3.example.com
+  status: 3 
