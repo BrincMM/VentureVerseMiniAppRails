@@ -19,7 +19,7 @@ Authorization: Bearer YOUR_API_KEY
 
 | Parameter    | Type    | Required | Description |
 |--------------|---------|----------|-------------|
-| email        | string  | Yes      | Developer's email address |
+| developer_id | integer | Yes      | Developer's ID |
 | name         | string  | Yes      | App name (must be globally unique) |
 | description  | string  | No       | App description |
 | app_url      | string  | No       | Webhook URL (must be valid URL format) |
@@ -31,7 +31,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ```json
 {
-  "email": "developer@example.com",
+  "developer_id": 456,
   "name": "My App",
   "description": "My application description",
   "app_url": "https://example.com/webhook",
@@ -106,7 +106,7 @@ When validation fails:
 
 ## Validation Rules
 
-1. **email**: Must be provided and match an existing developer
+1. **developer_id**: Must be provided and match an existing developer
 2. **name**: 
    - Required
    - Must be globally unique (not per developer)
@@ -132,5 +132,5 @@ When validation fails:
 
 - To create an API key for this app, see [API Keys documentation](./api_keys_create.md)
 - To update app details, use `PATCH /api/v1/developers/apps/:id`
-- To list all apps, use `GET /api/v1/developers/apps?email={email}`
+- To list all apps, use `GET /api/v1/developers/:developer_id/apps`
 

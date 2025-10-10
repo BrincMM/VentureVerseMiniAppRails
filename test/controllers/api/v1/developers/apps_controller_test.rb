@@ -196,7 +196,7 @@ module Api
         test "should create app" do
           assert_difference('App.count', 1) do
             post_with_token api_v1_developers_apps_url, params: {
-              email: @developer.email,
+              developer_id: @developer.id,
               name: "New Test App",
               description: "A new test application",
               app_url: "https://newapp.example.com",
@@ -220,7 +220,7 @@ module Api
 
         test "should fail create with non-existent developer" do
           post_with_token api_v1_developers_apps_url, params: {
-            email: "nonexistent@example.com",
+            developer_id: 99999,
             name: "New Test App",
             description: "A new test application"
           }, as: :json
@@ -234,7 +234,7 @@ module Api
 
         test "should fail create with duplicate name" do
           post_with_token api_v1_developers_apps_url, params: {
-            email: @developer.email,
+            developer_id: @developer.id,
             name: @app_one.name,  # Duplicate name
             description: "A test application"
           }, as: :json
@@ -248,7 +248,7 @@ module Api
 
         test "should fail create with missing name" do
           post_with_token api_v1_developers_apps_url, params: {
-            email: @developer.email,
+            developer_id: @developer.id,
             description: "A test application"
           }, as: :json
 
@@ -353,7 +353,7 @@ module Api
           
           # Now create a new app with the same name
           post_with_token api_v1_developers_apps_url, params: {
-            email: @developer.email,
+            developer_id: @developer.id,
             name: @app_one.name,  # Same name as disabled app
             description: "New app with previously used name",
             category_id: @category.id,

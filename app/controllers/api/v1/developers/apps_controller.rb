@@ -35,7 +35,7 @@ module Api
 
         # POST /api/v1/developers/apps
         def create
-          developer = Developer.find_by(email: params[:email])
+          developer = Developer.find_by(id: params[:developer_id])
           
           unless developer
             render 'api/v1/shared/error', 
