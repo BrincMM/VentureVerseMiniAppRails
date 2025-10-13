@@ -218,6 +218,11 @@ module Api
           assert_equal "A new test application", app_data["description"]
           assert_equal "dev", app_data["status"]
           assert_equal @developer.id, app_data["developer_id"]
+          
+          # Verify database state - ensure developer_id is actually saved
+          created_app = App.find(app_data["id"])
+          assert_equal @developer.id, created_app.developer_id
+          assert_not_nil created_app.developer_id, "Developer ID should not be nil in database"
         end
 
         test "should fail create with non-existent developer" do
