@@ -35,7 +35,7 @@ module Api
 
         # POST /api/v1/developers/apps
         def create
-          developer = Developer.find_by(id: params[:developer_id])
+          developer = Developer.find_by(id: params.dig(:app, :developer_id))
           
           unless developer
             render 'api/v1/shared/error', 
@@ -46,7 +46,7 @@ module Api
           end
           
           permitted_params = app_params
-          attributes = permitted_params.except(:tags)
+          attributes = permitted_params.except(:tags, :developer_id)
           
           @app = developer.apps.build(attributes)
           assign_tags(@app, permitted_params[:tags])
@@ -109,20 +109,21 @@ module Api
         private
 
         def app_params
-          permitted = params.permit(
+          permitted = params.require(:app).permit(
             :name,
             :description,
             :app_url,
             :status,
             :category_id,
             :sector_id,
+            :developer_id,
             :tags,
             tags: []
           )
           
           # Handle tags parameter - permit both string and array
-          if params[:tags].present? && !permitted[:tags].present?
-            permitted[:tags] = params[:tags]
+          if params[:app][:tags].present? && !permitted[:tags].present?
+            permitted[:tags] = params[:app][:tags]
           end
           
           permitted

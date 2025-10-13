@@ -196,12 +196,14 @@ module Api
         test "should create app" do
           assert_difference('App.count', 1) do
             post_with_token api_v1_developers_apps_url, params: {
-              developer_id: @developer.id,
-              name: "New Test App",
-              description: "A new test application",
-              app_url: "https://newapp.example.com",
-              category_id: @category.id,
-              sector_id: @sector.id
+              app: {
+                developer_id: @developer.id,
+                name: "New Test App",
+                description: "A new test application",
+                app_url: "https://newapp.example.com",
+                category_id: @category.id,
+                sector_id: @sector.id
+              }
             }, as: :json
           end
 
@@ -220,9 +222,11 @@ module Api
 
         test "should fail create with non-existent developer" do
           post_with_token api_v1_developers_apps_url, params: {
-            developer_id: 99999,
-            name: "New Test App",
-            description: "A new test application"
+            app: {
+              developer_id: 99999,
+              name: "New Test App",
+              description: "A new test application"
+            }
           }, as: :json
 
           assert_response :not_found
@@ -234,9 +238,11 @@ module Api
 
         test "should fail create with duplicate name" do
           post_with_token api_v1_developers_apps_url, params: {
-            developer_id: @developer.id,
-            name: @app_one.name,  # Duplicate name
-            description: "A test application"
+            app: {
+              developer_id: @developer.id,
+              name: @app_one.name,  # Duplicate name
+              description: "A test application"
+            }
           }, as: :json
 
           assert_response :unprocessable_entity
@@ -248,8 +254,10 @@ module Api
 
         test "should fail create with missing name" do
           post_with_token api_v1_developers_apps_url, params: {
-            developer_id: @developer.id,
-            description: "A test application"
+            app: {
+              developer_id: @developer.id,
+              description: "A test application"
+            }
           }, as: :json
 
           assert_response :unprocessable_entity
@@ -259,15 +267,55 @@ module Api
           assert_includes json_response["errors"], "Name can't be blank"
         end
 
+        test "should fail create with non-existent category" do
+          post_with_token api_v1_developers_apps_url, params: {
+            app: {
+              developer_id: @developer.id,
+              name: "Test App with Invalid Category",
+              description: "A test application",
+              category_id: 99999,
+              sector_id: @sector.id
+            }
+          }, as: :json
+
+          assert_response :unprocessable_entity
+          json_response = JSON.parse(response.body)
+          
+          assert_equal false, json_response["success"]
+          assert_equal "Failed to create app", json_response["message"]
+          assert_includes json_response["errors"], "Category must exist"
+        end
+
+        test "should fail create with non-existent sector" do
+          post_with_token api_v1_developers_apps_url, params: {
+            app: {
+              developer_id: @developer.id,
+              name: "Test App with Invalid Sector",
+              description: "A test application",
+              category_id: @category.id,
+              sector_id: 99999
+            }
+          }, as: :json
+
+          assert_response :unprocessable_entity
+          json_response = JSON.parse(response.body)
+          
+          assert_equal false, json_response["success"]
+          assert_equal "Failed to create app", json_response["message"]
+          assert_includes json_response["errors"], "Sector must exist"
+        end
+
         test "should create app with tags as array" do
           assert_difference('App.count', 1) do
             post_with_token api_v1_developers_apps_url, params: {
-              developer_id: @developer.id,
-              name: "Tagged App",
-              description: "App with tags",
-              category_id: @category.id,
-              sector_id: @sector.id,
-              tags: ["productivity", "automation", "api"]
+              app: {
+                developer_id: @developer.id,
+                name: "Tagged App",
+                description: "App with tags",
+                category_id: @category.id,
+                sector_id: @sector.id,
+                tags: ["productivity", "automation", "api"]
+              }
             }, as: :json
           end
 
@@ -284,12 +332,14 @@ module Api
         test "should create app with tags as comma-separated string" do
           assert_difference('App.count', 1) do
             post_with_token api_v1_developers_apps_url, params: {
-              developer_id: @developer.id,
-              name: "String Tagged App",
-              description: "App with string tags",
-              category_id: @category.id,
-              sector_id: @sector.id,
-              tags: "workflow, integration, saas"
+              app: {
+                developer_id: @developer.id,
+                name: "String Tagged App",
+                description: "App with string tags",
+                category_id: @category.id,
+                sector_id: @sector.id,
+                tags: "workflow, integration, saas"
+              }
             }, as: :json
           end
 
@@ -306,8 +356,10 @@ module Api
         # UPDATE tests
         test "should update app" do
           patch_with_token api_v1_developers_app_url(@app_one), params: {
-            name: "Updated App Name",
-            description: "Updated description"
+            app: {
+              name: "Updated App Name",
+              description: "Updated description"
+            }
           }, as: :json
 
           assert_response :ok
@@ -323,7 +375,9 @@ module Api
 
         test "should fail update with non-existent app" do
           patch_with_token api_v1_developers_app_url(id: 99999), params: {
-            name: "Updated App Name"
+            app: {
+              name: "Updated App Name"
+            }
           }, as: :json
 
           assert_response :not_found
@@ -335,7 +389,9 @@ module Api
 
         test "should fail update with duplicate name" do
           patch_with_token api_v1_developers_app_url(@app_one), params: {
-            name: @app_two.name  # Duplicate name
+            app: {
+              name: @app_two.name  # Duplicate name
+            }
           }, as: :json
 
           assert_response :unprocessable_entity
@@ -347,7 +403,9 @@ module Api
 
         test "should update app status" do
           patch_with_token api_v1_developers_app_url(@app_one), params: {
-            status: "active"
+            app: {
+              status: "active"
+            }
           }, as: :json
 
           assert_response :ok
@@ -397,11 +455,13 @@ module Api
           
           # Now create a new app with the same name
           post_with_token api_v1_developers_apps_url, params: {
-            developer_id: @developer.id,
-            name: @app_one.name,  # Same name as disabled app
-            description: "New app with previously used name",
-            category_id: @category.id,
-            sector_id: @sector.id
+            app: {
+              developer_id: @developer.id,
+              name: @app_one.name,  # Same name as disabled app
+              description: "New app with previously used name",
+              category_id: @category.id,
+              sector_id: @sector.id
+            }
           }, as: :json
 
           assert_response :created
@@ -422,7 +482,9 @@ module Api
           
           # Create and disable app_two with same name
           patch_with_token api_v1_developers_app_url(@app_two), params: {
-            name: @app_one.name
+            app: {
+              name: @app_one.name
+            }
           }, as: :json
           assert_response :ok
           

@@ -1,0 +1,95 @@
+---
+alwaysApply: true
+description: 
+```
+## API Parameter Structure Guidelines
+
+### Nested Parameters (使用 `params.require(:resource).permit(...)`)
+
+对于标准的 **CRUD 资源管理 API**，参数应该嵌套在资源名称下：
+
+**适用场景：**
+- 主要资源的增删改查（Apps, Perks, Categories, Sectors）
+- 数据模型类资源的管理操作
+- 需要明确资源边界的 API
+
+**Controller 实现：**
+```ruby
+def resource_params
+  params.require(:resource_name).permit(:field1, :field2, ...)
+end
+```
+
+**请求示例：**
+```json
+{
+  "app": {
+    "name": "My App",
+    "description": "..."
+  }
+}
+```
+
+**已实施的 API：**
+- `POST/PATCH /api/v1/apps` → `{ "app": {...} }`
+- `POST/PATCH /api/v1/perks` → `{ "perk": {...} }`
+- `POST/PATCH /api/v1/categories` → `{ "category": {...} }`
+- `POST/PATCH /api/v1/sectors` → `{ "sector": {...} }`
+- `POST /api/v1/log_in_histories` → `{ "log_in_history": {...} }`
+- `POST /api/v1/app_activities` → `{ "app_activity": {...} }`
+
+---
+
+### Flat Parameters (使用 `params.permit(...)`)
+
+对于 **用户操作、认证、特殊业务逻辑 API**，参数应该扁平化：
+
+**适用场景：**
+- 用户注册、登录、密码管理
+- 开发者注册、profile 管理
+- 特殊业务操作（充值、消费、授权等）
+- 跨资源关联操作
+- 命名空间下的资源操作（如 `/api/v1/developers/apps`）
+
+**Controller 实现：**
+```ruby
+def action_params
+  params.permit(:field1, :field2, ...)
+end
+```
+
+**请求示例：**
+```json
+{
+  "email": "user@example.com",
+  "password": "...",
+  "name": "..."
+}
+```
+
+**已实施的 API：**
+- 所有 `/api/v1/users/*` 端点（注册、profile、计划管理等）
+- 所有 `/api/v1/developers/*` 端点（注册、profile、apps 等）
+- `POST /api/v1/credit_topups`
+- `POST /api/v1/credit_spents`
+- `POST /api/v1/perk_accesses`
+- `POST /api/v1/waiting_lists`
+
+---
+
+### 新增 API 时的决策流程
+
+1. **这是标准 CRUD 资源管理吗？** → 使用嵌套参数
+2. **这是用户/开发者相关操作吗？** → 使用扁平参数
+3. **这是特殊业务逻辑吗？** → 使用扁平参数
+4. **这是在命名空间下的资源吗？** → 使用扁平参数
+
+---
+
+### 注意事项
+
+⚠️ **避免混合使用：** 同一资源的不同端点应保持一致的参数结构
+⚠️ **文档同步：** 在 `docs/api/v1/` 中的文档必须与实际实现保持一致
+⚠️ **测试覆盖：** 每个 create/update API 都应该有参数验证的测试用例
+```
+___

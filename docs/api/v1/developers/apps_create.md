@@ -17,29 +17,33 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Request Parameters
 
+All parameters must be nested under the `app` key.
+
 | Parameter                        | Type    | Required | Description |
 |----------------------------------|---------|----------|-------------|
-| developer_id                     | integer | Yes      | Developer's ID |
-| name                             | string  | Yes      | App name (must be globally unique) |
-| description                      | string  | No       | App description |
-| app_url                          | string  | No       | Webhook URL (must be valid URL format) |
-| category_id                      | integer | No       | Category ID |
-| sector_id                        | integer | No       | Sector ID |
-| status                           | string  | No       | App status: "active", "disabled", "reviewing", "dev" (defaults to "dev") |
-| tags                             | array   | No       | Array of tag strings or comma-separated string |
+| app.developer_id                 | integer | Yes      | Developer's ID |
+| app.name                         | string  | Yes      | App name (must be globally unique) |
+| app.description                  | string  | No       | App description |
+| app.app_url                      | string  | No       | Webhook URL (must be valid URL format) |
+| app.category_id                  | integer | No       | Category ID |
+| app.sector_id                    | integer | No       | Sector ID |
+| app.status                       | string  | No       | App status: "active", "disabled", "reviewing", "dev" (defaults to "dev") |
+| app.tags                         | array   | No       | Array of tag strings or comma-separated string |
 
 ## Request Example
 
 ```json
 {
-  "developer_id": 456,
-  "name": "My App",
-  "description": "My application description",
-  "app_url": "https://example.com/webhook",
-  "category_id": 1,
-  "sector_id": 1,
-  "status": "dev",
-  "tags": ["productivity", "automation"]
+  "app": {
+    "developer_id": 456,
+    "name": "My App",
+    "description": "My application description",
+    "app_url": "https://example.com/webhook",
+    "category_id": 1,
+    "sector_id": 1,
+    "status": "dev",
+    "tags": ["productivity", "automation"]
+  }
 }
 ```
 

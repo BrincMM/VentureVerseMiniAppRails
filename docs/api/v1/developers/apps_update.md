@@ -23,25 +23,27 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Request Parameters
 
-All parameters are optional. Only provide the fields you want to update.
+All parameters must be nested under the `app` key. All fields are optional - only provide the fields you want to update.
 
 | Parameter                        | Type    | Required | Description |
 |----------------------------------|---------|----------|-------------|
-| name                             | string  | No       | App name (must be globally unique) |
-| description                      | string  | No       | App description |
-| app_url                          | string  | No       | Webhook URL (must be valid URL format) |
-| category_id                      | integer | No       | Category ID |
-| sector_id                        | integer | No       | Sector ID |
-| status                           | string  | No       | App status: "active", "disabled", "reviewing", "dev" |
+| app.name                         | string  | No       | App name (must be globally unique) |
+| app.description                  | string  | No       | App description |
+| app.app_url                      | string  | No       | Webhook URL (must be valid URL format) |
+| app.category_id                  | integer | No       | Category ID |
+| app.sector_id                    | integer | No       | Sector ID |
+| app.status                       | string  | No       | App status: "active", "disabled", "reviewing", "dev" |
 
 ## Request Example
 
 ```json
 {
-  "name": "Updated App Name",
-  "description": "Updated description",
-  "app_url": "https://newurl.example.com/webhook",
-  "status": "active"
+  "app": {
+    "name": "Updated App Name",
+    "description": "Updated description",
+    "app_url": "https://newurl.example.com/webhook",
+    "status": "active"
+  }
 }
 ```
 
