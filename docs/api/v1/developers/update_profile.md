@@ -5,7 +5,7 @@ This API endpoint allows developers to update their profile information.
 ## Endpoint
 
 ```
-PATCH /api/v1/developers/profile
+PATCH /api/v1/developers/:developer_id/profile
 ```
 
 ## Authentication
@@ -15,19 +15,27 @@ Requires API Key in the Authorization header:
 Authorization: Bearer YOUR_API_KEY
 ```
 
+## URL Parameters
+
+| Parameter    | Type    | Required | Description |
+|--------------|---------|----------|-------------|
+| developer_id | integer | Yes      | Developer's ID |
+
 ## Request Parameters
 
 | Parameter | Type   | Required | Description |
 |-----------|--------|----------|-------------|
-| email     | string | Yes      | Developer's email address (for identification) |
 | name      | string | No       | Developer's full name |
 | github    | string | No       | GitHub profile URL |
 
 ## Request Example
 
+```bash
+PATCH /api/v1/developers/1/profile
+```
+
 ```json
 {
-  "email": "developer@example.com",
   "name": "John Updated Developer",
   "github": "https://github.com/johndev"
 }
@@ -86,41 +94,48 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Validation Rules
 
-1. Email must match an existing developer account
+1. Developer ID must match an existing developer account
 2. If provided, github must be a valid URL
-3. Email cannot be changed through this endpoint (for security)
 
 ## Notes
 
 - Only include the fields you want to update in the request
 - Omitted fields will remain unchanged
-- The email parameter is required to identify which developer to update, but the email itself cannot be changed
-- To change the email address, a separate email change process should be implemented
+- The developer_id in the URL identifies which developer to update
 - The `updated_at` timestamp is automatically updated on successful changes
 
 ## Example: Update Only Name
 
+```bash
+PATCH /api/v1/developers/1/profile
+```
+
 ```json
 {
-  "email": "developer@example.com",
   "name": "New Name Only"
 }
 ```
 
 ## Example: Update Only GitHub
 
+```bash
+PATCH /api/v1/developers/1/profile
+```
+
 ```json
 {
-  "email": "developer@example.com",
   "github": "https://github.com/newgithubusername"
 }
 ```
 
 ## Example: Update Both
 
+```bash
+PATCH /api/v1/developers/1/profile
+```
+
 ```json
 {
-  "email": "developer@example.com",
   "name": "Full Name Update",
   "github": "https://github.com/updatedgithub"
 }

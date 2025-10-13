@@ -79,7 +79,7 @@ Rails.application.routes.draw do
         post 'forget_password', to: 'forget_passwords#create'
         post 'verify_forget_password', to: 'forget_passwords#verify'
         get 'profile', to: 'profiles#show'
-        patch 'profile', to: 'profiles#update'
+        patch ':developer_id/profile', to: 'profiles#update'
         
         # Apps management
         resources :apps, only: [:show, :create, :update, :destroy] do

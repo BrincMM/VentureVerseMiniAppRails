@@ -13,7 +13,7 @@ module Api
         end
 
         def update
-          @developer = Developer.find_by(email: params[:email])
+          @developer = Developer.find_by(id: params[:developer_id])
           
           unless @developer
             render 'api/v1/shared/error', locals: { message: 'Developer not found', errors: nil }, status: :not_found, formats: [:json]

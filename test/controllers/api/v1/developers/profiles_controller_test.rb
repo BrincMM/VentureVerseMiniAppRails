@@ -49,8 +49,7 @@ module Api
         end
 
         test "should update developer profile successfully" do
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: @developer.email,
+          patch_with_token "/api/v1/developers/#{@developer.id}/profile", params: {
             name: "Updated Developer Name",
             github: "https://github.com/updated_github"
           }, as: :json
@@ -74,8 +73,7 @@ module Api
         test "should update only name" do
           original_github = @developer.github
           
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: @developer.email,
+          patch_with_token "/api/v1/developers/#{@developer.id}/profile", params: {
             name: "Only Name Updated"
           }, as: :json
 
@@ -90,8 +88,7 @@ module Api
         test "should update only github" do
           original_name = @developer.name
           
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: @developer.email,
+          patch_with_token "/api/v1/developers/#{@developer.id}/profile", params: {
             github: "https://github.com/new_github_username"
           }, as: :json
 
@@ -104,8 +101,7 @@ module Api
         end
 
         test "should fail to update with invalid github url" do
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: @developer.email,
+          patch_with_token "/api/v1/developers/#{@developer.id}/profile", params: {
             github: "not-a-valid-url"
           }, as: :json
 
@@ -118,8 +114,7 @@ module Api
         end
 
         test "should return not found when updating non-existent developer" do
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: "nonexistent@example.com",
+          patch_with_token "/api/v1/developers/99999/profile", params: {
             name: "Updated Name"
           }, as: :json
 
@@ -131,9 +126,7 @@ module Api
         end
 
         test "should handle empty update params" do
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: @developer.email
-          }, as: :json
+          patch_with_token "/api/v1/developers/#{@developer.id}/profile", params: {}, as: :json
 
           assert_response :success
           json_response = JSON.parse(response.body)
@@ -143,8 +136,7 @@ module Api
         test "should successfully update profile without changing email" do
           original_email = @developer.email
           
-          patch_with_token api_v1_developers_profile_url, params: {
-            email: @developer.email,
+          patch_with_token "/api/v1/developers/#{@developer.id}/profile", params: {
             name: "New Name"
           }, as: :json
 
