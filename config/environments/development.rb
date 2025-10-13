@@ -31,21 +31,25 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Configure mailer to use Gmail SMTP
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
+  # Disable email delivery in development to avoid SMTP errors
+  config.action_mailer.perform_deliveries = false
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :test
   config.action_mailer.default_options = { from: "noreply@ventureverse.com" }
-  config.action_mailer.smtp_settings = {
-    address: 'smtp.gmail.com',
-    port: 587,
-    domain: 'ventureverse.com',
-    user_name: 'noreply@ventureverse.com',
-    password: Rails.application.credentials.gmail_app_password,
-    authentication: 'plain',
-    enable_starttls: true,
-    open_timeout: 5,
-    read_timeout: 5
-  }
+  
+  # Uncomment below to use Gmail SMTP in development if needed
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: 'smtp.gmail.com',
+  #   port: 587,
+  #   domain: 'ventureverse.com',
+  #   user_name: 'noreply@ventureverse.com',
+  #   password: Rails.application.credentials.gmail_app_password,
+  #   authentication: 'plain',
+  #   enable_starttls: true,
+  #   open_timeout: 5,
+  #   read_timeout: 5
+  # }
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false

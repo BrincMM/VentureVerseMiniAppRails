@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_082638) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_13_070254) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -132,7 +132,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_082638) do
     t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_developers_on_confirmation_token", unique: true
     t.index ["email"], name: "index_developers_on_email", unique: true
-    t.index ["github"], name: "index_developers_on_github", unique: true
+    t.index ["github"], name: "index_developers_on_github"
   end
 
   create_table "forget_passwords", force: :cascade do |t|
