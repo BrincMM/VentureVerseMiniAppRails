@@ -54,7 +54,6 @@ Authorization: Bearer YOUR_API_KEY
       "sign_in_count": 0,
       "current_sign_in_at": null,
       "last_sign_in_at": null,
-      "confirmed_at": null,
       "created_at": "2025-10-09T08:34:14.289Z",
       "updated_at": "2025-10-09T08:34:14.289Z"
     }

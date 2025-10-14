@@ -25,24 +25,23 @@ class DeveloperTest < ActiveSupport::TestCase
     assert_includes developer.errors[:email], "has already been taken"
   end
 
-  test "should require unique github" do
+  test "should allow duplicate github" do
     developer = Developer.new(
       name: "Test Dev",
       email: "unique@example.com",
       github: developers(:one).github,
       password: "password123"
     )
-    assert_not developer.valid?
-    assert_includes developer.errors[:github], "has already been taken"
+    assert developer.valid?
   end
 
-  test "should have default status pending" do
+  test "should have default status active" do
     developer = Developer.new(
       name: "Test Dev",
       email: "test@example.com",
       password: "password123"
     )
-    assert_equal "pending", developer.status
+    assert_equal "active", developer.status
   end
 
   test "should have default role developer" do

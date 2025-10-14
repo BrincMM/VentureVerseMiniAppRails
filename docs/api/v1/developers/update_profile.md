@@ -60,7 +60,6 @@ PATCH /api/v1/developers/1/profile
       "sign_in_count": 15,
       "current_sign_in_at": "2025-10-09T10:15:30.123Z",
       "last_sign_in_at": "2025-10-08T14:20:10.456Z",
-      "confirmed_at": "2025-10-01T08:00:00.000Z",
       "created_at": "2025-10-01T08:00:00.000Z",
       "updated_at": "2025-10-09T12:30:45.789Z"
     }
@@ -149,7 +148,6 @@ The following fields **cannot** be updated through this endpoint:
 - `status` - Can only be changed by administrators
 - `role` - Can only be changed by administrators
 - `sign_in_count`, `sign_in_at`, `sign_in_ip` - Automatically managed by the system
-- `confirmed_at` - Managed by the email confirmation process
 
 
 
