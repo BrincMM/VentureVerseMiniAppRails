@@ -9,7 +9,7 @@ Retrieves the available categories, sectors, and tags for apps based on the prov
 ## Request Example
 
 ```http
-GET /api/v1/apps/filters?category_id=1&sector_id=2&tags=ai,machine-learning HTTP/1.1
+GET /api/v1/apps/filters HTTP/1.1
 Host: api.ventureverse.example
 Authorization: Bearer <access_token>
 Accept: application/json
