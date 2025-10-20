@@ -1,22 +1,16 @@
 module Api
   module V1
     class PerksController < ApiController
-      rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
+      before_action :set_perk, only: [:update, :destroy]
 
       def index
-        per_page = params.fetch(:per_page, 10).to_i
-        if per_page <= 0 || per_page > 100
-          return render_general_error(
-            message: 'Invalid parameters',
-            errors: ['Per page must be between 1 and 100'],
-            status: :unprocessable_entity
-          )
-        end
+        per_page = validate_pagination_params
+        return unless per_page
 
         query = Perk.all
         query = query.by_category(params[:category_id]) if params[:category_id].present?
         query = query.by_sector(params[:sector_id]) if params[:sector_id].present?
-        query = query.with_any_tags(params[:tags].split(',')) if params[:tags].present?
+        query = query.with_any_tags(parse_tags(params[:tags])) if params[:tags].present?
 
         @total_count = query.count
         @perks = query.order(partner_name: :asc, id: :asc).page(params[:page]).per(per_page)
@@ -35,10 +29,8 @@ module Api
           query = query.with_any_tags(tag_list) if tag_list.present?
         end
 
-        filtered_perks = query || Perk.none
-
-        category_counts = filtered_perks.group(:category_id).count
-        sector_counts = filtered_perks.group(:sector_id).count
+        category_counts = query.group(:category_id).count
+        sector_counts = query.group(:sector_id).count
 
         categories = Category.where(id: category_counts.keys).index_by(&:id)
         sectors = Sector.where(id: sector_counts.keys).index_by(&:id)
@@ -59,7 +51,7 @@ module Api
 
         tag_counts = ActsAsTaggableOn::Tagging
                      .joins(:tag)
-                     .where(taggable_type: 'Perk', taggable_id: filtered_perks.select(:id))
+                     .where(taggable_type: Perk.name, taggable_id: query.select(:id))
                      .group('tags.name')
                      .order('tags.name ASC')
                      .count
@@ -81,8 +73,11 @@ module Api
       end
 
       def create
-        @perk = Perk.new(perk_params)
-        assign_tags(@perk)
+        permitted_params = perk_params
+        attributes = permitted_params.except(:tags)
+
+        @perk = Perk.new(attributes)
+        assign_tags(@perk, permitted_params[:tags])
 
         if @perk.save
           render :create, status: :created
@@ -96,19 +91,12 @@ module Api
       end
 
       def update
-        @perk = Perk.find_by(id: params[:id])
-        unless @perk
-          return render_general_error(
-            message: 'Perk not found',
-            errors: ['Perk does not exist'],
-            status: :not_found
-          )
-        end
+        permitted_params = perk_params
+        attributes = permitted_params.except(:tags)
 
-        @perk.assign_attributes(perk_params)
-        assign_tags(@perk)
+        assign_tags(@perk, permitted_params[:tags]) if permitted_params.key?(:tags)
 
-        if @perk.save
+        if @perk.update(attributes)
           render :update
         else
           render_general_error(
@@ -120,25 +108,15 @@ module Api
       end
 
       def destroy
-        perk = Perk.find_by(id: params[:id])
-        unless perk
-          return render_general_error(
-            message: 'Perk not found',
-            errors: ['Perk does not exist'],
-            status: :not_found
-          )
-        end
+        tags_snapshot = @perk.tag_list.dup
 
-        tags_snapshot = perk.tag_list.dup
-        @perk = perk
-
-        if perk.destroy
+        if @perk.destroy
           @perk.tag_list = tags_snapshot
           render :destroy
         else
           render_general_error(
             message: 'Failed to delete perk',
-            errors: perk.errors.full_messages,
+            errors: @perk.errors.full_messages,
             status: :unprocessable_entity
           )
         end
@@ -146,41 +124,19 @@ module Api
 
       private
 
-      def perk_params
-        params.require(:perk).permit(:partner_name, :category_id, :sector_id, :company_website, :contact_email, :contact)
-      end
+      def set_perk
+        @perk = Perk.find_by(id: params[:id])
+        return if @perk
 
-      def assign_tags(perk)
-        return unless params[:perk].is_a?(ActionController::Parameters)
-
-        if params[:perk].key?(:tags)
-          perk.tag_list = parse_tags(params[:perk][:tags])
-        end
-      end
-
-      def parse_tags(value)
-        case value
-        when String
-          value.split(',').map(&:strip).reject(&:blank?)
-        when Array
-          value.map(&:to_s).map(&:strip).reject(&:blank?)
-        else
-          []
-        end
-      end
-
-      def handle_parameter_missing(exception)
         render_general_error(
-          message: 'Invalid parameters',
-          errors: ["#{exception.param.to_s.humanize} parameters are required"],
-          status: :unprocessable_entity
+          message: 'Perk not found',
+          errors: ['Perk does not exist'],
+          status: :not_found
         )
       end
 
-      def render_general_error(message:, errors:, status:)
-        render 'api/v1/general/errors',
-               locals: { message: message, errors: Array(errors) },
-               status: status
+      def perk_params
+        params.require(:perk).permit(:partner_name, :category_id, :sector_id, :company_website, :contact_email, :contact, :tags, tags: [])
       end
     end
   end

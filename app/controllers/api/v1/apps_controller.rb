@@ -1,24 +1,16 @@
 module Api
   module V1
     class AppsController < ApiController
-      rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
-
       before_action :set_app, only: [:update, :destroy]
 
       def index
-        per_page = params.fetch(:per_page, 10).to_i
-        if per_page <= 0 || per_page > 100
-          return render_general_error(
-            message: 'Invalid parameters',
-            errors: ['Per page must be between 1 and 100'],
-            status: :unprocessable_entity
-          )
-        end
+        per_page = validate_pagination_params
+        return unless per_page
 
         query = App.published
         query = query.by_category(params[:category_id]) if params[:category_id].present?
         query = query.by_sector(params[:sector_id]) if params[:sector_id].present?
-        query = query.with_any_tags(params[:tags].split(',')) if params[:tags].present?
+        query = query.with_any_tags(parse_tags(params[:tags])) if params[:tags].present?
 
         @total_count = query.count
         @apps = query.order(sort_order: :asc, id: :asc).page(params[:page]).per(per_page)
@@ -33,7 +25,7 @@ module Api
 
         tag_list = []
         if params[:tags].present?
-          tag_list = parse_filter_tags(params[:tags])
+          tag_list = parse_tags(params[:tags])
           query = query.with_any_tags(tag_list) if tag_list.present?
         end
 
@@ -61,7 +53,7 @@ module Api
 
         tag_counts = ActsAsTaggableOn::Tagging
                      .joins(:tag)
-                     .where(taggable_type: 'App', taggable_id: filtered_apps.select(:id))
+                     .where(taggable_type: App.name, taggable_id: filtered_apps.select(:id))
                      .group('tags.name')
                      .order('tags.name ASC')
                      .count
@@ -228,48 +220,7 @@ module Api
           message: 'App not found',
           errors: ['App does not exist'],
           status: :not_found
-        ) and return
-      end
-
-      def assign_tags(app, tags)
-        return if tags.nil?
-
-        tag_list = case tags
-                   when String
-                     tags.split(',')
-                   when Array
-                     tags
-                   else
-                     []
-                   end
-
-        tag_list = tag_list.map { |tag| tag.to_s.strip }.reject(&:blank?)
-        app.tag_list = tag_list
-      end
-
-      def parse_filter_tags(value)
-        case value
-        when String
-          value.split(',').map(&:strip).reject(&:blank?)
-        when Array
-          value.map(&:to_s).map(&:strip).reject(&:blank?)
-        else
-          []
-        end
-      end
-
-      def handle_parameter_missing(exception)
-        render_general_error(
-          message: 'Invalid parameters',
-          errors: ["#{exception.param.to_s.humanize} parameters are required"],
-          status: :unprocessable_entity
         )
-      end
-
-      def render_general_error(message:, errors:, status:)
-        render 'api/v1/general/errors',
-               locals: { message: message, errors: Array(errors) },
-               status: status
       end
     end
   end

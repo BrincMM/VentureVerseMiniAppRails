@@ -6,7 +6,9 @@ Updates attributes of an existing perk.
 
 **Method** : `PATCH`
 
-## Request Example
+## Request Examples
+
+**Example 1: Using string format for tags**
 
 ```http
 PATCH /api/v1/perks/1 HTTP/1.1
@@ -23,19 +25,36 @@ Content-Type: application/json
 }
 ```
 
+**Example 2: Using array format for tags**
+
+```http
+PATCH /api/v1/perks/1 HTTP/1.1
+Host: api.ventureverse.example
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "perk": {
+    "partner_name": "Updated Partner",
+    "category_id": 5,
+    "tags": ["remote", "global"]
+  }
+}
+```
+
 ## Parameters
 
-| Parameter    | Type   | Required | Description                               |
-|--------------|--------|----------|-------------------------------------------|
-| id           | number | Yes      | ID of the perk to update                  |
-| perk         | object | Yes      | Wrapper for attributes to be updated      |
-| partner_name | string | No       | Updated partner name                      |
-| category_id  | number | No       | Updated category ID                       |
-| sector_id    | number | No       | Updated sector ID                         |
-| company_website | string | No   | Updated company website                   |
-| contact_email   | string | No   | Updated contact email                     |
-| contact         | string | No   | Updated contact person                    |
-| tags            | string | No   | Comma-separated list of tag names         |
+| Parameter       | Type         | Required | Description                                                        |
+|-----------------|--------------|----------|--------------------------------------------------------------------|
+| id              | number       | Yes      | ID of the perk to update                                           |
+| perk            | object       | Yes      | Wrapper for attributes to be updated                               |
+| partner_name    | string       | No       | Updated partner name                                               |
+| category_id     | number       | No       | Updated category ID                                                |
+| sector_id       | number       | No       | Updated sector ID                                                  |
+| company_website | string       | No       | Updated company website                                            |
+| contact_email   | string       | No       | Updated contact email                                              |
+| contact         | string       | No       | Updated contact person                                             |
+| tags            | string/array | No       | Tags as comma-separated string (e.g., "ai,remote") or array (e.g., ["ai", "remote"]) |
 
 ## Success Response
 

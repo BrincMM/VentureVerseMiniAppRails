@@ -6,7 +6,9 @@ Creates a new perk entry.
 
 **Method** : `POST`
 
-## Request Example
+## Request Examples
+
+**Example 1: Using string format for tags**
 
 ```http
 POST /api/v1/perks HTTP/1.1
@@ -27,18 +29,39 @@ Content-Type: application/json
 }
 ```
 
+**Example 2: Using array format for tags**
+
+```http
+POST /api/v1/perks HTTP/1.1
+Host: api.ventureverse.example
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+{
+  "perk": {
+    "partner_name": "Gamma Partner",
+    "category_id": 1,
+    "sector_id": 2,
+    "company_website": "https://gamma.example.com",
+    "contact_email": "contact@gamma.example.com",
+    "contact": "Grace",
+    "tags": ["innovation", "ai"]
+  }
+}
+```
+
 ## Parameters
 
-| Parameter        | Type   | Required | Description                                            |
-|------------------|--------|----------|--------------------------------------------------------|
-| perk             | object | Yes      | Wrapper for perk attributes                            |
-| partner_name     | string | Yes      | Name of the partner providing the perk                 |
-| category_id      | number | Yes      | ID of the category associated with the perk            |
-| sector_id        | number | Yes      | ID of the sector associated with the perk              |
-| company_website  | string | Yes      | Company website URL                                    |
-| contact_email    | string | Yes      | Contact email address                                  |
-| contact          | string | Yes      | Contact person name                                    |
-| tags             | string | No       | Comma-separated list of tag names                      |
+| Parameter        | Type          | Required | Description                                                        |
+|------------------|---------------|----------|--------------------------------------------------------------------|
+| perk             | object        | Yes      | Wrapper for perk attributes                                        |
+| partner_name     | string        | Yes      | Name of the partner providing the perk                             |
+| category_id      | number        | Yes      | ID of the category associated with the perk                        |
+| sector_id        | number        | Yes      | ID of the sector associated with the perk                          |
+| company_website  | string        | Yes      | Company website URL                                                |
+| contact_email    | string        | Yes      | Contact email address                                              |
+| contact          | string        | Yes      | Contact person name                                                |
+| tags             | string/array  | No       | Tags as comma-separated string (e.g., "ai,innovation") or array (e.g., ["ai", "innovation"]) |
 
 ## Success Response
 

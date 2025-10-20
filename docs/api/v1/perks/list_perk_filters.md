@@ -9,7 +9,7 @@ Retrieves the available categories, sectors, and tags for perks based on the pro
 ## Request Example
 
 ```http
-GET /api/v1/perks/filters?category_id=1&sector_id=2&tags=remote,discount HTTP/1.1
+GET /api/v1/perks/filters HTTP/1.1
 Host: api.ventureverse.example
 Authorization: Bearer <access_token>
 Accept: application/json
